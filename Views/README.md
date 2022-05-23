@@ -1,0 +1,1 @@
+Nơi đặt các file view sử dụng chung cho toàn bộ code
