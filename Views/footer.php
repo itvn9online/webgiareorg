@@ -16,9 +16,13 @@ global $flatsome_opt;
  * nạp top của webgiareorg (nếu có)
  */
 if ( file_exists( WGR_CHILD_PATH . 'Views/footer.php' ) ) {
-    //global $__cf_row;
-    //print_r($__cf_row);
-    include WGR_CHILD_PATH . 'Views/footer.php';
+    ?>
+<footer id="footer" class="footer-wrapper">
+<?php
+include WGR_CHILD_PATH . 'Views/footer.php';
+?>
+</header>
+<?php
 }
 /*
  * không thì dùng top của flatsome
@@ -58,7 +62,9 @@ WGR_adds_js( [
 
 ?>
 <div id="oi_popup"></div>
-</body></html><?php
+</body>
+</html>
+<?php
 
 /*
  * Bên trên là footer của flatsome

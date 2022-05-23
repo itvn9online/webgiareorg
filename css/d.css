@@ -1,0 +1,17 @@
+.json-to-menu {
+    opacity: 0.1;
+}
+.json-to-menu.actived {
+    opacity: 1;
+}
+ul.eb-menu, .eb-menu ul {
+    list-style: none;
+}
+ul.eb-menu, .eb-menu ul, .eb-menu li, .eb-menu ul li {
+    margin: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+form.searchform {
+    margin-bottom: 0;
+}

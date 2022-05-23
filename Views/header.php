@@ -32,7 +32,8 @@ wp_head();
 
 // nạp các file css dùng chung cho toàn website
 WGR_adds_css( [
-    WGR_CHILD_PATH . 'css/d.css'
+    WGR_BASE_PATH . 'css/d.css',
+    WGR_CHILD_PATH . 'css/d.css',
 ], [
     'cdn' => CDN_BASE_URL,
 ] );
@@ -59,9 +60,13 @@ WGR_adds_js( [
  * nạp top của webgiareorg (nếu có)
  */
 if ( file_exists( WGR_CHILD_PATH . 'Views/top.php' ) ) {
-    //global $__cf_row;
-    //print_r($__cf_row);
+    ?>
+<header id="header" class="header-wrapper">
+    <?php
     include WGR_CHILD_PATH . 'Views/top.php';
+    ?>
+</header>
+<?php
 }
 /*
  * không thì dùng top của flatsome
