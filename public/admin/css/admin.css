@@ -1,0 +1,38 @@
+.click-set-nhanban {
+    position: fixed;
+    z-index: 9999;
+    right: 120px;
+    top: 42px;
+    left: 50%;
+    max-width: 150px;
+}
+.show-if-duplicator-null {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.show-if-duplicator-null div {
+    max-width: 600px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.show-if-duplicator-null div {
+    margin: 0 auto;
+    width: 60%;
+    background: rgba(255, 193, 7, .8);
+    padding: 10px;
+}
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */
+/* */

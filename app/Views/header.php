@@ -40,7 +40,7 @@ WGR_adds_css( [
 
 // các file js bắt buộc phải nạp trước
 WGR_adds_js( [
-    WGR_BASE_PATH . 'public/javascript/functions.js'
+    WGR_BASE_PATH . 'public/javascript/functions.js',
 ], [
     'cdn' => CDN_BASE_URL,
 ] );

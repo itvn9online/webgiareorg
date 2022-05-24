@@ -33,3 +33,29 @@
         $(this).html(str).addClass(cl);
     });
 })(jQuery);
+
+//
+setInterval(function () {
+    var new_scroll_top = window.scrollY || jQuery(window).scrollTop();
+
+    //
+    if (new_scroll_top > 120) {
+        jQuery('body').addClass('ebfixed-top-menu');
+
+        //
+        //WGR_lazyload_footer_content();
+
+        //
+        if (new_scroll_top > 500) {
+            //		if ( new_scroll_top < old_scroll_top ) {
+            jQuery('body').addClass('ebshow-top-scroll');
+
+            //
+            //_global_js_eb.ebBgLazzyLoad(new_scroll_top);
+        } else {
+            jQuery('body').removeClass('ebshow-top-scroll');
+        }
+    } else {
+        jQuery('body').removeClass('ebfixed-top-menu').removeClass('ebshow-top-scroll');
+    }
+}, 200);

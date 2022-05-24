@@ -15,3 +15,13 @@ ul.eb-menu, .eb-menu ul, .eb-menu li, .eb-menu ul li {
 form.searchform {
     margin-bottom: 0;
 }
+.ebfixed-top-menu .fixed-top-menu, .ebfixed-top-menu .fix-top-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+.ebfixed-top-menu.logged-in .fix-top-menu {
+    top: 32px;
+}

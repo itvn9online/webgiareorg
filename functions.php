@@ -24,3 +24,8 @@ foreach ( glob( WGR_BASE_PATH . 'ux-builder-setup/*.php' ) as $filename ) {
     //echo $filename . '<br>' . "\n";
     include $filename;
 }
+
+// nạp thêm code cho admin
+if ( is_admin() ) {
+    include WGR_BASE_PATH . 'app/Admin/Autoload.php';
+}

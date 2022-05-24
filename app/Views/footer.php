@@ -18,10 +18,11 @@ global $flatsome_opt;
 if ( file_exists( WGR_CHILD_PATH . 'Views/footer.php' ) ) {
     ?>
 <footer id="footer" class="footer-wrapper">
-<?php
-include WGR_CHILD_PATH . 'Views/footer.php';
-?>
-</header>
+    <?php
+    include WGR_CHILD_PATH . 'Views/footer.php';
+    ?>
+</footer>
+<div onClick="window.scroll(0, 0);" class="back-to-top button icon invert plain fixed bottom z-1 is-outline circle"><i class="icon-angle-up"></i></div>
 <?php
 }
 /*
@@ -53,6 +54,7 @@ wp_footer();
 // các file js có thể để chế độ defer
 WGR_adds_js( [
     WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue.min.js',
+    //WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue' . ( WP_DEBUG === true ? '.min' : '' ) . '.js',
     WGR_BASE_PATH . 'public/javascript/footer.js',
 ], [
     'cdn' => CDN_BASE_URL,
@@ -62,9 +64,7 @@ WGR_adds_js( [
 
 ?>
 <div id="oi_popup"></div>
-</body>
-</html>
-<?php
+</body></html><?php
 
 /*
  * Bên trên là footer của flatsome
