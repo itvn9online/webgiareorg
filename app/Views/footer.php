@@ -52,8 +52,8 @@ wp_footer();
 
 // các file js có thể để chế độ defer
 WGR_adds_js( [
-    WGR_BASE_PATH . 'thirdparty/vuejs-2.6.10/vue.min.js',
-    WGR_BASE_PATH . 'javascript/footer.js',
+    WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue.min.js',
+    WGR_BASE_PATH . 'public/javascript/footer.js',
 ], [
     'cdn' => CDN_BASE_URL,
 ], [

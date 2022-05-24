@@ -32,7 +32,7 @@ wp_head();
 
 // nạp các file css dùng chung cho toàn website
 WGR_adds_css( [
-    WGR_BASE_PATH . 'css/d.css',
+    WGR_BASE_PATH . 'public/css/d.css',
     WGR_CHILD_PATH . 'css/d.css',
 ], [
     'cdn' => CDN_BASE_URL,
@@ -40,7 +40,7 @@ WGR_adds_css( [
 
 // các file js bắt buộc phải nạp trước
 WGR_adds_js( [
-    WGR_BASE_PATH . 'javascript/functions.js'
+    WGR_BASE_PATH . 'public/javascript/functions.js'
 ], [
     'cdn' => CDN_BASE_URL,
 ] );
