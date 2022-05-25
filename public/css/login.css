@@ -1,0 +1,20 @@
+body.login {
+    background: #677EB0 url("images-base/HD-Eagle-Wallpapers.jpg") top center fixed no-repeat;
+    background-size: 100% auto;
+}
+#login h1 a {
+    background-image: url("images-base/echbay-wp-logo.png") !important;
+    background-size: contain !important;
+    background-position: center;
+    margin: 0 auto 10px auto;
+    width: 260px;
+    height: 50px;
+}
+.login #backtoblog a, .login #nav a {
+    color: #000;
+}
+.login #backtoblog, .login #nav {
+    margin: 1px 0 0 0;
+    background: #fff;
+    padding: 10px 24px;
+}
