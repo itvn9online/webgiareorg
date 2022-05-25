@@ -10,7 +10,7 @@ function WGR_front_header() {
         WGR_BASE_PATH . 'public/thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/admin/css/admin.css',
-        //WGR_BASE_PATH . 'public/css/d.css',
+        WGR_BASE_PATH . 'public/css/d.css',
         //WGR_CHILD_PATH . 'css/d.css',
     ], [
         'cdn' => '//' . $_SERVER[ 'HTTP_HOST' ] . '/',

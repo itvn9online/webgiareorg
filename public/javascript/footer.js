@@ -17,7 +17,7 @@
             for (var x in arr) {
                 str += '<li><a href="' + a.link + x + '">' + arr[x] + '</a></li>';
             }
-            str = '<ul class="sub-menu">' + str + '<ul>';
+            str = '<ul class="sub-menu">' + str + '</ul>';
         }
 
         //
@@ -30,7 +30,7 @@
         }
 
         //
-        $(this).html(str).addClass(cl);
+        $(this).html(str).removeClass('d-none').addClass(cl);
     });
 })(jQuery);
 

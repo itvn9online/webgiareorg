@@ -71,4 +71,4 @@ WGR_adds_js( [
  */
 
 // kết thúc website -> in ra cache nếu có
-//require __DIR__ . '/footer_cache.php';
+include __DIR__ . '/footer_cache.php';

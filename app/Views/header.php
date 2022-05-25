@@ -1,7 +1,7 @@
 <?php
 
 // kiểm tra nạp footer và kích hoạt cache cho web
-//require __DIR__ . '/header_cache.php';
+include __DIR__ . '/header_cache.php';
 
 /*
  * @daidq - 0984533228 - itvn9online@gmail.com

@@ -29,3 +29,7 @@ foreach ( glob( WGR_BASE_PATH . 'ux-builder-setup/*.php' ) as $filename ) {
 if ( is_admin() ) {
     include WGR_BASE_PATH . 'app/Admin/Autoload.php';
 }
+// các chức năng chỉ chạy ngoài trang khách
+else {
+    //
+}

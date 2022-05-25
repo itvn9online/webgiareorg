@@ -1,8 +1,15 @@
 .json-to-menu {
     opacity: 0.1;
+    display: none;
+    height: 25px;
+    overflow: hidden;
 }
 .json-to-menu.actived {
     opacity: 1;
+    display: block;
+    height: auto;
+    overflow: auto;
+    overflow: unset;
 }
 ul.eb-menu, .eb-menu ul {
     list-style: none;
@@ -24,4 +31,25 @@ form.searchform {
 }
 .ebfixed-top-menu.logged-in .fix-top-menu {
     top: 32px;
+}
+.graybg {
+    background-color: #ccc;
+}
+.gray2bg {
+    background-color: #f2f2f2;
+}
+.row .col-inner p:last-child {
+    margin-bottom: 0;
+}
+.padding0 {
+    padding: 0;
+}
+.padding10 {
+    padding: 10px;
+}
+.padding20 {
+    padding: 20px;
+}
+.top-menu-space {
+    padding-top: 20px;
 }
