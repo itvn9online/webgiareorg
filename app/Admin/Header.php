@@ -7,13 +7,13 @@ function WGR_front_header() {
     // nạp các file css dùng chung cho toàn website
     WGR_adds_css( [
         // nạp thư viện bên thứ 3 trước
-        WGR_BASE_PATH . 'public/thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',
+        //WGR_BASE_PATH . 'public/thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/admin/css/admin.css',
         WGR_BASE_PATH . 'public/css/d.css',
         //WGR_CHILD_PATH . 'css/d.css',
     ], [
-        'cdn' => '//' . $_SERVER[ 'HTTP_HOST' ] . '/',
+        'cdn' => DYNAMIC_BASE_URL,
     ] );
 
     // các file js bắt buộc phải nạp trước
@@ -25,7 +25,7 @@ function WGR_front_header() {
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/javascript/functions.js',
     ], [
-        'cdn' => '//' . $_SERVER[ 'HTTP_HOST' ] . '/',
+        'cdn' => DYNAMIC_BASE_URL,
     ] );
 }
 add_action( 'admin_head', 'WGR_front_header' );

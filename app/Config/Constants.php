@@ -21,3 +21,12 @@ if ( is_user_logged_in() ) {
     define( 'USER_ID', 0 );
 }
 //echo USER_ID . '<br>' . "\n";
+
+/*
+ * URL động cho website để có thể chạy trên nhiều tên miền khác nhau mà không cần config lại
+ */
+// tinh chỉnh protocol theo ý thích -> mặc định là https
+defined( 'BASE_PROTOCOL' ) || define( 'BASE_PROTOCOL', 'https' );
+// -> url động cho website
+define( 'DYNAMIC_BASE_URL', BASE_PROTOCOL . '://' . $_SERVER[ 'HTTP_HOST' ] . '/' );
+//die( DYNAMIC_BASE_URL );
