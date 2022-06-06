@@ -3,6 +3,7 @@
 // nạp CSS, JS để tránh phải bấm Ctrl + F5
 function WGR_get_add_css( $f, $ops = [], $attr = [] ) {
     //print_r( $ops );
+    //echo $f . '<br>' . "\n";
     $f = str_replace( ABSPATH, '', $f );
     $f = ltrim( $f, '/' );
     //echo $f . '<br>' . "\n";

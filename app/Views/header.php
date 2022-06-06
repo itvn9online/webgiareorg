@@ -30,13 +30,58 @@ include __DIR__ . '/header_cache.php';
 //
 wp_head();
 
+// nạp file font theo kiểu inline
+$font_awesome_before = WGR_get_add_css( WGR_BASE_PATH . 'public/thirdparty/awesome47/css/font-awesome.before.css', [
+    'get_content' => 1
+] );
+$font_awesome_before = str_replace( '../fonts/', WGR_BASE_URI . 'public/thirdparty/awesome47/fonts/', $font_awesome_before );
+echo $font_awesome_before;
+
+
+// nạp một số css ở dạng preload
+$arr_preload_bootstrap = [
+    CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/css/font-awesome.min.css?v=4.7',
+
+    // bản full
+    //CDN_BASE_URL . 'thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap.rtl.min.css',
+
+    // các module đơn lẻ
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-grid.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-grid.rtl.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-reboot.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-reboot.rtl.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-utilities.min.css',
+    //'thirdparty/bootstrap-5.1.3/css/bootstrap-utilities.rtl.min.css',
+
+    //
+    CDN_BASE_URL . WGR_BASE_URI . 'public/css/d.css?v=' . filemtime( WGR_BASE_PATH . 'public/css/d.css' ),
+];
+
+foreach ( $arr_preload_bootstrap as $v ) {
+    ?>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="<?php echo $v; ?>" />
+<?php
+}
+
+
 // nạp các file css dùng chung cho toàn website
 WGR_adds_css( [
-    WGR_BASE_PATH . 'public/css/d.css',
+    //WGR_BASE_PATH . 'public/thirdparty/awesome47/css/font-awesome.min.css',
+    //WGR_BASE_PATH . 'public/css/d.css',
     WGR_CHILD_PATH . 'css/d.css',
 ], [
     'cdn' => CDN_BASE_URL,
 ] );
+
+// nạp css dùng cho từng loại trang
+if ( is_home() || is_front_page() ) {
+    WGR_adds_css( [
+        WGR_CHILD_PATH . 'css/home.css',
+    ], [
+        'cdn' => CDN_BASE_URL,
+    ] );
+}
 
 // các file js bắt buộc phải nạp trước
 WGR_adds_js( [

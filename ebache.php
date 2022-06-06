@@ -8,7 +8,7 @@
 defined( 'EB_TIME_CACHE' ) || define( 'EB_TIME_CACHE', 600 );
 
 //
-$sub_dir_cache = $_SERVER[ 'HTTP_HOST' ] . '/';
+$sub_dir_cache = explode( ':', $_SERVER[ 'HTTP_HOST' ] )[ 0 ] . '/';
 
 //
 if ( !function_exists( 'wp_is_mobile' ) ) {

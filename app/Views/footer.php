@@ -56,6 +56,7 @@ WGR_adds_js( [
     WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue.min.js',
     //WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue' . ( WP_DEBUG === true ? '.min' : '' ) . '.js',
     WGR_BASE_PATH . 'public/javascript/footer.js',
+    WGR_CHILD_PATH . 'javascript/d.js',
 ], [
     'cdn' => CDN_BASE_URL,
 ], [

@@ -1,3 +1,9 @@
+i.fas, em.fas, i.fa, em.fa {
+    font-style: normal;
+}
+.fa:before, .fa:after {
+    font-family: FontAwesome;
+}
 .json-to-menu {
     opacity: 0.1;
     display: none;
@@ -17,6 +23,9 @@ ul.eb-menu, .eb-menu ul {
 ul.eb-menu, .eb-menu ul, .eb-menu li, .eb-menu ul li {
     margin: 0;
     margin-bottom: 0;
+    margin-left: 0;
+}
+.col-inner ul.eb-menu li {
     margin-left: 0;
 }
 form.searchform {
