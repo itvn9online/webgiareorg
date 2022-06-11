@@ -17,7 +17,7 @@ global $flatsome_opt;
  */
 if ( file_exists( WGR_CHILD_PATH . 'Views/footer.php' ) ) {
     ?>
-<footer id="footer" class="footer-wrapper">
+<footer id="footer" class="footer-wrapper wgr-primary-footer">
     <?php
     include WGR_CHILD_PATH . 'Views/footer.php';
     ?>
@@ -30,7 +30,7 @@ if ( file_exists( WGR_CHILD_PATH . 'Views/footer.php' ) ) {
  */
 else {
     ?>
-<footer id="footer" class="footer-wrapper">
+<footer id="footer" class="footer-wrapper flatsome-primary-footer">
     <?php do_action('flatsome_footer'); ?>
 </footer>
 <?php

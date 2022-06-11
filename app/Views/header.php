@@ -106,7 +106,7 @@ WGR_adds_js( [
  */
 if ( file_exists( WGR_CHILD_PATH . 'Views/top.php' ) ) {
     ?>
-<header id="header" class="header-wrapper">
+<header id="header" class="header-wrapper wgr-primary-header">
     <?php
     include WGR_CHILD_PATH . 'Views/top.php';
     ?>
@@ -119,7 +119,7 @@ if ( file_exists( WGR_CHILD_PATH . 'Views/top.php' ) ) {
 else {
     do_action( 'flatsome_before_header' );
     ?>
-<header id="header" class="header <?php flatsome_header_classes(); ?>">
+<header id="header" class="header flatsome-primary-header <?php flatsome_header_classes(); ?>">
     <div class="header-wrapper">
         <?php get_template_part( 'template-parts/header/header', 'wrapper' ); ?>
     </div>

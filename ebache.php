@@ -8,7 +8,8 @@
 defined( 'EB_TIME_CACHE' ) || define( 'EB_TIME_CACHE', 600 );
 
 //
-$sub_dir_cache = explode( ':', $_SERVER[ 'HTTP_HOST' ] )[ 0 ] . '/';
+$sub_dir_cache = [ 'ebcache' ];
+$sub_dir_cache[] = explode( ':', $_SERVER[ 'HTTP_HOST' ] )[ 0 ];
 
 //
 if ( !function_exists( 'wp_is_mobile' ) ) {
@@ -36,25 +37,29 @@ if ( !function_exists( 'wp_is_mobile' ) ) {
 
     //
     if ( WGR_is_mobile() ) {
-        $sub_dir_cache .= 'm/';
+        $sub_dir_cache[] = 'm';
     }
 } else if ( wp_is_mobile() ) {
-    $sub_dir_cache .= 'm/';
+    $sub_dir_cache[] = 'm';
+}
+//print_r( $sub_dir_cache );
+
+// tự động tạo thư mục cache nếu chưa có
+$root_dir_cache = dirname( __DIR__ );
+foreach ( $sub_dir_cache as $v ) {
+    $root_dir_cache .= '/' . $v;
+
+    //
+    if ( !is_dir( $root_dir_cache ) ) {
+        mkdir( $root_dir_cache, 0777 );
+        echo $root_dir_cache . '<br>' . "\n";
+    }
 }
 
 // thư mục lưu ebcache
-define( 'EB_THEME_CACHE', dirname( __DIR__ ) . '/ebcache/' . $sub_dir_cache );
+define( 'EB_THEME_CACHE', $root_dir_cache . '/' );
 //echo EB_THEME_CACHE . '<br>' . "\n";
 //die( __FILE__ . ':' . __LINE__ );
-// tạo luôn thư mục cache nếu chưa có
-if ( !is_dir( WP_CONTENT_DIR . '/ebcache' ) ) {
-    mkdir( WP_CONTENT_DIR . '/ebcache', 0777 );
-
-    //
-    if ( !is_dir( EB_THEME_CACHE ) ) {
-        mkdir( EB_THEME_CACHE, 0777 );
-    }
-}
 
 // nạp function tạo cache
 include __DIR__ . '/app/Cache/Global.php';
