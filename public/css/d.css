@@ -59,6 +59,10 @@ form.searchform {
 .padding20 {
     padding: 20px;
 }
+section.section.padding0 {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
 .top-menu-space {
     padding-top: 20px;
 }
