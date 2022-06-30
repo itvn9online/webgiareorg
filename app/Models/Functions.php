@@ -108,3 +108,30 @@ function WGR_sanitize_output( $buffer ) {
 
     return $buffer;
 }
+
+function WGR_create_dir( $path, $ftp = true, $mod = 0755 ) {
+    if ( is_dir( $path ) ) {
+        return true;
+    }
+
+    //
+    if ( mkdir( $path, $mod ) ) {
+        // server window ko cần chmod
+        chmod( $path, $mod )or die( 'ERROR chmod dir: ' . $path );
+        return true;
+    }
+
+    // Không thì tạo thông qua FTP
+    if ( $ftp === true ) {
+        return WGR_ftp_create_dir( $path, $mod );
+    }
+    return false;
+}
+
+function WGR_create_file( $path, $content ) {
+    if ( file_put_contents( $path, $content, LOCK_EX ) ) {
+        touch( $path );
+        return true;
+    }
+    return false;
+}

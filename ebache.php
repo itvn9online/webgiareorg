@@ -62,7 +62,7 @@ define( 'EB_THEME_CACHE', $root_dir_cache . '/' );
 //die( __FILE__ . ':' . __LINE__ );
 
 // nạp function tạo cache
-include __DIR__ . '/app/Cache/Global.php';
+include_once __DIR__ . '/app/Cache/Global.php';
 
 // tạo tên file cache
 $filename = WGR_create_cache_file();
@@ -85,7 +85,7 @@ else {
         //echo 'wgr_ebsuppercache_timeout';
     }
     // nếu cache còn hiệu lức -> in ra luôn và thoát
-    else if ( file_exists( $filename ) && filemtime( $filename ) + EB_TIME_CACHE > time() ) {
+    else if ( WGR_cache_expire( $filename, EB_TIME_CACHE ) ) {
         //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
         echo file_get_contents( $filename, 1 );
         exit();

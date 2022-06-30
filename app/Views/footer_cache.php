@@ -15,10 +15,9 @@ if ( WHY_EBCACHE_DISABLE == '' ) {
             //echo $filename . '<br>' . "\n";
 
             //
-            if ( !file_exists( $filename ) || filemtime( $filename ) + EB_TIME_CACHE < time() ) {
+            if ( !WGR_cache_expire( $filename, EB_TIME_CACHE ) ) {
                 //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
-                touch( $filename );
-                file_put_contents( $filename, WGR_remove_html_empty_line( $main_content ) . WGR_builder_eb_cache_note( ENABLE_EBCACHE ), LOCK_EX );
+                WGR_create_file( $filename, WGR_remove_html_empty_line( $main_content ) . WGR_builder_eb_cache_note( ENABLE_EBCACHE ) );
             }
         } else {
             echo '<!-- WGR_create_cache_file not exists -->';

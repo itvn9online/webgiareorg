@@ -1,6 +1,16 @@
 <?php
 
 //
+function WGR_cache_expire( $path, $t = 3600 ) {
+    if ( $t > 0 && file_exists( $path ) && time() - filemtime( $path ) < $t ) {
+        // cache còn hạn
+        return true;
+    }
+    // cache hết hạn
+    return false;
+}
+
+//
 function WGR_create_cache_file( $cache_dir = '' ) {
     if ( isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
         $url = $_SERVER[ 'REQUEST_URI' ];

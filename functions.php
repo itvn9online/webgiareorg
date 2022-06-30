@@ -8,6 +8,10 @@
 define( 'WGR_BASE_PATH', __DIR__ . '/' );
 define( 'WGR_BASE_URI', str_replace( ABSPATH, '', __DIR__ ) . '/' );
 
+// nạp function tạo cache
+//echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
+include_once WGR_BASE_PATH . 'app/Cache/Global.php';
+
 // nạp config
 foreach ( glob( WGR_BASE_PATH . 'app/Config/*.php' ) as $filename ) {
     //echo $filename . '<br>' . "\n";

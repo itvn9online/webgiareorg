@@ -116,3 +116,9 @@ function WGR_preloads_js( $fs, $ops = [] ) {
         echo WGR_get_add_js( $f, $ops ) . PHP_EOL;
     }
 }
+
+//
+function WGR_select( $sql ) {
+    global $wpdb;
+    return $wpdb->get_results( trim( $sql ), OBJECT );
+}

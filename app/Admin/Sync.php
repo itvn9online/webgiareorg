@@ -29,12 +29,12 @@ function WGR_action_vendor_sync( $dir, $check_thirdparty_exist = true ) {
     //echo $test_permission . '<br>' . "\n";
 
     //
-    if ( file_exists( $test_permission ) && filemtime( $test_permission ) + 3600 > time() ) {
+    if ( WGR_cache_expire( $test_permission ) ) {
         return false;
     }
 
     // thử tạo file trong thư mục unzip xem có tạo được không
-    if ( !file_put_contents( $test_permission, time() ) ) {
+    if ( !WGR_create_file( $test_permission, time() ) ) {
         // nếu không tạo được -> báo lỗi luôn
         echo 'Please set permistion for folder: ' . $dir . '<br>' . "\n";
         die( __FILE__ . ':' . __LINE__ );
