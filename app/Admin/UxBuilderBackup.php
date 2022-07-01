@@ -79,7 +79,7 @@ function autoUxBuilderBackup( $space_backup = 3600 ) {
 
         //
         WGR_create_file( $file_backup, $v->post_content );
-        echo 'Create new: <strong>' . basename( $file_backup ) . '</strong><br>' . "\n";
+        //echo 'Create new: <strong>' . basename( $file_backup ) . '</strong><br>' . "\n";
     }
 
     //

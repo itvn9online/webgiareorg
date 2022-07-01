@@ -64,8 +64,10 @@ function WGR_action_vendor_sync( $dir, $check_thirdparty_exist = true ) {
             } else {
                 echo 'ERROR! sync code ' . $file . ' <br>' . "\n";
             }
+            /*
         } else {
             echo $file . ' has been sync <br>' . "\n";
+            */
         }
     }
 }
