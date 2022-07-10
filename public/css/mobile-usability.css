@@ -1,0 +1,8 @@
+embed, iframe, object, #main {
+    max-width: 100%;
+}
+@media only screen and (max-width:588px) {
+    body, #main {
+        overflow-x: hidden;
+    }
+}

@@ -4,6 +4,11 @@
 $main_content = ob_get_contents();
 ob_end_clean();
 
+/*
+ * Thay thế 1 số nội dung theo chuẩn chung
+ */
+$main_content = str_replace( '="./"', '="' . DYNAMIC_BASE_URL . '"', $main_content );
+
 //
 echo $main_content;
 

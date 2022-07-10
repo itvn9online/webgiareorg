@@ -12,6 +12,9 @@ define( 'WGR_BASE_URI', str_replace( ABSPATH, '', __DIR__ ) . '/' );
 //echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
 
+//
+include WGR_BASE_PATH . 'app/Helpers/Viewport.php';
+
 // nạp config
 foreach ( glob( WGR_BASE_PATH . 'app/Config/*.php' ) as $filename ) {
     //echo $filename . '<br>' . "\n";
