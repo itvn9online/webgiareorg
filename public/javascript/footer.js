@@ -32,6 +32,15 @@
         //
         $(this).html(str).removeClass('d-none').addClass(cl);
     });
+
+    //
+    jQuery('a').each(function () {
+        if ((jQuery(this).attr('aria-label') || '') == '') {
+            $(this).attr({
+                'aria-label': $(this).attr('title') || $(this).attr('data-title') || 'External'
+            });
+        }
+    });
 })(jQuery);
 
 //

@@ -27,6 +27,14 @@ include __DIR__ . '/header_cache.php';
 // đặt tham số này để không nạp lại base nữa
 //define( 'HAS_BASE_HREF', true );
 
+// nạp phần css inline để phục vụ cho bản mobile
+?>
+<style>
+<?php echo file_get_contents(WGR_BASE_PATH . 'public/css/mobile-usability.css', 1);
+?>
+</style>
+<?php
+
 //
 wp_head();
 
