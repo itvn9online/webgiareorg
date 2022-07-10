@@ -32,6 +32,16 @@
         //
         $(this).html(str).removeClass('d-none').addClass(cl);
     });
+
+    // chỉnh lại link cho phone call
+    $('a').each(function () {
+        var a = $(this).attr('href') || '';
+        if (a.split('tel:').length > 1) {
+            $(this).attr({
+                href: 'tel:' + a.split('tel:')[1]
+            });
+        }
+    });
 })(jQuery);
 
 //

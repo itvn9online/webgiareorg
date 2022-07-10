@@ -41,12 +41,6 @@ form.searchform {
 .ebfixed-top-menu.logged-in .fix-top-menu {
     top: 32px;
 }
-.graybg {
-    background-color: #ccc;
-}
-.gray2bg {
-    background-color: #f2f2f2;
-}
 .row .col-inner p:last-child {
     margin-bottom: 0;
 }
@@ -70,6 +64,30 @@ section.section.padding10 {
 .top-menu-space {
     padding-top: 20px;
 }
+.bottom-menu-space {
+    padding-bottom: 20px;
+}
 .d-none {
     display: none;
+}
+.upper {
+    text-transform: uppercase;
+}
+.bold {
+    font-weight: bold;
+}
+.medium18 {
+    font-size: 18px;
+}
+.blackbg {
+    background-color: black;
+}
+.whitebg {
+    background-color: white;
+}
+.graybg {
+    background-color: #ccc;
+}
+.gray2bg {
+    background-color: #f2f2f2;
 }
