@@ -9,17 +9,13 @@ if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 } else {
     //echo __FILE__ . '<br>' . "\n";
 
-    /*
-     * đồng bộ code và database nếu có
-     */
-    include __DIR__ . '/Sync.php';
-    WGR_vendor_sync();
+    // tự động nạp các file trong autoload
+    foreach ( glob( __DIR__ . '/autoload/*.php' ) as $filename ) {
+        //echo $filename . '<br>' . "\n";
+        include $filename;
+    }
 
     //
-    include __DIR__ . '/UxBuilderBackup.php';
-    autoUxBuilderBackup();
-
-    // nạp header + footer cho admin
-    include __DIR__ . '/Header.php';
-    include __DIR__ . '/Footer.php';
+    //WGR_vendor_sync();
+    //autoUxBuilderBackup();
 }

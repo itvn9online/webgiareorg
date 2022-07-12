@@ -73,12 +73,48 @@ section.section.padding10 {
 .upper {
     text-transform: uppercase;
 }
-.bold {
+.bold, .strong {
     font-weight: bold;
 }
-.medium18 {
+.bolder {
+    font-weight: bolder;
+}
+/* font size */
+.size11, .s11, .small {
+    font-size: 11px;
+}
+.size12, .s12, .small12 {
+    font-size: 12px;
+}
+.size15, .s15, .medium {
+    font-size: 15px;
+}
+.size16, .s16, .medium16 {
+    font-size: 16px;
+}
+.size18, .s18, .medium18 {
     font-size: 18px;
 }
+.size23, .s23, .big {
+    font-size: 23px;
+}
+.size30, .s30, .big2, .big30 {
+    font-size: 30px;
+}
+/* color */
+.blackcl, .blackcolor {
+    color: black;
+}
+.whitecl, .whitecolor {
+    color: white;
+}
+.graycl, .graycolor {
+    color: #ccc;
+}
+.gray2cl, .gray2color {
+    color: #f2f2f2;
+}
+/* background color */
 .blackbg {
     background-color: black;
 }

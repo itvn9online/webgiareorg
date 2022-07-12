@@ -21,10 +21,9 @@ if ( USER_ID > 0 ) {
 else if ( $_SERVER[ 'REQUEST_METHOD' ] != 'GET' ) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) running in GET method only';
 }
-// nếu cache đang được bật, nhưng lại dùng cache của đơn vị khác -> cũng hủy cache luôn
-else if ( defined( 'WP_CACHE' ) && WP_CACHE == true ) {
-    $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but an another plugin cache is enable too.
-    If you want to using EchBay Cache, please set WP_CACHE = false or comment WP_CACHE in file wp-config.php';
+// nếu đang dùng cache của đơn vị khác -> cũng hủy cache luôn
+else if ( defined( 'WP_CACHE' ) && WP_CACHE !== false ) {
+    $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but an another plugin cache is enable too. If you want to using EchBay Cache, please set WP_CACHE = false or comment WP_CACHE in file wp-config.php';
 }
 // tắt ép cache -> dùng với các custom page mà cần kiểu submit -> tìm kiếm, đặt hàng
 else if ( defined( 'WGR_NO_CACHE' ) && WGR_NO_CACHE == true ) {

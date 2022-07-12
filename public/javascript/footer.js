@@ -34,6 +34,11 @@
     });
 
     //
+    jQuery('a[href="#"]').click(function () {
+        return false;
+    });
+
+    //
     jQuery('a').each(function () {
         // chỉnh lại link cho phone call
         var a = $(this).attr('href') || '';
