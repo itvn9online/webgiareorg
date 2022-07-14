@@ -34,8 +34,11 @@
     });
 
     //
-    jQuery('a[href="#"]').click(function () {
-        return false;
+    jQuery('a[href="#"]').attr({
+        'href': 'javascript:;',
+        'rel': 'nofollow'
+        //}).click(function () {
+        //return false;
     });
 
     //

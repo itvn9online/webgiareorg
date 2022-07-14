@@ -14,8 +14,4 @@ if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
         //echo $filename . '<br>' . "\n";
         include $filename;
     }
-
-    //
-    //WGR_vendor_sync();
-    //autoUxBuilderBackup();
 }

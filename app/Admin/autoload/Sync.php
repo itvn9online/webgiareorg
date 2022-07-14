@@ -6,12 +6,23 @@
 
 //
 function WGR_vendor_sync( $check_thirdparty_exist = true ) {
+    $last_sync_vendor = WGR_BASE_PATH . 'last-sync-vendor.txt';
+    //echo $last_sync_vendor . '<br>' . "\n";
+    // giãn cách sync -> trong thời gian cho phép thì hủy bỏ việc sync luôn
+    if ( WGR_cache_expire( $last_sync_vendor ) ) {
+        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+        return false;
+    }
+
     // đồng bộ vendor CSS, JS -> đặt tên là thirdparty để tránh trùng lặp khi load file tĩnh ngoài frontend
     WGR_action_vendor_sync( WGR_BASE_PATH . 'public/thirdparty', $check_thirdparty_exist );
     // đồng bộ vendor php
     WGR_action_vendor_sync( WGR_BASE_PATH . 'vendor', $check_thirdparty_exist );
     // đồng bộ ThirdParty php (code php của bên thứ 3)
     WGR_action_vendor_sync( WGR_BASE_PATH . 'app/ThirdParty', $check_thirdparty_exist );
+
+    //
+    WGR_create_file( $last_sync_vendor, time() );
 }
 
 /*
@@ -23,15 +34,8 @@ function WGR_action_vendor_sync( $dir, $check_thirdparty_exist = true ) {
     if ( !is_dir( $dir ) ) {
         return false;
     }
-
-    //
     $test_permission = $dir . '/test_permission.txt';
     //echo $test_permission . '<br>' . "\n";
-
-    //
-    if ( WGR_cache_expire( $test_permission ) ) {
-        return false;
-    }
 
     // thử tạo file trong thư mục unzip xem có tạo được không
     if ( !WGR_create_file( $test_permission, time() ) ) {
@@ -88,3 +92,6 @@ function WGR_MY_unzip( $file, $dir ) {
     }
     return false;
 }
+
+//
+WGR_vendor_sync();

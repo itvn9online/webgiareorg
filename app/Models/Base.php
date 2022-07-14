@@ -11,6 +11,13 @@ function WGR_get_add_css( $f, $ops = [], $attr = [] ) {
     if ( !file_exists( ABSPATH . $f ) ) {
         return '<!-- ' . $f . ' not exist! -->';
     }
+    //echo filesize( $f ) . '<br>' . "\n";
+    /*
+    if ( filesize( $f ) == 0 ) {
+        unlink( $f );
+        return '<!-- ' . $f . ' filesize zero! -->';
+    }
+    */
 
     //
     if ( isset( $ops[ 'get_content' ] ) ) {
@@ -71,6 +78,13 @@ function WGR_get_add_js( $f, $ops = [], $attr = [] ) {
     if ( !file_exists( ABSPATH . $f ) ) {
         return '<!-- ' . $f . ' not exist! -->';
     }
+    //echo filesize( $f ) . '<br>' . "\n";
+    /*
+    if ( filesize( $f ) == 0 ) {
+        unlink( $f );
+        return '<!-- ' . $f . ' filesize zero! -->';
+    }
+    */
 
     //
     if ( isset( $ops[ 'get_content' ] ) ) {
