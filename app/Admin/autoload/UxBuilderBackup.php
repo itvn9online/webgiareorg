@@ -39,6 +39,45 @@ function autoUxBuilderBackup( $space_backup = 3600 ) {
     $backup_ext = '.tpl';
 
     //
+    /*
+    $data = WGR_select( "SELECT post_type
+    FROM
+        `" . $wpdb->posts . "`
+    GROUP BY
+        post_type" );
+    print_r( $data );
+    die( __FILE__ . ':' . __LINE__ );
+    */
+
+    /*
+     * backup menu
+     */
+    $mot_tuan = 24 * 3600 * 7;
+    $data = wp_get_nav_menus();
+    //print_r( $data );
+    foreach ( $data as $v ) {
+        //print_r( $v );
+
+        //
+        $file_backup = $ux_builder_dir . '/' . $v->taxonomy . '-' . $v->term_id . '-' . $v->slug . $backup_ext;
+        //echo $file_backup . '<br>' . "\n";
+
+        // nếu chưa có backup hoặc backup đủ lâu thì backup tiếp
+        if ( !WGR_cache_expire( $file_backup, $mot_tuan ) ) {
+            $html = wp_nav_menu( [
+                'echo' => false, // không echo -> lấy kết quả trả về để return
+                'menu' => $v->term_id,
+                //'menu_class' => 'eb-set-menu-selected eb-menu cf',
+            ] );
+            //echo $html . "\n";
+
+            //
+            WGR_create_file( $file_backup, $html );
+        }
+    }
+
+
+    //
     $data = WGR_select( "SELECT *
     FROM
         `" . $wpdb->posts . "`
@@ -55,6 +94,8 @@ function autoUxBuilderBackup( $space_backup = 3600 ) {
         //echo $v->post_date_gmt . '<br>' . "\n";
         //echo $v->post_modified . '<br>' . "\n";
         //echo $v->post_modified_gmt . '<br>' . "\n";
+        //echo $v->post_type . '<br>' . "\n";
+        //print_r( $v );
         //continue;
 
         // lấy ngày thay đổi cuối để tạo backup -> nếu không có thay đổi thì không tạo backup
