@@ -1,3 +1,6 @@
+var web_link = window.location.protocol + '//' + document.domain + '/';
+var eb_this_current_url = window.location.href.split('#')[0];
+
 // chờ vuejs nạp xong để khởi tạo nội dung
 function WGR_vuejs(app_id, obj, _callBack, max_i) {
     if (typeof max_i != 'number') {

@@ -58,6 +58,16 @@
             });
         }
     });
+
+    ///
+    $('a.ez-toc-link').each(function () {
+        var a = $(this).attr('href') || '';
+        if (a.substr(0, 1) == '#') {
+            $(this).attr({
+                href: eb_this_current_url + a
+            });
+        }
+    });
 })(jQuery);
 
 //
