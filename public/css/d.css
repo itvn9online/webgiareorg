@@ -128,3 +128,15 @@ section.section.padding10 {
 .gray2bg {
     background-color: #f2f2f2;
 }
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-style: italic;
+    font-size: 90%;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-style: italic;
+    font-size: 90%;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    font-style: italic;
+    font-size: 90%;
+}
