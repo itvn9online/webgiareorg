@@ -68,6 +68,11 @@
             });
         }
     });
+
+    //
+    $(document).ready(function () {
+        $('body').addClass('document-ready');
+    });
 })(jQuery);
 
 //
