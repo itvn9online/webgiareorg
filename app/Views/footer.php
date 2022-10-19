@@ -15,21 +15,21 @@ global $flatsome_opt;
 /*
  * nạp top của webgiareorg (nếu có)
  */
-if ( file_exists( WGR_CHILD_PATH . 'Views/footer.php' ) ) {
-    ?>
+if (file_exists(WGR_CHILD_PATH . 'Views/footer.php')) {
+?>
 <footer id="footer" class="footer-wrapper wgr-primary-footer">
     <?php
     include WGR_CHILD_PATH . 'Views/footer.php';
-    ?>
+?>
 </footer>
-<div onClick="window.scroll(0, 0);" class="back-to-top button icon invert plain fixed bottom z-1 is-outline circle"><i class="icon-angle-up"></i></div>
+<div onClick="window.scroll(0, 0);" class="back-to-top button icon invert plain fixed bottom z-1 is-outline circle"><i
+        class="icon-angle-up"></i></div>
 <?php
 }
 /*
  * không thì dùng top của flatsome
- */
-else {
-    ?>
+ */else {
+?>
 <footer id="footer" class="footer-wrapper flatsome-primary-footer">
     <?php do_action('flatsome_footer'); ?>
 </footer>
@@ -52,20 +52,23 @@ wp_footer();
 //require __DIR__ . '/footer_cache_quick_cart.php';
 
 // các file js có thể để chế độ defer
-WGR_adds_js( [
-    WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue.min.js',
-    //WGR_BASE_PATH . 'public/thirdparty/vuejs-2.6.10/vue' . ( WP_DEBUG === true ? '.min' : '' ) . '.js',
+WGR_adds_js([
+    WGR_BASE_PATH . 'public/thirdparty/vuejs/vue.min.js',
+    //WGR_BASE_PATH . 'public/thirdparty/vuejs/vue' . ( WP_DEBUG === true ? '.min' : '' ) . '.js',
     WGR_BASE_PATH . 'public/javascript/footer.js',
     WGR_CHILD_PATH . 'javascript/d.js',
 ], [
-    'cdn' => CDN_BASE_URL,
-], [
-    'defer'
-] );
+        'cdn' => CDN_BASE_URL,
+    ], [
+        'defer'
+    ]);
 
 ?>
 <div id="oi_popup"></div>
-</body></html><?php
+</body>
+
+</html>
+<?php
 
 /*
  * Bên trên là footer của flatsome
