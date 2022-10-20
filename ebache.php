@@ -5,7 +5,7 @@
 //echo session_id();
 
 // thời gian lưu cache
-defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 600);
+defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
 //
 $sub_dir_cache = ['ebcache'];
@@ -83,11 +83,15 @@ else {
     }
     // nếu cache còn hiệu lức -> in ra luôn và thoát
     else {
-        $cache_content = WGR_my_cache(WGR_get_cache_file());
-        if ($cache_content !== false) {
-            echo $cache_content;
-            exit();
-        }
+        WGR_display(WGR_get_cache_file());
+
+        /*
+         $cache_content = WGR_my_cache(WGR_get_cache_file());
+         if ($cache_content !== false) {
+         echo $cache_content;
+         exit();
+         }
+         */
         define('EB_FALSE_CACHE', 1);
     }
 }
