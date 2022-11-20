@@ -50,6 +50,11 @@
                 href: 'tel:' + a.split('tel:')[1]
             });
         }
+        if (a.split('mailto:').length > 1) {
+            $(this).attr({
+                href: 'mailto:' + a.split('mailto:')[1]
+            });
+        }
 
         //
         if ((jQuery(this).attr('aria-label') || '') == '') {
