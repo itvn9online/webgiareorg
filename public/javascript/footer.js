@@ -1,4 +1,31 @@
 //console.log(typeof jQuery);
+
+//
+var arr_selected_swatches = {};
+
+function WGR_after_load_devvn_quick_cart() {
+    setTimeout(function () {
+        WGR_action_load_devvn_quick_cart();
+    }, 600);
+}
+function WGR_action_load_devvn_quick_cart() {
+    // selected thuộc tính theo select của người dùng trước đó
+    //console.log(sessionStorage.getItem('arr-elected-swatches'));
+    var user_elected_swatches = sessionStorage.getItem('arr-elected-swatches');
+    if (user_elected_swatches === null) {
+        return false;
+    }
+    user_elected_swatches = JSON.parse(user_elected_swatches);
+    //console.log(user_elected_swatches);
+
+    //
+    for (var x in user_elected_swatches) {
+        //console.log(x);
+        //console.log(user_elected_swatches[x]);
+        jQuery('.devvn_prod_variable .ux-swatches[data-attribute_name="' + x + '"] .ux-swatch[data-value="' + user_elected_swatches[x] + '"]').trigger('click');
+    }
+}
+
 //
 (function ($) {
     // tạo menu cho phần my account
@@ -72,6 +99,23 @@
                 href: eb_this_current_url + a
             });
         }
+    });
+
+    // mỗi lần truy cập là dọn cái session này đi
+    sessionStorage.removeItem('arr-elected-swatches');
+    //console.log(sessionStorage.getItem('arr-elected-swatches'));
+    $('.ux-swatches .ux-swatch').click(function () {
+        var a = $(this).parent('.ux-swatches').attr('data-attribute_name') || '';
+        //console.log(a);
+        var b = $(this).attr('data-value') || '';
+        //console.log(b);
+
+        //
+        arr_selected_swatches[a] = b;
+        //console.log(arr_selected_swatches);
+
+        // lưu dưới dạng ses
+        sessionStorage.setItem('arr-elected-swatches', JSON.stringify(arr_selected_swatches));
     });
 
     //

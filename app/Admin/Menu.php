@@ -49,7 +49,7 @@ function WGR_create_admin_menu()
     /*
      * submenu -> Super Admin, Administrator, Editor, Author
      */
-    add_submenu_page($parent_slug, 'Danh sách đơn hàng', 'Đơn hàng', 'publish_posts', 'eb-order', 'func_include_wgr_private_code');
+    add_submenu_page($parent_slug, 'Danh sách Đơn hàng', 'Đơn hàng', 'publish_posts', 'eb-order', 'func_include_wgr_private_code');
 
 
     /*
@@ -63,7 +63,7 @@ function WGR_create_admin_menu()
 
 
     // menu chỉnh sửa sản phẩm nhanh -> Super Admin, Administrator, Editor
-    add_submenu_page($parent_slug, 'Công cụ hỗ trợ chỉnh sửa nhanh dữ liệu', 'Sản phẩm', 'publish_pages', 'eb-products', 'func_include_wgr_private_code');
+    add_submenu_page($parent_slug, 'Danh sách Sản phẩm', 'Sản phẩm', 'publish_pages', 'eb-products', 'func_include_wgr_private_code');
 
 
     /*
@@ -81,7 +81,7 @@ function WGR_create_admin_menu()
     /*
      * Mọi người đều có thể nhìn thấy menu này
      */
-    //add_submenu_page($parent_slug, 'Giới thiệu về tác giả', 'Giới thiệu', 'read', 'eb-about', 'func_include_wgr_private_code');
+    add_submenu_page($parent_slug, 'Giới thiệu về tác giả', 'Giới thiệu', 'read', 'eb-about', 'func_include_wgr_private_code');
 
 
     /*
