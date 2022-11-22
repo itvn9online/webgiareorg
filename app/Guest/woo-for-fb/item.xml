@@ -1,0 +1,12 @@
+<item>
+<g:id>%ID%</g:id>
+<g:availability>%availability%</g:availability>
+<g:condition>new</g:condition>
+<g:description><![CDATA[%post_excerpt%]]></g:description>
+<g:image_link>%image_link%</g:image_link>
+<g:link>%permalink%</g:link>
+<g:title><![CDATA[%post_title%]]></g:title>
+<g:price>%price%</g:price>%add_on_data%
+<g:gender><![CDATA[unisex]]></g:gender>
+<g:brand>%product_rss_brand%</g:brand>
+</item>

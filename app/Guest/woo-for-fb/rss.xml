@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+    <channel>
+        <title><![CDATA[%blogname%]]></title>
+        <link>%base_url%</link>
+        <description><![CDATA[%blogdescription%]]></description>
+        <last_update>%time%</last_update>
+        <code_copyright>Cache by EchBay.com - WebGiaRe.org</code_copyright>
+        <facebook_document>
+            <![CDATA[https://developers.facebook.com/docs/marketing-api/dynamic-product-ads/product-catalog?__mref=message_bubble#feed-format]]>
+        </facebook_document>
+        <google_document>
+            <![CDATA[https://support.google.com/merchants/topic/6324338?hl=vi&ref_topic=7294998]]>
+        </google_document>
+        <google_product_category>
+            <![CDATA[https://support.google.com/merchants/answer/6324436?hl=vi]]>
+        </google_product_category>
+        <google_product_taxonomy>
+            <![CDATA[https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt]]>
+        </google_product_taxonomy>
+        %rss_item%
+    </channel>
+</rss>

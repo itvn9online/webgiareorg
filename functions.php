@@ -42,6 +42,7 @@ foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
 // nạp thêm code cho admin
 if (is_admin()) {
     include WGR_BASE_PATH . 'app/Admin/Autoload.php';
+    include WGR_BASE_PATH . 'app/Admin/Menu.php';
 }
 // các chức năng chỉ chạy ngoài trang khách
 else {
@@ -49,4 +50,7 @@ else {
     if (USER_ID === 0) {
         include WGR_BASE_PATH . 'app/Helpers/LoginMod.php';
     }
+
+    //
+    include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
 }
