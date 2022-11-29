@@ -1,8 +1,5 @@
 <?php
 
-// khai báo qua tham số này để khi cần có thể chuyển url cho partner
-defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'webgiare.org');
-
 // Thay doi duong dan logo login page
 function WGR_wpc_url_login()
 {

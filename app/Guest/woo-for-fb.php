@@ -6,7 +6,7 @@
  * https://developers.facebook.com/docs/marketing-api/dynamic-product-ads/product-catalog?__mref=message_bubble#feed-format
  */
 
-function action_woo_for_fb()
+function action_woo_for_fb($export_type = 'facebook')
 {
     checkRequestToken();
 
@@ -77,9 +77,22 @@ function action_woo_for_fb()
         //print_r($v->availability);
         //$v->regular_price = $_product->get_regular_price();
         $v->sale_price = $_product->get_sale_price();
+
+        //
         $v->add_on_data = '';
         if ($v->sale_price > 0) {
             $v->add_on_data .= '<g:sale_price>' . $v->sale_price . ' VND</g:sale_price>';
+        }
+
+        // cho bản của google
+        if ($export_type == 'google') {
+            $item_groups_id = $_product->get_category_ids();
+            //print_r($item_groups_id);
+
+            //
+            if (!empty($item_groups_id)) {
+                $v->add_on_data .= '<g:item_group_id>' . $item_groups_id[0] . '</g:item_group_id>';
+            }
         }
 
         //
@@ -120,9 +133,6 @@ function action_woo_for_fb()
     die($rss_content);
 }
 
-/**
- * at_rest_init
- */
 function woo_for_fb()
 {
     // route url: domain.com/wp-json/$namespace/$route
@@ -141,3 +151,6 @@ function woo_for_fb()
 
 //
 add_action('rest_api_init', 'woo_for_fb');
+
+// nạp chức năng export cho google -> nạp kiểu này để còn tái sử dụng code của file dành cho facebook
+include WGR_BASE_PATH . 'app/Guest/woo-for-gg.php';

@@ -43,7 +43,7 @@ function WGR_create_admin_menu()
     /*
      * EchBay menu -> mọi người đều có thể nhìn thấy menu này
      */
-    add_menu_page('Danh sách đơn hàng', 'EchBay.com', 'read', $parent_slug, 'func_include_wgr_private_code', NULL, 6);
+    add_menu_page('Danh sách đơn hàng', PARTNER_WEBSITE, 'read', $parent_slug, 'func_include_wgr_private_code', NULL, 6);
 
 
     /*
@@ -69,7 +69,7 @@ function WGR_create_admin_menu()
     /*
      * Super Admin, Administrator, Editor
      */
-    //add_submenu_page($parent_slug, 'Cấu hình website', 'Cấu hình website', 'publish_pages', 'eb-config', 'func_include_wgr_private_code');
+    add_submenu_page($parent_slug, 'Cấu hình website', 'Cấu hình website', 'publish_pages', 'eb-config', 'func_include_wgr_private_code');
 
     //add_submenu_page($parent_slug, 'Cài đặt và chỉnh sửa giao diện mặc định', 'Cài đặt giao diện', 'manage_options', 'eb-config_theme', 'func_include_wgr_private_code');
 

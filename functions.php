@@ -8,6 +8,9 @@
 define('WGR_BASE_PATH', __DIR__ . '/');
 define('WGR_BASE_URI', str_replace(ABSPATH, '', __DIR__) . '/');
 
+// khai báo qua tham số này để khi cần có thể chuyển url cho partner
+defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'webgiare.org');
+
 // nạp function tạo cache
 //echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
@@ -53,4 +56,5 @@ else {
 
     //
     include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
+    include WGR_BASE_PATH . 'app/Guest/contact-price.php';
 }
