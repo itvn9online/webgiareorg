@@ -19,7 +19,7 @@ function autoUxBuilderBackup($space_backup = 3600)
     }
 
     // file lưu tiến trình backup lần trước
-    $last_backup_ux_builder = ABSPATH . 'last-backup-ux-builder.txt';
+    $last_backup_ux_builder = ABSPATH . 'wgr-last-backup-ux-builder.txt';
     //echo $last_backup_ux_builder . '<br>' . "\n";
     // giãn cách backup -> trong thời gian cho phép thì hủy bỏ việc backup luôn
     if (WGR_cache_expire($last_backup_ux_builder, $space_backup)) {
