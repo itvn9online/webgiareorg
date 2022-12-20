@@ -1,13 +1,4 @@
 <?php
-/*
- * Đây là file index đã thêm chức năng ebcache vào, nhằm giúp cho việc xử lý dữ liệu được dễ dàng hơn
- */
-// tham số để không nạp lại chức năng này nhiều lần
-define('WP_COPY_WGR_SUPPER_CACHE', 1);
-
-// file tạo cache
-include __DIR__ . '/wp-content/webgiareorg/eb_cache.php';
-
 /**
  * Front to the WordPress application. This file doesn't do anything, but loads
  * wp-blog-header.php which does and tells WordPress to load the theme.
@@ -21,6 +12,15 @@ include __DIR__ . '/wp-content/webgiareorg/eb_cache.php';
  * @var bool
  */
 define('WP_USE_THEMES', true);
+
+/*
+ * Đây là file index đã thêm chức năng ebcache vào, nhằm giúp cho việc xử lý dữ liệu được dễ dàng hơn
+ */
+// tham số để không nạp lại chức năng này nhiều lần
+define('WP_COPY_WGR_SUPPER_CACHE', 1);
+
+// file tạo cache
+include __DIR__ . '/wp-content/webgiareorg/eb_cache.php';
 
 /** Loads the WordPress Environment and Template */
 require __DIR__ . '/wp-blog-header.php';
