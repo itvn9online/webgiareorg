@@ -27,7 +27,17 @@ function autoUxBuilderBackup($space_backup = 3600)
         return false;
     }
 
-    //
+    // tạo file htaccess chặn truy cập vào thư mục này
+    $htaccess_deny_all = file_get_contents(WGR_BASE_PATH . 'app/Helpers/templates/htaccess_deny_all.txt');
+    $arr_deny_all = [
+        'base_url' => get_home_url(),
+    ];
+    foreach ($arr_deny_all as $k => $v) {
+        $htaccess_deny_all = str_replace('{{' . $k . '}}', $v, $htaccess_deny_all);
+    }
+    WGR_create_file($ux_builder_dir . '/.htaccess', $htaccess_deny_all);
+
+    // bắt đầu backup dữ liệu
     global $wpdb;
     //die( $wpdb->posts );
 

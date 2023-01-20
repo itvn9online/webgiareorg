@@ -79,9 +79,9 @@ function action_woo_for_fb($export_type = 'facebook')
         $v->sale_price = $_product->get_sale_price();
 
         //
-        $v->add_on_data = '';
+        $add_on_data = '';
         if ($v->sale_price > 0) {
-            $v->add_on_data .= '<g:sale_price>' . $v->sale_price . ' VND</g:sale_price>';
+            $add_on_data .= '<g:sale_price>' . $v->sale_price . ' VND</g:sale_price>';
         }
 
         // cho bản của google
@@ -91,9 +91,12 @@ function action_woo_for_fb($export_type = 'facebook')
 
             //
             if (!empty($item_groups_id)) {
-                $v->add_on_data .= '<g:item_group_id>' . $item_groups_id[0] . '</g:item_group_id>';
+                $add_on_data .= '<g:item_group_id>' . $item_groups_id[0] . '</g:item_group_id>';
             }
         }
+
+        //
+        $v->add_on_data = $add_on_data;
 
         //
         foreach ($v as $k2 => $v2) {
@@ -108,9 +111,7 @@ function action_woo_for_fb($export_type = 'facebook')
     //
     $rss_brand = explode('.', $_SERVER['HTTP_HOST']);
     $rss_brand = $rss_brand[0];
-    foreach ([
-        'product_rss_brand' => $rss_brand,
-    ] as $k => $v) {
+    foreach (['product_rss_brand' => $rss_brand,] as $k => $v) {
         $rss_item = str_replace('%' . $k . '%', $v, $rss_item);
     }
 
@@ -119,13 +120,7 @@ function action_woo_for_fb($export_type = 'facebook')
 
     //
     $rss_content = file_get_contents(__DIR__ . '/woo-for-fb/rss.xml');
-    foreach ([
-        'time' => date('r', time()),
-        'rss_item' => $rss_item,
-        'base_url' => get_site_url(),
-        'blogname' => get_bloginfo('blogname'),
-        'blogdescription' => get_bloginfo('blogdescription'),
-    ] as $k => $v) {
+    foreach (['time' => date('r', time()), 'rss_item' => $rss_item, 'base_url' => get_site_url(), 'blogname' => get_bloginfo('blogname'), 'blogdescription' => get_bloginfo('blogdescription'),] as $k => $v) {
         $rss_content = str_replace('%' . $k . '%', $v, $rss_content);
     }
 
