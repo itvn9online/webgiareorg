@@ -7,7 +7,7 @@ function check_and_update_webgiareorg()
     $remove_version = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
 
     //
-    if (version_compare($version, $remove_version, '<')) {
+    if (isset($_GET['update_wgr_code']) || version_compare($version, $remove_version, '<')) {
         //echo $version . PHP_EOL;
         //echo $remove_version . PHP_EOL;
         $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
@@ -94,7 +94,8 @@ function check_and_update_webgiareorg()
 
 ?>
 <h1>Về tác giả</h1>
-<p>Phiên bản code: <?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></p>
+<p>Phiên bản webgiare code: <?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></p>
+<p>Mặc định, webgiare code sẽ được cập nhật tự động. Bạn có thể <a href="wp-admin/admin.php?page=eb-about&update_wgr_code=1">Bấm vào đây</a> để cập nhật lại webgiare code thủ công.</p>
 <?php
 
 //
