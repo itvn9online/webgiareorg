@@ -28,7 +28,7 @@ function webgiare_update_themes($transient)
     if (false == $remote = get_transient('webgiare-theme-update' . $version)) {
         // connect to a remote server where the update information is stored
         $remote = wp_remote_get(
-            'https://flatsome.webgiare.org/wp-content/webgiareorg/info.json',
+            'https://flatsome.echbay.com/wp-content/webgiareorg/info.php',
             array(
                 'timeout' => 30,
                 'headers' => array(
