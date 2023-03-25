@@ -100,3 +100,10 @@ function check_and_update_webgiareorg()
 
 //
 check_and_update_webgiareorg();
+
+?>
+<script>
+    if (window.location.href.split('update_wgr_code=').length > 1) {
+        window.history.pushState("", document.title, window.location.href.split('&update_wgr_code=')[0].split('?update_wgr_code=')[0]);
+    }
+</script>
