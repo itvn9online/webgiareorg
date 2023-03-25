@@ -91,7 +91,11 @@ function check_and_update_webgiareorg()
         unlink($dest);
     }
 }
-check_and_update_webgiareorg();
 
 ?>
 <h1>Về tác giả</h1>
+<p>Phiên bản code: <?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></p>
+<?php
+
+//
+check_and_update_webgiareorg();
