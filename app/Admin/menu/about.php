@@ -20,71 +20,75 @@ function check_and_update_webgiareorg()
         $download_url = 'https://github.com/itvn9online/webgiareorg/archive/refs/heads/main.zip';
 
         //
-        if (copy($download_url, $dest)) {
-            chmod($dest, 0777);
+        if (!copy($download_url, $dest)) {
+            return false;
+        }
+        chmod($dest, 0777);
+
+        //
+        if (filesize($dest) > 1000) {
+            // kết quả giải nén
+            $unzipfile = false;
+            $dir_unzip_update_to = WP_CONTENT_DIR . '/';
+            $dir_name_for_unzip_to = 'webgiareorg-main';
 
             //
-            if (filesize($dest) > 1000) {
-                // kết quả giải nén
-                $unzipfile = false;
-                $dir_unzip_update_to = WP_CONTENT_DIR . '/';
-                $dir_name_for_unzip_to = 'webgiareorg-main';
+            if (class_exists('ZipArchive')) {
+                echo '<div>Using: <strong>ZipArchive</strong></div>';
 
-                //
-                if (class_exists('ZipArchive')) {
-                    echo '<div>Using: <strong>ZipArchive</strong></div>';
+                $zip = new ZipArchive;
+                if (
+                    $zip->open($dest) === TRUE
+                ) {
+                    $zip->extractTo($dir_unzip_update_to);
+                    $zip->close();
 
-                    $zip = new ZipArchive;
-                    if (
-                        $zip->open($dest) === TRUE
-                    ) {
-                        $zip->extractTo($dir_unzip_update_to);
-                        $zip->close();
-
-                        //
-                        $unzipfile = true;
-                    }
-                } else {
-                    echo '<div>Using: <strong>unzip_file (wordpress)</strong></div>';
-
-                    $unzipfile = unzip_file($dest, $dir_unzip_update_to);
-                }
-
-                //
-                if ($unzipfile == true) {
-                    echo '<div>Unzip to: <strong>' . $dir_unzip_update_to . $dir_name_for_unzip_to . '</strong></div>';
-
-                    if (!is_dir($dir_unzip_update_to . $dir_name_for_unzip_to)) {
-                        echo '<h3 class="redcolor">Unzip faild...</strong></h3>';
-                    } else {
-                        // thực hiện đổi tên thư mục
-                        $myoldfolder = $dir_unzip_update_to . 'webgiareorg';
-                        echo $myoldfolder . '<br>' . PHP_EOL;
-
-                        //
-                        $mynewfolder = '';
-                        if (is_dir($myoldfolder)) {
-                            $mynewfolder = $myoldfolder . '-' . date('Ymd-His');
-                            echo $mynewfolder . '<br>' . PHP_EOL;
-
-                            // ưu tiên sử dụng PHP thuần cho nó nhanh
-                            if (rename($myoldfolder, $mynewfolder)) {
-                                if (rename($dir_unzip_update_to . $dir_name_for_unzip_to, $myoldfolder)) {
-                                    echo '<div>Hoàn thành quá trình cập nhật code (rename)!</div>';
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    echo '<div>Do not unzip file, update faild!</div>';
+                    //
+                    $unzipfile = true;
                 }
             } else {
-                echo '<div>File bị xóa vì không đủ dung lượng cần thiết!</div>';
+                echo '<div>Using: <strong>unzip_file (wordpress)</strong></div>';
+
+                $unzipfile = unzip_file($dest, $dir_unzip_update_to);
             }
 
             //
-            unlink($dest);
+            if ($unzipfile == true) {
+                echo '<div>Unzip to: <strong>' . $dir_unzip_update_to . $dir_name_for_unzip_to . '</strong></div>';
+
+                if (!is_dir($dir_unzip_update_to . $dir_name_for_unzip_to)) {
+                    echo '<h3 class="redcolor">Unzip faild...</strong></h3>';
+                } else {
+                    // thực hiện đổi tên thư mục
+                    $myoldfolder = $dir_unzip_update_to . 'webgiareorg';
+                    echo $myoldfolder . '<br>' . PHP_EOL;
+
+                    // đổi tên thư mục code cũ
+                    $mynewfolder = '';
+                    if (is_dir($myoldfolder)) {
+                        $mynewfolder = $myoldfolder . '-' . date('Ymd-His');
+                        echo $mynewfolder . '<br>' . PHP_EOL;
+
+                        // ưu tiên sử dụng PHP thuần cho nó nhanh
+                        if (rename($myoldfolder, $mynewfolder)) {
+                            echo '<div>Hoàn thành quá trình backup code (rename)!</div>';
+                        }
+                    }
+
+                    // đổi tên thư mục code mới
+                    if (rename($dir_unzip_update_to . $dir_name_for_unzip_to, $myoldfolder)) {
+                        echo '<div>Hoàn thành quá trình cập nhật code (rename)!</div>';
+                    }
+                }
+            } else {
+                echo '<div>Do not unzip file, update faild!</div>';
+            }
+        } else {
+            echo '<div>File bị xóa vì không đủ dung lượng cần thiết!</div>';
         }
+
+        //
+        unlink($dest);
     }
 }
 check_and_update_webgiareorg();
