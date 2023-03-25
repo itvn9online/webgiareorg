@@ -12,6 +12,8 @@ if (isset($_GET['changes'])) {
     //echo $changes_txt . PHP_EOL;
     if (file_exists($changes_txt)) {
         header('Content-Type: text/plain; charset=UTF-8');
+        header_remove('X-Frame-Options');
+        header('X-Frame-Options: ALLOWALL', true);
 
         //
         die(file_get_contents($changes_txt));
