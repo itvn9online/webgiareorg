@@ -95,7 +95,7 @@ function check_and_update_webgiareorg()
 ?>
 <h1>Về tác giả</h1>
 <p>Phiên bản webgiare code: <?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></p>
-<p>Mặc định, webgiare code sẽ được cập nhật tự động. Bạn có thể <a href="wp-admin/admin.php?page=eb-about&update_wgr_code=1">Bấm vào đây</a> để cập nhật lại webgiare code thủ công.</p>
+<p>Mặc định, webgiare code sẽ được cập nhật tự động. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1">Bấm vào đây</a> để cập nhật lại webgiare code thủ công.</p>
 <?php
 
 //
