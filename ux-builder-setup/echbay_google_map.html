@@ -1,0 +1,49 @@
+<div id="{{map_id}}" data-lat="{{map_latitude}}" data-lng="{{map_longitude}}" data-height="{{map_height}}"
+    data-zoom="{{map_zoom}}" style="max-width: 1900px;margin: 0 auto;height: {{map_height}}px;">
+</div>
+<script>
+    function renderMap() {
+        bando = new google.maps.Map(document.getElementById("{{map_id}}"), {
+            center: {
+                lat: jQuery('#{{map_id}}').attr('data-lat') * 1,
+                lng: jQuery('#{{map_id}}').attr('data-lng') * 1,
+            },
+            zoom: jQuery('#{{map_id}}').attr('data-zoom') * 1,
+        });
+
+        var marker = new google.maps.Marker({
+            position: {
+                lat: jQuery('#{{map_id}}').attr('data-lat') * 1,
+                lng: jQuery('#{{map_id}}').attr('data-lng') * 1,
+            },
+            map: bando,
+        });
+    }
+
+    function showMap() {
+        jQuery("#{{map_id}}").height(jQuery('#{{map_id}}').attr('data-height') * 1);
+
+        //
+        renderMap();
+    }
+
+    //
+    (function (b, e, v, t, s) {
+        if (window.location.protocol != "https:") {
+            window.location = "https://" + document.domain;
+            return false;
+        }
+
+        //
+        t = b.createElement(e);
+        t.async = !0;
+
+        v = "";
+
+        // -> src
+        t.src =
+            "https://maps.googleapis.com/maps/api/js?key=" + v + "&callback=showMap";
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+    })(document, "script");
+</script>
