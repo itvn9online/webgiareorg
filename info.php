@@ -6,6 +6,9 @@
 //
 header('Access-Control-Allow-Origin: *');
 
+//
+$flatsome_version = '3.16.7';
+
 // hiển thị lịch sử thay đổi
 if (isset($_GET['changes'])) {
     $changes_txt = dirname(__DIR__) . '/themes/flatsome/changes.txt';
@@ -26,7 +29,7 @@ if (isset($_GET['changes'])) {
 // thông tin update
 $update = array(
     // phiên bản flatsome
-    "version" => "3.16.7",
+    "version" => $flatsome_version,
     // phiên bản tối thiểu của wordpress
     "requires" => "5.0.0",
     // phiên bản tối thiểu của php
@@ -34,7 +37,7 @@ $update = array(
     // log thay đổi
     "details_url" => "https://flatsome.echbay.com/wp-content/webgiareorg/info.php?changes=log",
     // link download
-    "download_url" => "https://flatsome.echbay.com/download/flatsome-3.16.7.zip"
+    "download_url" => "https://flatsome.echbay.com/download/flatsome-" . $flatsome_version . ".zip"
 );
 
 //
