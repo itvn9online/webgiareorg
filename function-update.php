@@ -64,7 +64,8 @@ function webgiare_update_themes($transient)
     //
     $data = array(
         'theme' => $template,
-        'url' => $remote->details_url,
+        //'url' => $remote->details_url,
+        'url' => esc_url(admin_url('admin.php?page=wgr-version-flatsome')),
         'requires' => $remote->requires,
         'requires_php' => $remote->requires_php,
         'version' => $version,
@@ -90,6 +91,14 @@ function webgiare_update_themes($transient)
 
     return $transient;
 }
+
+// Tạo page để xem thông tin phiên bản
+function __wgr_version_flatsome()
+{
+    $a = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt');
+    echo nl2br($a);
+}
+add_submenu_page(null, '', '', 'manage_options', 'wgr-version-flatsome', '__wgr_version_flatsome');
 
 // để đỡ nặng web, chỉ chạy tính năng update theme khi truy cập các url này
 if (!defined('WGR_CHECKED_UPDATE_THEME')) {
