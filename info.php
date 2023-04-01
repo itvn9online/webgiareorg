@@ -35,7 +35,8 @@ $update = array(
     // phiên bản tối thiểu của php
     "requires_php" => "5.6.20",
     // log thay đổi
-    "details_url" => "https://flatsome.echbay.com/wp-content/webgiareorg/info.php?changes=log",
+    //"details_url" => "https://flatsome.echbay.com/wp-content/webgiareorg/info.php?changes=log",
+    "details_url" => "https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt",
     // link download
     "download_url" => "https://flatsome.echbay.com/download/flatsome-" . $flatsome_version . ".zip"
 );
