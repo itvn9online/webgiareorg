@@ -12,7 +12,7 @@
  * Tham khảo từ nguồn:
  * https://rudrastyh.com/wordpress/theme-updates-from-custom-server.html
  */
-function webgiare_v2_update_themes($transient)
+function webgiare_v3_update_themes($transient)
 {
     // lấy thông tin theme flatsome
     $theme = wp_get_theme(get_template());
@@ -103,7 +103,7 @@ if (!defined('WGR_CHECKED_UPDATE_THEME')) {
         || strpos($_SERVER['REQUEST_URI'], '/update.php') !== false
         || strpos($_SERVER['REQUEST_URI'], '/themes.php') !== false
     ) {
-        add_filter('site_transient_update_themes', 'webgiare_v2_update_themes');
+        add_filter('site_transient_update_themes', 'webgiare_v3_update_themes');
     }
 }
 //die(__FILE__ . ':' . __LINE__);
