@@ -92,3 +92,12 @@ function WGR_create_admin_menu()
 
 // thêm menu vào admin
 add_filter('admin_menu', 'WGR_create_admin_menu');
+
+
+// Tạo page để xem thông tin phiên bản
+function __wgr_version_flatsome()
+{
+    $a = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt');
+    echo nl2br($a);
+}
+add_submenu_page(null, '', '', 'manage_options', 'wgr-version-flatsome', '__wgr_version_flatsome');
