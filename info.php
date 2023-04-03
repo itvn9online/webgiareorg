@@ -11,19 +11,10 @@ $flatsome_version = '3.16.8';
 
 // hiển thị lịch sử thay đổi
 if (isset($_GET['changes'])) {
-    $changes_txt = dirname(__DIR__) . '/themes/flatsome/changes.txt';
-    //echo $changes_txt . PHP_EOL;
-    if (file_exists($changes_txt)) {
-        header('Content-Type: text/plain; charset=UTF-8');
-        header_remove('X-Frame-Options');
-        header('X-Frame-Options: ALLOWALL', true);
-
-        //
-        die(file_get_contents($changes_txt));
-    }
+    header('Content-Type: text/plain; charset=UTF-8');
 
     //
-    //die(__FILE__ . ':' . __LINE__);
+    die(file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt'));
 }
 
 // thông tin update

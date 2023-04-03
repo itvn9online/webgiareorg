@@ -65,7 +65,8 @@ function webgiare_v2_update_themes($transient)
     $data = array(
         'theme' => $template,
         //'url' => $remote->details_url,
-        'url' => esc_url(admin_url('admin.php?page=wgr-version-flatsome')),
+        //'url' => esc_url(admin_url('admin.php?page=wgr-version-flatsome')),
+        'url' => esc_url(get_site_url() . '/wp-content/webgiareorg/info.php?changes=log'),
         'requires' => $remote->requires,
         'requires_php' => $remote->requires_php,
         'version' => $version,
