@@ -101,11 +101,11 @@ function check_and_update_webgiareorg()
 //
 if (defined('WGR_CHECKED_UPDATE_THEME')) {
 ?>
-    <p>Phiên bản Flatsome của bạn đang được cập nhật thông qua server của webgiare.org</p>
+    <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của webgiare.org</p>
 <?php
 } else {
 ?>
-    <p>Phiên bản Flatsome của bạn đang được cập nhật thông qua server của themeforest.net</p>
+    <p class="greencolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của themeforest.net</p>
 <?php
 }
 
