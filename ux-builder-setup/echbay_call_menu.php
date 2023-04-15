@@ -58,8 +58,8 @@ function action_echbay_call_menu($atts)
 
     // sử dụng cache cho menu -> tránh duplicate query
     $filename = '';
-    if (defined('EB_THEME_CACHE') && function_exists('WGR_get_cache_file')) {
-        $filename = EB_THEME_CACHE . __FUNCTION__ .  $call_menu . '.txt';
+    if (function_exists('my_builder_path_cache')) {
+        $filename = my_builder_path_cache(__FUNCTION__ .  $call_menu);
 
         //
         $html = WGR_my_cache($filename);

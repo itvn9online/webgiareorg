@@ -120,3 +120,12 @@ Served to: ebcache all URI (' . $note . ')
 Caching using hard disk drive. Recommendations using SSD for your website.
 Compression = gzip -->';
 }
+
+// tạo file cache cho các tùy biến trong ux builder
+function my_builder_path_cache($fname)
+{
+    if (defined('EB_THEME_CACHE')) {
+        return EB_THEME_CACHE . $fname . '.txt';
+    }
+    return '';
+}
