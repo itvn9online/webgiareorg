@@ -77,7 +77,7 @@ function action_echbay_call_menu($atts)
     ]);
 
     if ($menu_title != '') {
-        $html = '<h4 class="echbay-flatsome-menu">' . $menu_title . '</h4>' . $html;
+        $html = '<h4 class="echbayflatsome-title-menu">' . $menu_title . '</h4>' . $html;
     }
 
     if ($custom_class != '') {

@@ -9,7 +9,7 @@ function devvn_wc_custom_get_price_html($price, $product)
             $regular_price = wc_get_price_to_display($product, array('qty' => 1, 'price' => $product->get_regular_price()));
             $price = wc_format_price_range($regular_price, __('Free!', 'woocommerce'));
         } else {
-            $price = '<span class="contact-price amount">' . __('Liên hệ', 'woocommerce') . '</span>';
+            $price = '<span class="contact-price contact-wgr-price amount">' . __('Liên hệ', 'woocommerce') . '</span>';
         }
     }
     return $price;

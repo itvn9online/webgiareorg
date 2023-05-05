@@ -109,7 +109,7 @@ function action_echbay_youtube_video($atts)
     </a></div>';
 
     if ($video_title != '') {
-        $html .= '<h4 class="echbay-flatsome-menu">' . $video_title . '</h4>';
+        $html .= '<h4 class="echbayflatsome-title-video">' . $video_title . '</h4>';
     }
 
     if ($custom_class != '') {
