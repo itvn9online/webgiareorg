@@ -99,6 +99,57 @@ function check_and_update_webgiareorg()
 <?php
 
 //
+if (class_exists('Imagick')) {
+?>
+    <p class="greencolor">Xin chúc mừng, <strong>Imagick</strong> đã được cài đặt! Các chức năng xử lý hình ảnh sẽ hoạt động ổn định hơn.</p>
+<?php
+} else {
+?>
+    <p class="orgcolor">Vui lòng cài đăt thêm <strong>Imagick</strong> để các chức năng xử lý hình ảnh hoạt động ổn định hơn.</p>
+<?php
+}
+
+?>
+<!-- OPcache -->
+<p><strong>OPcache:</strong>
+    <?php
+    if (function_exists('opcache_get_status') && is_array(opcache_get_status())) {
+    ?>
+        <span class="greencolor"> Xin chúc mừng, <strong>OPcache</strong> đã được cài đặt!</span>
+    <?php
+    } else {
+    ?>
+        <span class="orgcolor"> Nên bổ sung thêm OPcache sẽ giúp tăng đáng kể hiệu suất website của bạn.</span>
+    <?php
+    }
+    ?>
+</p>
+<!-- END OPcache -->
+<!-- Memcached -->
+<p><strong>Memcached:</strong>
+    <?php
+    if (function_exists('Memcached')) {
+    ?>
+        Xin chúc mừng, <strong>Memcached</strong> đã được cài đặt!
+    <?php
+    }
+    ?>
+</p>
+<!-- END Memcached -->
+<!-- Redis -->
+<p><strong>Redis (<?php echo phpversion('redis'); ?>):</strong>
+    <?php
+    if (phpversion('redis') != '') {
+    ?>
+        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
+    <?php
+    }
+    ?>
+</p>
+<!-- END Redis -->
+<?php
+
+//
 if (defined('WGR_CHECKED_UPDATE_THEME')) {
 ?>
     <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của webgiare.org</p>
