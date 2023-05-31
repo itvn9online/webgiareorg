@@ -7,7 +7,7 @@
 header('Access-Control-Allow-Origin: *');
 
 //
-$flatsome_version = '3.17.0';
+$flatsome_version = '3.17.1';
 
 // hiển thị lịch sử thay đổi
 if (isset($_GET['changes'])) {
