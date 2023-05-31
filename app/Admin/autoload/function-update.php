@@ -4,7 +4,7 @@
 */
 
 //
-if (in_array(
+if (!in_array(
     $_SERVER['HTTP_HOST'],
     [
         'webgiare.org',
