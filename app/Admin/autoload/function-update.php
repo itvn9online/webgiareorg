@@ -4,7 +4,14 @@
 */
 
 //
-if ($_SERVER['HTTP_HOST'] != 'webgiare.org' && $_SERVER['HTTP_HOST'] != 'www.webgiare.org') {
+if (in_array(
+    $_SERVER['HTTP_HOST'],
+    [
+        'webgiare.org',
+        'www.webgiare.org',
+        'world.webgiare.org',
+    ]
+)) {
     $flatsome_function_update = dirname(WGR_CHILD_PATH) . '/flatsome/inc/functions/function-update.php';
     //echo $flatsome_function_update . PHP_EOL;
     // nếu còn tồn tại chuỗi _site_transient_update_themes -> vẫn còn đang dùng code của flatsome
