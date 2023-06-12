@@ -153,3 +153,23 @@ function checkRequestToken($require = false)
 {
     //
 }
+
+// dọn dẹp thử mục thuộc dạng bảo mật nếu chẳng may up nhầm lên host
+function WGR_cleanup_vscode($dir)
+{
+    if (!is_dir($dir)) {
+        return false;
+    }
+    $objects = scandir($dir);
+    foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+            if (filetype($dir . "/" . $object) == "dir") {
+                WGR_action_cleanup_vscode($dir . "/" . $object);
+            } else {
+                unlink($dir . "/" . $object);
+            }
+        }
+    }
+    reset($objects);
+    rmdir($dir);
+}

@@ -46,6 +46,10 @@ foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
 if (is_admin()) {
     include WGR_BASE_PATH . 'app/Admin/Autoload.php';
     include WGR_BASE_PATH . 'app/Admin/Menu.php';
+
+    //
+    WGR_cleanup_vscode(__DIR__ . '/.vscode');
+    WGR_cleanup_vscode(WGR_CHILD_PATH . '.vscode');
 }
 // các chức năng chỉ chạy ngoài trang khách
 else {
@@ -58,26 +62,4 @@ else {
     include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
     include WGR_BASE_PATH . 'app/Guest/contact-price.php';
     include WGR_BASE_PATH . 'app/ThirdParty/rank_math_the_breadcrumbs.php';
-}
-
-//
-if (is_dir(__DIR__ . '/.vscode')) {
-    function WGR_cleanup_vscode($dir)
-    {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($dir . "/" . $object) == "dir") {
-                        WGR_cleanup_vscode($dir . "/" . $object);
-                    } else {
-                        unlink($dir . "/" . $object);
-                    }
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
-    }
-    WGR_cleanup_vscode(__DIR__ . '/.vscode');
 }
