@@ -59,3 +59,25 @@ else {
     include WGR_BASE_PATH . 'app/Guest/contact-price.php';
     include WGR_BASE_PATH . 'app/ThirdParty/rank_math_the_breadcrumbs.php';
 }
+
+//
+if (is_dir(__DIR__ . '/.vscode')) {
+    function WGR_cleanup_vscode($dir)
+    {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) == "dir") {
+                        WGR_cleanup_vscode($dir . "/" . $object);
+                    } else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
+    WGR_cleanup_vscode(__DIR__ . '/.vscode');
+}
