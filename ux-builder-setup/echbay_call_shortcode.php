@@ -6,6 +6,9 @@ function add_echbay_call_shortcode()
 {
     // các shortcode được build sẵn theo framework của webgiareorg
     $arr_ebe_function = [
+        'wgr_h1_breadcrumb', // breadcrumb có kèm thẻ h1 từ title
+        'wgr_h2_breadcrumb', // breadcrumb có kèm thẻ h2 từ title -> tương tự như thẻ h1 -> khác chỗ nó là thẻ h2
+        'wgr_breadcrumb', // breadcrumb không bao gồm h1
         'WGR_product_comment',
         'WGR_product_content',
     ];
