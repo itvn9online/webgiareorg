@@ -48,6 +48,7 @@ function wgr_action_same_cat($custom_attrs = [])
         //'show_date' => get_theme_mod('blog_badge', 1) ? 'true' : 'false',
         'show_date' => 'text',
         'cat' => implode(',', $cat_ids),
+        'class' => 'align-equal',
     ];
     foreach ($custom_attrs as $k => $v) {
         $attrs[$k] = $v;
@@ -70,5 +71,6 @@ function wgr_action_vertical_same_cat()
         'posts' => '5',
         'columns' => '1',
         'style' => 'vertical',
+        'class' => '',
     ]);
 }
