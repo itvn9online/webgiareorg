@@ -4,7 +4,7 @@
 * shortcode tạo breadcrumb cho trang tin tức
 */
 // shorcode tạo breadcrumb không h1 -> cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_breadcrumb]
-add_shortcode('wgr_breadcrumb', 'action_wgr_breadcrumb');
+add_shortcode('wgr_breadcrumb', 'action_wgr_default_breadcrumb');
 
 // shorcode tạo breadcrumb có h1 -> cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_h1_breadcrumb]
 add_shortcode('wgr_h1_breadcrumb', 'action_wgr_h1_breadcrumb');
@@ -71,6 +71,11 @@ function action_wgr_breadcrumb($entry_tag = '')
         ];
     }
     return wgr_list_breadcrumb($category->post_title, $arr_breadcrumbs, $entry_tag);
+}
+
+function action_wgr_default_breadcrumb()
+{
+    return action_wgr_breadcrumb();
 }
 
 function action_wgr_h1_breadcrumb()
