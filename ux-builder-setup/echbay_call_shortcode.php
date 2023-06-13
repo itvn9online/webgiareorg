@@ -11,6 +11,7 @@ function add_echbay_call_shortcode()
         'wgr_breadcrumb', // breadcrumb không bao gồm h1
         'WGR_product_comment',
         'WGR_product_content',
+        'wgr_same_cat',
     ];
     $ops_list = [
         '' => '- Chọn shortcode -',
