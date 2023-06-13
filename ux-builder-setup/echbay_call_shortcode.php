@@ -13,6 +13,8 @@ function add_echbay_call_shortcode()
         'WGR_product_content',
         'wgr_same_cat',
         'wgr_same_vertical_cat',
+        'wgr_same_col6_cat',
+        'wgr_same_col4_cat',
     ];
     $ops_list = [
         '' => '- Chọn shortcode -',

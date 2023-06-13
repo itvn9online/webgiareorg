@@ -4,7 +4,12 @@
 * shortcode lấy bài viết cùng danh mục
 */
 // trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_same_cat]
+// trả về post với 3 col trên row
 add_shortcode('wgr_same_cat', 'wgr_action_default_same_cat');
+// trả về post với 2 col trên row
+add_shortcode('wgr_same_col6_cat', 'wgr_action_col6_same_cat');
+// trả về post với 4 col trên row
+add_shortcode('wgr_same_col4_cat', 'wgr_action_col4_same_cat');
 
 // trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_same_vertical_cat]
 add_shortcode('wgr_same_vertical_cat', 'wgr_action_vertical_same_cat');
@@ -58,10 +63,25 @@ function wgr_action_same_cat($custom_attrs = [])
     echo flatsome_apply_shortcode('blog_posts', $attrs);
 }
 
-
 function wgr_action_default_same_cat()
 {
     return wgr_action_same_cat();
+}
+
+function wgr_action_col6_same_cat()
+{
+    return wgr_action_same_cat([
+        'posts' => '4',
+        'columns' => '2',
+    ]);
+}
+
+function wgr_action_col4_same_cat()
+{
+    return wgr_action_same_cat([
+        'posts' => '8',
+        'columns' => '4',
+    ]);
 }
 
 function wgr_action_vertical_same_cat()
