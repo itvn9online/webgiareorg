@@ -91,7 +91,7 @@ function wgr_list_breadcrumb($title, $arr_breadcrumbs, $entry_tag = '')
     //
     if ($entry_tag != '') {
 ?>
-        <<?php echo $entry_tag; ?> class="entry-title entry-term-title"><?php echo $title; ?></<?php echo $entry_tag; ?>>
+        <entry_title_tag class="entry-title entry-term-title"><?php echo $title; ?></entry_title_tag>
     <?php
     }
     ?>
@@ -123,7 +123,7 @@ function wgr_list_breadcrumb($title, $arr_breadcrumbs, $entry_tag = '')
     ob_end_clean();
 
     //
-    return $result;
+    return str_replace('entry_title_tag', $entry_tag, $result);
 }
 
 // chi tiết tin tức
@@ -138,10 +138,16 @@ function wgr_details_breadcrumb($entry_tag = '')
     //
     ob_start();
 
-    //
-    if ($entry_tag != '') {
+    // nếu là h1 -> hiển thị title của post hiện tại
+    if ($entry_tag == 'h1') {
     ?>
-        <<?php echo $entry_tag; ?> class="entry-title entry-post-title"><?php the_title(); ?></<?php echo $entry_tag; ?>>
+        <h1 class="entry-title entry-post-title"><?php the_title(); ?></h1>
+    <?php
+    }
+    // các thẻ khác sẽ hiển thị danh mục
+    else if ($entry_tag != '') {
+    ?>
+        <entry_title_tag class="entry-title entry-post-title"><?php echo $category[0]->name; ?></entry_title_tag>
     <?php
     }
     ?>
@@ -172,5 +178,5 @@ function wgr_details_breadcrumb($entry_tag = '')
     ob_end_clean();
 
     //
-    return $result;
+    return str_replace('entry_title_tag', $entry_tag, $result);
 }
