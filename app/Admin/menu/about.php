@@ -95,7 +95,7 @@ function check_and_update_webgiareorg()
 ?>
 <h1>Về tác giả</h1>
 <p>Phiên bản WebGiaRe code: <strong><?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></strong></p>
-<p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
+<p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
 <?php
 
 //
@@ -152,11 +152,11 @@ if (class_exists('Imagick')) {
 //
 if (defined('WGR_CHECKED_UPDATE_THEME')) {
 ?>
-    <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của webgiare.org</p>
+    <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của <span class="bold">webgiare.org</span></p>
 <?php
 } else {
 ?>
-    <p class="greencolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của themeforest.net</p>
+    <p class="greencolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của <span class="bold">themeforest.net</span></p>
 <?php
 }
 
