@@ -1,6 +1,6 @@
 <?php
 /*
- * Chức năng gọi tới các menu dựng sẵn của webgiareorg
+ * Chức năng tạo google map
  */
 function add_echbay_google_map()
 {

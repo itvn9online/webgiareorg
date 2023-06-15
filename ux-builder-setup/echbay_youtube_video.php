@@ -1,6 +1,6 @@
 <?php
 /*
- * Chức năng gọi tới các menu dựng sẵn của webgiareorg
+ * Chức năng tạo video youtube
  * https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
  */
 function add_echbay_youtube_video()
