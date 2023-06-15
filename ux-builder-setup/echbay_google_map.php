@@ -100,6 +100,7 @@ function action_echbay_google_map($atts)
         'map_height' => $map_height,
         'map_zoom' => $map_zoom,
         'map_id' => $map_id,
+        'custom_class' => $custom_class,
     ] as $k => $v) {
         $html = str_replace('{{' . $k . '}}', $v, $html);
     }
