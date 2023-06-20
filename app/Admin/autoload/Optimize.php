@@ -463,6 +463,36 @@ function WGR_remove_css_multi_comment($a)
         $str = str_replace(':' . $k . '!', ':#' . $v . '!', $str);
     }
 
+    // loại bỏ các dòng css chưa có code
+    $str = WGR_remove_css_not_using($str);
+
+    //
+    return $str;
+}
+
+// loại bỏ các dòng css chưa có code
+function WGR_remove_css_not_using($str)
+{
+    $str = str_replace('{  }', '{}', $str);
+    $str = str_replace('{ }', '{}', $str);
+    $str = explode('{}', $str);
+    //print_r($str);
+    foreach ($str as $k => $v) {
+        // cắt chuỗi
+        $v = explode('}', $v);
+        //print_r($v);
+        //$v = array_pop($v);
+        $v[count($v) - 1] = '';
+        //print_r($v);
+        $v = implode('}', $v);
+        //print_r($v);
+
+        //
+        $str[$k] = $v;
+    }
+    $str = implode('', $str);
+    //die(__CLASS__ . ':' . __LINE__);
+
     //
     return $str;
 }
