@@ -7,7 +7,8 @@
 header('Access-Control-Allow-Origin: *');
 
 //
-$flatsome_version = '3.17.3';
+//$flatsome_version = '3.17.3';
+$flatsome_version = file_get_contents('https://flatsome.echbay.com/wp-content/themes/VERSION', 1);
 
 // hiển thị lịch sử thay đổi
 if (isset($_GET['changes'])) {
