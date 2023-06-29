@@ -39,6 +39,15 @@
     color: #090 !important
 }
 
+.orgcolor {
+    color: #F90 !important;
+}
+
+.redcolor,
+.redcolor a {
+    color: #f00 !important
+}
+
 /* */
 /* */
 /* */

@@ -96,7 +96,15 @@ function check_and_update_webgiareorg()
 <h1>Về tác giả</h1>
 <p>Phiên bản WebGiaRe code: <strong><?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></strong></p>
 <p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
+<p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
 <?php
+
+//
+if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+?>
+    <p class="redcolor">Với các website sử dụng Wordpress, phiên bản PHP tối ưu nên dùng là PHP 8.0 trở lên (khuyên dùng 8.1). Nếu có thể! hãy nâng cấp phiên bản PHP cho website của bạn.</p>
+<?php
+}
 
 //
 if (class_exists('Imagick')) {
