@@ -11,6 +11,9 @@ define('WGR_BASE_URI', str_replace(ABSPATH, '', __DIR__) . '/');
 // khai báo qua tham số này để khi cần có thể chuyển url cho partner
 defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'webgiare.org');
 
+// bật chế độ auto update nếu chưa có
+defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
+
 // nạp function tạo cache
 //echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
