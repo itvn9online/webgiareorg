@@ -38,8 +38,11 @@
 	jQuery('a[href="#"]').attr({
 		href: "javascript:;",
 		rel: "nofollow",
-		//}).click(function () {
-		//return false;
+		/*
+		})
+		.click(function () {
+			return false;
+			*/
 	});
 
 	//
