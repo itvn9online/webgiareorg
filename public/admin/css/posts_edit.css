@@ -1,5 +1,6 @@
 @charset "utf-8";
-#submitpost #publishing-action {
+
+#publishing-action {
     position: fixed;
     right: 10px;
     bottom: 10px;
