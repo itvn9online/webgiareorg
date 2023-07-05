@@ -9,7 +9,7 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
 //
 $sub_dir_cache = ['ebcache'];
-$sub_dir_cache[] = explode(':', $_SERVER['HTTP_HOST'])[0];
+$sub_dir_cache[] = explode(':', str_replace('www.', '', $_SERVER['HTTP_HOST']))[0];
 
 //
 if (!function_exists('wp_is_mobile')) {
@@ -45,7 +45,7 @@ if (!function_exists('wp_is_mobile')) {
 } else if (wp_is_mobile()) {
     $sub_dir_cache[] = 'm';
 }
-//print_r( $sub_dir_cache );
+//print_r($sub_dir_cache);
 
 // tự động tạo thư mục cache nếu chưa có
 $root_dir_cache = dirname(__DIR__);
@@ -68,11 +68,7 @@ define('EB_THEME_CACHE', $root_dir_cache . '/');
 include_once __DIR__ . '/app/Cache/Global.php';
 
 // chỉ cache với phương thức GET
-if ($_SERVER['REQUEST_METHOD'] != 'GET') {
-    // khác phát bỏ qua luôn
-}
-// tiếp tục kiểm tra cache
-else {
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của côkie còn không
     $last_update_logeg_cache = isset($_COOKIE['wgr_ebsuppercache_timeout']) ? $_COOKIE['wgr_ebsuppercache_timeout'] : 0;
     //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . "\n";

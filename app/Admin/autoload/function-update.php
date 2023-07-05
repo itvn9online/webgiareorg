@@ -23,13 +23,10 @@ function WGR_flatsome_function_update($f)
 }
 
 //
-if (!in_array(
-    $_SERVER['HTTP_HOST'],
-    [
-        'webgiare.org',
-        'www.webgiare.org',
-        'world.webgiare.org',
-    ]
-)) {
+if (strpos($_SERVER['HTTP_HOST'], 'webgiare.org') === false) {
     WGR_flatsome_function_update(dirname(WGR_CHILD_PATH) . '/flatsome/inc/functions/function-update.php');
+    /*
+} else {
+    echo get_template_directory();
+    */
 }
