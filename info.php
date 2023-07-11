@@ -6,10 +6,6 @@
 //
 header('Access-Control-Allow-Origin: *');
 
-//
-//$flatsome_version = '3.17.3';
-$flatsome_version = file_get_contents('https://flatsome.echbay.com/wp-content/themes/VERSION', 1);
-
 // hiển thị lịch sử thay đổi
 if (isset($_GET['changes'])) {
     header('Content-Type: text/plain; charset=UTF-8');
@@ -19,8 +15,22 @@ if (isset($_GET['changes'])) {
     die(file_get_contents('https://webgiare.org/wp-content/themes/flatsome/changes.txt'));
 }
 
+//
+$flatsome_version = file_get_contents('https://flatsome.echbay.com/wp-content/themes/VERSION', 1);
+//die($flatsome_version);
+
+// kiểm tra xem có file để download chưa
+$dir_download = dirname(dirname(__DIR__)) . '/download/flatsome-' . $flatsome_version . '.zip';
+//die($dir_download);
+if (!file_exists($dir_download)) {
+    die('ERROR! File for download not exist!');
+}
+
+//
+header('Content-Type: application/json');
+
 // thông tin update
-$update = array(
+die(json_encode([
     // phiên bản flatsome
     "version" => $flatsome_version,
     // phiên bản tối thiểu của wordpress
@@ -33,8 +43,4 @@ $update = array(
     "details_url" => "https://webgiare.org/wp-content/themes/flatsome/changes.txt",
     // link download
     "download_url" => "https://flatsome.echbay.com/download/flatsome-" . $flatsome_version . ".zip"
-);
-
-//
-header('Content-Type: application/json');
-die(json_encode($update));
+]));
