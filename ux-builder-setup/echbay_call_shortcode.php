@@ -11,10 +11,17 @@ function add_echbay_call_shortcode()
         'wgr_breadcrumb', // breadcrumb không bao gồm h1
         'WGR_product_comment',
         'WGR_product_content',
+        //
         'wgr_same_cat',
-        'wgr_same_vertical_cat',
-        'wgr_same_col6_cat',
         'wgr_same_col4_cat',
+        'wgr_same_col6_cat',
+        'wgr_same_vertical_cat',
+        //
+        'wgr_product_same_cat',
+        'wgr_product_same_col4_cat',
+        'wgr_product_same_col6_cat',
+        'wgr_product_same_vertical_cat',
+        //
         //'wgr_facebook_like_box',
     ];
     $ops_list = [

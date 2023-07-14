@@ -3,19 +3,19 @@
 /*
 * shortcode lấy bài viết cùng danh mục
 */
-// trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_same_cat]
+// trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_product_same_cat]
 // trả về post với 3 col trên row
-add_shortcode('wgr_same_cat', 'wgr_action_default_same_cat');
-// trả về post với 2 col trên row
-add_shortcode('wgr_same_col6_cat', 'wgr_action_col6_same_cat');
+add_shortcode('wgr_product_same_cat', 'wgr_action_default_product_same_cat');
 // trả về post với 4 col trên row
-add_shortcode('wgr_same_col4_cat', 'wgr_action_col4_same_cat');
+add_shortcode('wgr_product_same_col4_cat', 'wgr_action_col4_product_same_cat');
+// trả về post với 2 col trên row
+add_shortcode('wgr_product_same_col6_cat', 'wgr_action_col6_product_same_cat');
 
 // trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_same_vertical_cat]
-add_shortcode('wgr_same_vertical_cat', 'wgr_action_vertical_same_cat');
+add_shortcode('wgr_product_same_vertical_cat', 'wgr_action_vertical_product_same_cat');
 
 //
-function wgr_action_same_cat($custom_attrs = [])
+function wgr_action_product_same_cat($custom_attrs = [])
 {
     $pid = get_the_ID();
     //var_dump($pid);
@@ -24,7 +24,7 @@ function wgr_action_same_cat($custom_attrs = [])
     }
     //var_dump($pid);
 
-    $arr_list_tag = get_the_category($pid);
+    $arr_list_tag = get_the_terms($pid, 'product_cat');
     //print_r($arr_list_tag);
     if (empty($arr_list_tag)) {
         return false;
@@ -40,53 +40,45 @@ function wgr_action_same_cat($custom_attrs = [])
     //
     $attrs = [
         'type' => 'row',
-        //'image_width' => '20',
-        'image_height' => '56.25%',
-        'posts' => '6',
-        'depth' => get_theme_mod('blog_posts_depth', 0),
-        'excerpt' => 'false',
-        'depth_hover' => get_theme_mod('blog_posts_depth_hover', 0),
-        'text_align' => get_theme_mod('blog_posts_title_align', 'center'),
-        'style' => 'default',
-        'columns' => '3',
-        'columns__md' => '1',
-        //'show_date' => get_theme_mod('blog_badge', 1) ? 'true' : 'false',
-        'show_date' => 'text',
+        'show_cat' => '0',
+        'show_rating' => '0',
+        'show_quick_view' => '0',
+        'equalize_box' => 'true',
         'cat' => implode(',', $cat_ids),
-        'class' => 'align-equal',
+        'products' => '4',
     ];
     foreach ($custom_attrs as $k => $v) {
         $attrs[$k] = $v;
     }
 
     // -> trả về shortcode của flatsome
-    echo flatsome_apply_shortcode('blog_posts', $attrs);
+    return flatsome_apply_shortcode('ux_products', $attrs);
 }
 
-function wgr_action_default_same_cat()
+function wgr_action_default_product_same_cat()
 {
-    return wgr_action_same_cat();
+    return wgr_action_product_same_cat();
 }
 
-function wgr_action_col6_same_cat()
+function wgr_action_col6_product_same_cat()
 {
-    return wgr_action_same_cat([
+    return wgr_action_product_same_cat([
         'posts' => '4',
         'columns' => '2',
     ]);
 }
 
-function wgr_action_col4_same_cat()
+function wgr_action_col4_product_same_cat()
 {
-    return wgr_action_same_cat([
+    return wgr_action_product_same_cat([
         'posts' => '8',
         'columns' => '4',
     ]);
 }
 
-function wgr_action_vertical_same_cat()
+function wgr_action_vertical_product_same_cat()
 {
-    return wgr_action_same_cat([
+    return wgr_action_product_same_cat([
         'image_width' => '20',
         'posts' => '5',
         'columns' => '1',
