@@ -26,8 +26,14 @@ else if (defined('WP_CACHE') && WP_CACHE !== false) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but an another plugin cache is enable too. If you want to using EchBay Cache, please set WP_CACHE = false or comment WP_CACHE in file wp-config.php';
 }
 // tắt ép cache -> dùng với các custom page mà cần kiểu submit -> tìm kiếm, đặt hàng
-else if (defined('WGR_NO_CACHE') && WGR_NO_CACHE == true) {
+/*
+else if (defined('WGR_NO_CACHE')) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) not running because WGR_NO_CACHE enable';
+}
+*/
+// constant defined by w3 total cache
+else if (defined('DONOTCACHEPAGE')) {
+    $why_ebcache_not_active = 'EchBay Cache (ebcache) not running because DONOTCACHEPAGE enable';
 }
 //
 else if (is_home() || is_front_page()) {
