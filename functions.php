@@ -14,6 +14,9 @@ defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'webgiare.org');
 // bật chế độ auto update nếu chưa có
 defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 
+// Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
+//defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
+
 // nạp function tạo cache
 //echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
