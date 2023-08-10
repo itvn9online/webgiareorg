@@ -88,9 +88,10 @@ function webgiare_v3_update_themes($transient)
         && version_compare($version, $remote->version, '<')
         && version_compare($remote->requires, get_bloginfo('version'), '<')
         && version_compare($remote->requires_php, PHP_VERSION, '<')
+        && isset($transient->response)
     ) {
         $transient->response[$template] = $data;
-    } else {
+    } else if (isset($transient->no_update)) {
         $transient->no_update[$template] = $data;
     }
     //print_r($transient);
