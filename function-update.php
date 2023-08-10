@@ -14,6 +14,8 @@
  */
 function webgiare_v3_update_themes($transient)
 {
+    //print_r($transient);
+
     // lấy thông tin theme flatsome
     $theme = wp_get_theme(get_template());
     $template = $theme->get_template();
@@ -25,7 +27,11 @@ function webgiare_v3_update_themes($transient)
     //echo HOUR_IN_SECONDS . PHP_EOL;
     //die(__FILE__ . ':' . __LINE__);
     // tránh việc request liên tục gây chậm web thì dùng hàm này
-    if (false == $remote = get_transient('webgiare-theme-update' . $version)) {
+    $remote = get_transient('webgiare-theme-update' . $version);
+    //print_r($remote);
+    // TEST
+    //$remote = false;
+    if (false == $remote) {
         // connect to a remote server where the update information is stored
         $remote = wp_remote_get(
             'https://flatsome.echbay.com/wp-content/webgiareorg/info.php',
@@ -74,6 +80,7 @@ function webgiare_v3_update_themes($transient)
         'package' => $remote->download_url,
     );
     //print_r($data);
+    //print_r($transient);
 
     // check all the versions now
     if (
@@ -86,7 +93,6 @@ function webgiare_v3_update_themes($transient)
     } else {
         $transient->no_update[$template] = $data;
     }
-
     //print_r($transient);
     //die(__FILE__ . ':' . __LINE__);
 
@@ -95,13 +101,14 @@ function webgiare_v3_update_themes($transient)
 
 // để đỡ nặng web, chỉ chạy tính năng update theme khi truy cập các url này
 if (!defined('WGR_CHECKED_UPDATE_THEME')) {
-    define('WGR_CHECKED_UPDATE_THEME', 1);
+    define('WGR_CHECKED_UPDATE_THEME', true);
 
     //
     if (
         strpos($_SERVER['REQUEST_URI'], '/update-core.php') !== false
         || strpos($_SERVER['REQUEST_URI'], '/update.php') !== false
         || strpos($_SERVER['REQUEST_URI'], '/themes.php') !== false
+        || strpos($_SERVER['REQUEST_URI'], '/plugins.php') !== false
     ) {
         add_filter('site_transient_update_themes', 'webgiare_v3_update_themes');
     }
