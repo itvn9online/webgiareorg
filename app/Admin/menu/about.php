@@ -160,7 +160,7 @@ if (class_exists('Imagick')) {
 //
 if (defined('WGR_CHECKED_UPDATE_THEME')) {
 ?>
-    <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của <span class="bold">webgiare.org</span></p>
+    <p class="bluecolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của <span class="bold">WebGiaRe.org</span></p>
 <?php
 } else {
 ?>
