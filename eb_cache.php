@@ -8,7 +8,7 @@
 defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
 //
-$sub_dir_cache = ['ebcache'];
+$sub_dir_cache = ['uploads', 'ebcache'];
 $cache_prefix = str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
 
 //
