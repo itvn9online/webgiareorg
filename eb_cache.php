@@ -7,7 +7,7 @@
 // thời gian lưu cache
 defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
-//
+// thư mục ebcache luôn cho vào uploads để đảm bảo lệnh tạo thư mục sẽ luôn được thực thi do permission
 $sub_dir_cache = ['uploads', 'ebcache'];
 $cache_prefix = str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
 
@@ -55,6 +55,7 @@ foreach ($sub_dir_cache as $v) {
     //
     if (!is_dir($root_dir_cache)) {
         mkdir($root_dir_cache, 0777);
+        chmod($root_dir_cache, 0777) or die('ERROR chmod cache dir');
         echo $root_dir_cache . '<br>' . "\n";
     }
 }
