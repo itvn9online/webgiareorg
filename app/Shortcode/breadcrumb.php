@@ -101,7 +101,7 @@ function wgr_list_breadcrumb($title, $arr_breadcrumbs, $entry_tag = '')
     }
     ?>
     <ul aria-label="breadcrumbs" class="cf wgr-breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="Trang chủ" class="breadcrumb-home"><span itemprop="name">Trang chủ</span></a>
+        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="<?php echo __('Home', 'flatsome'); ?>" class="breadcrumb-home"><span itemprop="name"><?php echo __('Home', 'flatsome'); ?></span></a>
             <meta itemprop="position" content="1">
         </li>
         <?php

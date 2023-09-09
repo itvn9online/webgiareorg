@@ -1,16 +1,24 @@
 @charset "utf-8";
-i.fas, em.fas, i.fa, em.fa {
+
+i.fas,
+em.fas,
+i.fa,
+em.fa {
     font-style: normal;
 }
-.fa:before, .fa:after {
+
+.fa:before,
+.fa:after {
     font-family: FontAwesome;
 }
+
 .json-to-menu {
     opacity: 0.1;
     display: none;
     height: 25px;
     overflow: hidden;
 }
+
 .json-to-menu.actived {
     opacity: 1;
     display: block;
@@ -18,125 +26,190 @@ i.fas, em.fas, i.fa, em.fa {
     overflow: auto;
     overflow: unset;
 }
-ul.eb-menu, .eb-menu ul {
+
+ul.eb-menu,
+.eb-menu ul {
     list-style: none;
 }
-ul.eb-menu, .eb-menu ul, .eb-menu li, .eb-menu ul li {
+
+ul.eb-menu,
+.eb-menu ul,
+.eb-menu li,
+.eb-menu ul li {
     margin: 0;
     margin-bottom: 0;
     margin-left: 0;
 }
+
 .col-inner ul.eb-menu li {
     margin-left: 0;
 }
+
 form.searchform {
     margin-bottom: 0;
 }
-.ebfixed-top-menu .fixed-top-menu, .ebfixed-top-menu .fix-top-menu {
+
+.ebfixed-top-menu .fixed-top-menu,
+.ebfixed-top-menu .fix-top-menu {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 99;
 }
+
 .ebfixed-top-menu.logged-in .fix-top-menu {
     top: 32px;
 }
+
+/*
 .row .col-inner p:last-child {
     margin-bottom: 0;
 }
+*/
 .padding0 {
     padding: 0;
 }
+
 .padding10 {
     padding: 10px;
 }
+
 .padding20 {
     padding: 20px;
 }
+
 section.section.padding0 {
     padding-bottom: 0 !important;
     padding-top: 0 !important;
 }
+
 section.section.padding10 {
     padding-bottom: 10px !important;
     padding-top: 10px !important;
 }
+
 .top-menu-space {
     padding-top: 20px;
 }
+
 .bottom-menu-space {
     padding-bottom: 20px;
 }
+
 .d-none {
     display: none;
 }
+
 .upper {
     text-transform: uppercase;
 }
-.bold, .strong {
+
+.bold,
+.strong {
     font-weight: bold;
 }
+
 .bolder {
     font-weight: bolder;
 }
+
 /* font size */
-.size11, .s11, .small {
+.size11,
+.s11,
+.small {
     font-size: 11px;
 }
-.size12, .s12, .small12 {
+
+.size12,
+.s12,
+.small12 {
     font-size: 12px;
 }
-.size15, .s15, .medium {
+
+.size15,
+.s15,
+.medium {
     font-size: 15px;
 }
-.size16, .s16, .medium16 {
+
+.size16,
+.s16,
+.medium16 {
     font-size: 16px;
 }
-.size18, .s18, .medium18 {
+
+.size18,
+.s18,
+.medium18 {
     font-size: 18px;
 }
-.size23, .s23, .big {
+
+.size23,
+.s23,
+.big {
     font-size: 23px;
 }
-.size30, .s30, .big2, .big30 {
+
+.size30,
+.s30,
+.big2,
+.big30 {
     font-size: 30px;
 }
+
 /* color */
-.blackcl, .blackcolor {
+.blackcl,
+.blackcolor {
     color: black;
 }
-.whitecl, .whitecolor {
+
+.whitecl,
+.whitecolor {
     color: white;
 }
-.graycl, .graycolor {
+
+.graycl,
+.graycolor {
     color: #ccc;
 }
-.gray2cl, .gray2color {
+
+.gray2cl,
+.gray2color {
     color: #f2f2f2;
 }
+
 /* background color */
 .blackbg {
     background-color: black;
 }
+
 .whitebg {
     background-color: white;
 }
+
 .graybg {
     background-color: #ccc;
 }
+
 .gray2bg {
     background-color: #f2f2f2;
 }
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
     font-style: italic;
     font-size: 90%;
 }
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
     font-style: italic;
     font-size: 90%;
 }
-::-ms-input-placeholder { /* Microsoft Edge */
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
     font-style: italic;
     font-size: 90%;
 }
