@@ -1,5 +1,42 @@
 //console.log(typeof jQuery);
 
+function a_ez_toc_link() {
+	$("a.ez-toc-link")
+		.each(function () {
+			var a = $(this).attr("href") || "";
+			if (a.substr(0, 1) == "#") {
+				$(this).attr({
+					href: eb_this_current_url + a,
+				});
+			}
+		})
+		.off("click")
+		.on("click", function (e) {
+			//console.log(Math.random());
+			//e.preventDefault();
+			var a = $(this).attr("href") || "";
+			if (a != "") {
+				a = a.split("#");
+				if (a.length > 1) {
+					window.location.hash = a[1];
+
+					//
+					var o = jQuery('.ez-toc-section[id="' + a[1] + '"]');
+					if (o.length > 0) {
+						o = o.offset().top;
+						o -= jQuery("#header").height() || jQuery("header").height() || 90;
+						o -= jQuery("#wpadminbar").height() || 0;
+						o = Math.ceil(o);
+						//console.log(o);
+						window.scroll(0, o);
+						//jQuery("html, body").animate({ scrollTop: o }, 500);
+					}
+				}
+			}
+			return false;
+		});
+}
+
 //
 (function ($) {
 	// tạo menu cho phần my account
@@ -73,42 +110,8 @@
 	$(document).ready(function () {
 		$("body").addClass("document-ready");
 
-		///
-		$("a.ez-toc-link")
-			.each(function () {
-				var a = $(this).attr("href") || "";
-				if (a.substr(0, 1) == "#") {
-					$(this).attr({
-						href: eb_this_current_url + a,
-					});
-				}
-			})
-			.off("click")
-			.on("click", function (e) {
-				//console.log(Math.random());
-				//e.preventDefault();
-				var a = $(this).attr("href") || "";
-				if (a != "") {
-					a = a.split("#");
-					if (a.length > 1) {
-						var o = jQuery('.ez-toc-section[id="' + a[1] + '"]');
-						if (o.length > 0) {
-							jQuery("html, body").animate(
-								{
-									scrollTop:
-										o.offset().top -
-											(jQuery("#header").height() ||
-												jQuery("header").height() ||
-												90) -
-											jQuery("#wpadminbar").height() || 0,
-								},
-								500
-							);
-						}
-					}
-				}
-				return false;
-			});
+		//
+		//a_ez_toc_link();
 	});
 })(jQuery);
 

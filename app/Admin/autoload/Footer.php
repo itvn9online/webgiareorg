@@ -29,12 +29,12 @@ function WGR_front_footer()
 
     // css
     WGR_adds_css($arr_css_admin, [
-        'cdn' => DYNAMIC_BASE_URL,
+        'cdn' => CDN_BASE_URL,
     ]);
 
     // js
     WGR_adds_js($arr_js_admin, [
-        'cdn' => DYNAMIC_BASE_URL,
+        'cdn' => CDN_BASE_URL,
     ]);
 
 
@@ -45,7 +45,7 @@ function WGR_front_footer()
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/admin/js/footer.js',
     ], [
-        'cdn' => DYNAMIC_BASE_URL,
+        'cdn' => CDN_BASE_URL,
     ]);
 }
 add_action('admin_footer', 'WGR_front_footer');

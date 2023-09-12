@@ -29,6 +29,7 @@ function WGR_get_add_css($f, $ops = [], $attr = [])
     if (!isset($ops['cdn']) || $ops['cdn'] == '') {
         $ops['cdn'] = DYNAMIC_BASE_URL;
     }
+    //echo $ops['cdn'] . '<br>' . PHP_EOL;
 
     //
     if (isset($ops['preload'])) {

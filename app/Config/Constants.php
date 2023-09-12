@@ -1,9 +1,5 @@
 <?php
 
-// khi cần chuyển các file tĩnh sang url khác để giảm tải cho server chính thì dùng chức năng này
-defined('CDN_BASE_URL') || define('CDN_BASE_URL', '');
-//echo CDN_BASE_URL . '<br>' . "\n";
-
 // thuộc tính này để xác định code áp dụng cho plugin wocomerce -> sẽ có 1 số tính năng bổ sung cho nó
 define('WGR_FOR_WOOCOMERCE', class_exists('WooCommerce') ? true : false);
 //echo WGR_FOR_WOOCOMERCE . '<br>' . "\n";
@@ -31,3 +27,7 @@ defined('BASE_PROTOCOL') || define('BASE_PROTOCOL', 'https');
 //define('DYNAMIC_BASE_URL', BASE_PROTOCOL . '://' . $_SERVER['HTTP_HOST'] . '/');
 define('DYNAMIC_BASE_URL', get_home_url() . '/');
 //die( DYNAMIC_BASE_URL );
+
+// khi cần chuyển các file tĩnh sang url khác để giảm tải cho server chính thì dùng chức năng này
+defined('CDN_BASE_URL') || define('CDN_BASE_URL', DYNAMIC_BASE_URL);
+//echo CDN_BASE_URL . '<br>' . "\n";

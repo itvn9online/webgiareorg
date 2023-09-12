@@ -14,8 +14,8 @@ function WGR_front_header()
         WGR_BASE_PATH . 'public/css/d.css',
         //WGR_CHILD_PATH . 'css/d.css',
     ], [
-            'cdn' => DYNAMIC_BASE_URL,
-        ]);
+        'cdn' => CDN_BASE_URL,
+    ]);
 
     // các file js bắt buộc phải nạp trước
     WGR_adds_js([
@@ -26,7 +26,7 @@ function WGR_front_header()
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/javascript/functions.js',
     ], [
-            'cdn' => DYNAMIC_BASE_URL,
-        ]);
+        'cdn' => CDN_BASE_URL,
+    ]);
 }
 add_action('admin_head', 'WGR_front_header');
