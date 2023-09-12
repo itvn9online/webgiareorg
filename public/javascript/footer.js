@@ -69,26 +69,46 @@
 		}
 	});
 
-	///
-	$("a.ez-toc-link")
-		/*
-		.each(function () {
-			var a = $(this).attr("href") || "";
-			if (a.substr(0, 1) == "#") {
-				$(this).attr({
-					href: eb_this_current_url + a,
-				});
-			}
-		})
-        */
-		.click(function (e) {
-			e.preventDefault();
-			return false;
-		});
-
 	//
 	$(document).ready(function () {
 		$("body").addClass("document-ready");
+
+		///
+		$("a.ez-toc-link")
+			.each(function () {
+				var a = $(this).attr("href") || "";
+				if (a.substr(0, 1) == "#") {
+					$(this).attr({
+						href: eb_this_current_url + a,
+					});
+				}
+			})
+			.off("click")
+			.on("click", function (e) {
+				//console.log(Math.random());
+				//e.preventDefault();
+				var a = $(this).attr("href") || "";
+				if (a != "") {
+					a = a.split("#");
+					if (a.length > 1) {
+						var o = jQuery('.ez-toc-section[id="' + a[1] + '"]');
+						if (o.length > 0) {
+							jQuery("html, body").animate(
+								{
+									scrollTop:
+										o.offset().top -
+											(jQuery("#header").height() ||
+												jQuery("header").height() ||
+												90) -
+											jQuery("#wpadminbar").height() || 0,
+								},
+								500
+							);
+						}
+					}
+				}
+				return false;
+			});
 	});
 })(jQuery);
 
