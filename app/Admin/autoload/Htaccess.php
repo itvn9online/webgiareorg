@@ -17,4 +17,8 @@ if (!file_exists($root_htaccess) || strpos(file_get_contents($root_htaccess), 'R
     if (strpos($content_htaccess, 'RewriteCond %{HTTPS} off') !== false) {
         file_put_contents($root_htaccess, $content_htaccess);
     }
+    /*
+} else {
+    echo $root_htaccess . '<br>' . PHP_EOL;
+    */
 }
