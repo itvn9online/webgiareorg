@@ -155,6 +155,7 @@ if (class_exists('Imagick')) {
     ?>
 </p>
 <!-- END Redis -->
+<p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database -> bảng options -> option_name -> tìm và xóa hoặc đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
 <?php
 
 //
