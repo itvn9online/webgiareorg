@@ -74,18 +74,23 @@ function WGR_remove_html_empty_line($str)
     foreach ($str as $v) {
         $v = trim($v);
 
-        //
+        // dòng trống thì bỏ qua
         if ($v == '') {
+            continue;
+        } else if (substr($v, 0, 5) == '<!-- ' && substr($v, -4) == ' -->') {
+            // dòng comment html cũng bỏ qua luôn -> không bỏ qua mấy dòng hỗ trợ IE kiểu <!--[if IE 9 ]>
             continue;
         }
 
         //
-        $result .= $v;
+        $result .= $v . PHP_EOL;
+        /*
         if (strpos($v, '//') !== false) {
             $result .= "\n";
         } else {
             $result .= ' ';
         }
+        */
     }
 
     //
