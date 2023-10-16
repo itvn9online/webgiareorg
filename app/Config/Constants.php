@@ -2,7 +2,7 @@
 
 // thuộc tính này để xác định code áp dụng cho plugin wocomerce -> sẽ có 1 số tính năng bổ sung cho nó
 define('WGR_FOR_WOOCOMERCE', class_exists('WooCommerce') ? true : false);
-//echo WGR_FOR_WOOCOMERCE . '<br>' . "\n";
+//echo WGR_FOR_WOOCOMERCE . '<br>' . PHP_EOL;
 
 // thời gian lưu cache
 defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 600);
@@ -16,7 +16,7 @@ if (is_user_logged_in()) {
 } else {
     define('USER_ID', 0);
 }
-//echo USER_ID . '<br>' . "\n";
+//echo USER_ID . '<br>' . PHP_EOL;
 
 /*
  * URL động cho website để có thể chạy trên nhiều tên miền khác nhau mà không cần config lại
@@ -30,4 +30,4 @@ define('DYNAMIC_BASE_URL', get_home_url() . '/');
 
 // khi cần chuyển các file tĩnh sang url khác để giảm tải cho server chính thì dùng chức năng này
 defined('CDN_BASE_URL') || define('CDN_BASE_URL', DYNAMIC_BASE_URL);
-//echo CDN_BASE_URL . '<br>' . "\n";
+//echo CDN_BASE_URL . '<br>' . PHP_EOL;

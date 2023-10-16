@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Chuẩn bị cho cache thông qua bảng memory trong db
+ */
+//echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+// nếu chưa có file này
+if (defined('EB_MY_CACHE_CONFIG') && !file_exists(EB_MY_CACHE_CONFIG)) {
+    echo 'copy my-config to my-config <br>' . PHP_EOL;
+    // copy từ file temp
+    copy(WGR_BASE_PATH . 'my-config.php', EB_MY_CACHE_CONFIG);
+
+    // lấy nội dung file config này
+    $my_content_config = file_get_contents(EB_MY_CACHE_CONFIG);
+
+    // thay thế nội dung từ file wp-config
+    foreach ([
+        'name' => DB_NAME,
+        'user' => DB_USER,
+        'pass' => DB_PASSWORD,
+        'host' => DB_HOST,
+    ] as $k => $v) {
+        $my_content_config = str_replace('%' . $k . '%', $v, $my_content_config);
+    }
+    // lưu mới
+    file_put_contents(EB_MY_CACHE_CONFIG, $my_content_config);
+}

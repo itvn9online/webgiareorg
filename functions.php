@@ -18,33 +18,34 @@ defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 //defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
 
 // nạp function tạo cache
-//echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
+//echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . PHP_EOL;
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
+//include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
 
 //
 include WGR_BASE_PATH . 'app/Helpers/Viewport.php';
 
 // nạp config
 foreach (glob(WGR_BASE_PATH . 'app/Config/*.php') as $filename) {
-    //echo $filename . '<br>' . "\n";
+    //echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
 // nạp model
 foreach (glob(WGR_BASE_PATH . 'app/Models/*.php') as $filename) {
-    //echo $filename . '<br>' . "\n";
+    //echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
 // nạp Shortcode
 foreach (glob(WGR_BASE_PATH . 'app/Shortcode/*.php') as $filename) {
-    //echo $filename . '<br>' . "\n";
+    //echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
 // nạp ux kết hợp với flatsome
 foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
-    //echo $filename . '<br>' . "\n";
+    //echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 

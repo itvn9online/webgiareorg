@@ -2,7 +2,8 @@
 /*
  * Chức năng gọi tới các function dựng sẵn của webgiareorg
  */
-function add_echbay_call_function() {
+function add_echbay_call_function()
+{
     $arr_ebe_function = [
         'WGR_get_cart_url',
         'WGR_get_search_form',
@@ -24,12 +25,12 @@ function add_echbay_call_function() {
     $ops_list = [
         '' => '- Chọn function -',
     ];
-    foreach ( $arr_ebe_function as $v ) {
-        $ops_list[ $v ] = $v;
+    foreach ($arr_ebe_function as $v) {
+        $ops_list[$v] = $v;
     }
 
     //
-    add_ux_builder_shortcode( 'echbay_call_function', array(
+    add_ux_builder_shortcode('echbay_call_function', array(
         'name' => 'Echbay Call Function',
         'category' => 'Echbay',
         //'priority' => 1,
@@ -47,35 +48,36 @@ function add_echbay_call_function() {
                 'placeholder' => 'Tùy chỉnh CSS',
             ),
         ),
-    ) );
+    ));
 }
-add_action( 'ux_builder_setup', 'add_echbay_call_function' );
+add_action('ux_builder_setup', 'add_echbay_call_function');
 
 // gọi short code từ UX Builder
-function action_echbay_call_function( $atts ) {
-    extract( shortcode_atts( array(
+function action_echbay_call_function($atts)
+{
+    extract(shortcode_atts(array(
         'call_function' => '',
         'custom_class' => '',
-    ), $atts ) );
+    ), $atts));
 
     //
-    if ( $call_function == '' ) {
+    if ($call_function == '') {
         return __FUNCTION__ . ' call_function is empty!';
     }
-    //echo $call_function . ' bbbbbbbbbbbbbb <br>' . "\n";
+    //echo $call_function . ' bbbbbbbbbbbbbb <br>' . PHP_EOL;
 
     //
-    if ( !function_exists( $call_function ) ) {
+    if (!function_exists($call_function)) {
         return __FUNCTION__ . ' function ' . $call_function . ' not exist!';
     }
 
     //
     $html = $call_function();
     //echo '<aaaaaaaaaaaa>' . $html . '</aaaaaaaaaaaa>';
-    if ( $custom_class != '' ) {
+    if ($custom_class != '') {
         $html = '<div class="' . $custom_class . '">' . $html . '</div>';
     }
 
     return $html;
 }
-add_shortcode( 'echbay_call_function', 'action_echbay_call_function' );
+add_shortcode('echbay_call_function', 'action_echbay_call_function');

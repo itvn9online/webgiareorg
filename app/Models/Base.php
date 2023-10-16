@@ -4,15 +4,15 @@
 function WGR_get_add_css($f, $ops = [], $attr = [])
 {
     //print_r( $ops );
-    //echo $f . '<br>' . "\n";
+    //echo $f . '<br>' . PHP_EOL;
     $f = str_replace(ABSPATH, '', $f);
     $f = ltrim($f, '/');
-    //echo $f . '<br>' . "\n";
+    //echo $f . '<br>' . PHP_EOL;
 
     if (!file_exists(ABSPATH . $f)) {
         return '<!-- ' . $f . ' not exist! -->';
     }
-    //echo filesize( $f ) . '<br>' . "\n";
+    //echo filesize( $f ) . '<br>' . PHP_EOL;
     /*
     if ( filesize( $f ) == 0 ) {
         unlink( $f );
@@ -81,11 +81,11 @@ function WGR_get_add_js($f, $ops = [], $attr = [])
     //print_r( $ops );
     $f = str_replace(ABSPATH, '', $f);
     $f = ltrim($f, '/');
-    //echo $f . '<br>' . "\n";
+    //echo $f . '<br>' . PHP_EOL;
     if (!file_exists(ABSPATH . $f)) {
         return '<!-- ' . $f . ' not exist! -->';
     }
-    //echo filesize( $f ) . '<br>' . "\n";
+    //echo filesize( $f ) . '<br>' . PHP_EOL;
     /*
     if ( filesize( $f ) == 0 ) {
         unlink( $f );

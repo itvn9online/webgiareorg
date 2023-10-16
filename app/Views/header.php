@@ -121,9 +121,9 @@ include __DIR__ . '/header_cache.php';
     <div id="wrapper">
         <?php
 
-        /*
+        /**
          * nạp top của webgiareorg (nếu có)
-         */
+         **/
         if (file_exists(WGR_CHILD_PATH . 'Views/top.php')) {
         ?>
             <header id="header" class="header-wrapper wgr-primary-header">
@@ -132,10 +132,10 @@ include __DIR__ . '/header_cache.php';
                 ?>
             </header>
         <?php
-        }
-        /*
-         * không thì dùng top của flatsome
-         */ else {
+        } else {
+            /**
+             * không thì dùng top của flatsome
+             **/
             do_action('flatsome_before_header');
         ?>
             <header id="header" class="header flatsome-primary-header <?php flatsome_header_classes(); ?>">

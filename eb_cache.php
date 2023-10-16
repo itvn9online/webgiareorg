@@ -1,7 +1,7 @@
 <?php
 
 // TEST
-//echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+//echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
 //echo session_id();
 
 // thời gian lưu cache
@@ -10,6 +10,12 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 // thư mục ebcache luôn cho vào uploads để đảm bảo lệnh tạo thư mục sẽ luôn được thực thi do permission
 $sub_dir_cache = ['uploads', 'ebcache'];
 $cache_prefix = str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
+
+/**
+ * xác định thiết bị cache trong db memory
+ * mặc định là 0 = desktop
+ */
+$memory_cache_device = 0;
 
 //
 if (!function_exists('wp_is_mobile')) {
@@ -40,9 +46,11 @@ if (!function_exists('wp_is_mobile')) {
     //
     if (WGR_is_mobile()) {
         $cache_prefix .= '_m';
+        $memory_cache_device = 1;
     }
 } else if (wp_is_mobile()) {
     $cache_prefix .= '_m';
+    $memory_cache_device = 1;
 }
 $sub_dir_cache[] = $cache_prefix;
 //print_r($sub_dir_cache);
@@ -56,14 +64,22 @@ foreach ($sub_dir_cache as $v) {
     if (!is_dir($root_dir_cache)) {
         mkdir($root_dir_cache, 0777);
         chmod($root_dir_cache, 0777) or die('ERROR chmod cache dir');
-        echo $root_dir_cache . '<br>' . "\n";
+        echo $root_dir_cache . '<br>' . PHP_EOL;
     }
 }
 
+//
+//define('EB_DEVICE_CACHE', $memory_cache_device);
+define('EB_PREFIX_CACHE', $cache_prefix);
+
 // thư mục lưu ebcache
 define('EB_THEME_CACHE', $root_dir_cache . '/');
-//echo EB_THEME_CACHE . '<br>' . "\n";
+//echo EB_THEME_CACHE . '<br>' . PHP_EOL;
 //die( __FILE__ . ':' . __LINE__ );
+
+// file nạp config kết nối database
+//define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config.php');
+//echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 
 // nạp function tạo cache
 include_once __DIR__ . '/app/Cache/Global.php';
@@ -72,8 +88,8 @@ include_once __DIR__ . '/app/Cache/Global.php';
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của côkie còn không
     $last_update_logeg_cache = isset($_COOKIE['wgr_ebsuppercache_timeout']) ? $_COOKIE['wgr_ebsuppercache_timeout'] : 0;
-    //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . "\n";
-    //echo $last_update_logeg_cache . '<br>' . "\n";
+    //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . PHP_EOL;
+    //echo $last_update_logeg_cache . '<br>' . PHP_EOL;
 
     // nếu còn hạn thì bỏ qua
     if ($last_update_logeg_cache > time()) {

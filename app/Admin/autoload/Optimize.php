@@ -16,8 +16,8 @@ function WGR_update_core_remove_html_comment($a)
             continue;
         }
         // loại bỏ các comment html đơn giản
-        //echo substr( $v, 0, 4 ) . '<br>' . "\n";
-        //echo substr( $v, -3 ) . '<br>' . "\n";
+        //echo substr( $v, 0, 4 ) . '<br>' . PHP_EOL;
+        //echo substr( $v, -3 ) . '<br>' . PHP_EOL;
         if (substr($v, 0, 4) == '<!--' && substr($v, -3) == '-->') {
             continue;
         }
@@ -57,7 +57,7 @@ function WGR_update_core_remove_php_comment($a)
         }
 
         //
-        $str .= $v . "\n";
+        $str .= $v . PHP_EOL;
     }
 
     //	return trim( WGR_remove_js_multi_comment( $str ) );
@@ -421,7 +421,7 @@ function WGR_remove_css_multi_comment($a)
     if (count($a) < 10) {
         return false;
     }
-    //echo 'count a: ' . count( $a ) . '<br>' . "\n";
+    //echo 'count a: ' . count( $a ) . '<br>' . PHP_EOL;
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
@@ -555,10 +555,10 @@ function WGR_optimize_css_js()
         return false;
     }
     $last_optimize_code = WGR_BASE_PATH . 'last-optimize-code.txt';
-    //echo $last_optimize_code . '<br>' . "\n";
+    //echo $last_optimize_code . '<br>' . PHP_EOL;
     // giãn cách optmize -> trong thời gian cho phép thì hủy bỏ việc optmize luôn
     if (WGR_cache_expire($last_optimize_code)) {
-        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+        //echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
         return false;
     }
 
