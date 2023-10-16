@@ -19,6 +19,8 @@ if (defined('EB_MY_CACHE_CONFIG') && !file_exists(EB_MY_CACHE_CONFIG)) {
         'user' => DB_USER,
         'pass' => DB_PASSWORD,
         'host' => DB_HOST,
+        'redis_host' => WGR_REDIS_HOST,
+        'redis_port' => WGR_REDIS_PORT,
     ] as $k => $v) {
         $my_content_config = str_replace('%' . $k . '%', $v, $my_content_config);
     }

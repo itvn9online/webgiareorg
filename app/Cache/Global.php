@@ -1,7 +1,7 @@
 <?php
 
 //
-//include __DIR__ . '/DbCache.php';
+include __DIR__ . '/DbCache.php';
 include __DIR__ . '/RedisCache.php';
 
 //
@@ -32,7 +32,7 @@ function WGR_my_cache($path, $c = '', $t = 120)
         // cache qua redis (nếu có)
         if (EB_REDIS_CACHE === true) {
             $redis = new Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
             //echo "Connection to server sucessfully";
             //set the data in redis string 
             return $redis->set(WGR_redis_key($path), $c);
@@ -43,7 +43,7 @@ function WGR_my_cache($path, $c = '', $t = 120)
     // cache qua redis (nếu có)
     if (EB_REDIS_CACHE === true) {
         $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
+        $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
         //echo "Connection to server sucessfully";
         // Get the stored data and print it 
         $data = $redis->get(WGR_redis_key($path));
@@ -83,7 +83,7 @@ function WGR_display($f)
     // cache qua redis (nếu có)
     if (EB_REDIS_CACHE === true) {
         $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
+        $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
         //echo "Connection to server sucessfully";
         // Get the stored data and print it 
         $data = $redis->get(WGR_redis_key($f));

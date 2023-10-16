@@ -78,7 +78,7 @@ define('EB_THEME_CACHE', $root_dir_cache . '/');
 //die( __FILE__ . ':' . __LINE__ );
 
 // file nạp config kết nối database
-//define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config.php');
+define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config.php');
 //echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 
 // nạp function tạo cache

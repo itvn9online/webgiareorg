@@ -4,7 +4,7 @@
  * Nạp config phục vụ cho cache nếu có
  */
 //echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
-if (file_exists(EB_MY_CACHE_CONFIG)) {
+if (defined('EB_MY_CACHE_CONFIG') && file_exists(EB_MY_CACHE_CONFIG)) {
     include EB_MY_CACHE_CONFIG;
 
     // nếu không kết nối được tới db
@@ -63,6 +63,7 @@ if (file_exists(EB_MY_CACHE_CONFIG)) {
         //
         return $connect_mcache;
     }
+    //$connect_mcache = WGR_connect_memory_cache();
 
     // thiết lập cache từ memory
     define('EB_MEMORY_CACHE', true);

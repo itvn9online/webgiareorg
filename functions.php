@@ -14,13 +14,17 @@ defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'WebGiaRe.org');
 // bật chế độ auto update nếu chưa có
 defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 
+//
+defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
+defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
+
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
 //defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
 
 // nạp function tạo cache
 //echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . PHP_EOL;
+include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
-//include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
 
 //
 include WGR_BASE_PATH . 'app/Helpers/Viewport.php';
