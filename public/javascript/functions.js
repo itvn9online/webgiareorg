@@ -123,3 +123,73 @@ function WGR_non_mark_seo(str) {
 	})(str);
 	return str;
 }
+
+function WGR_html_alert(m, lnk) {
+	return WGR_alert(m, lnk);
+}
+
+function WGR_alert(m, lnk) {
+	if (typeof m == "undefined") {
+		m = "";
+	}
+	if (typeof lnk == "undefined") {
+		lnk = "";
+	}
+	//console.log(m);
+	//console.log(lnk);
+
+	//
+	if (top != self) {
+		top.WGR_alert(m, lnk);
+	} else {
+		if (m != "") {
+			// class thể hiện màu sắc của alert
+			var cl = "";
+			if (lnk == "error") {
+				cl = "redbg";
+			} else if (lnk == "warning") {
+				cl = "orgbg";
+			}
+
+			// id dùng để hẹn giờ tự ẩn
+			var jd = "_" + Math.random().toString(32).replace(/\./gi, "_");
+
+			//
+			var htm = [
+				'<div id="' + jd + '" class="' + cl + '" onClick="$(this).fadeOut();">',
+				m,
+				"</div>",
+			].join(" ");
+			//console.log(htm);
+
+			//
+			if ($("#my_custom_alert").length < 1) {
+				$("body").append('<div id="my_custom_alert"></div>');
+			}
+			$("#my_custom_alert").append(htm).show();
+
+			//
+			setTimeout(function () {
+				$("#" + jd).remove();
+
+				// nếu không còn div nào -> ẩn luôn
+				if ($("#my_custom_alert div").length < 1) {
+					$("#my_custom_alert").fadeOut();
+				}
+			}, 6000);
+		} else if (lnk != "") {
+			return WGR_redirect(lnk);
+		}
+	}
+
+	//
+	return false;
+}
+
+function WGR_redirect(l) {
+	if (top != self) {
+		top.WGR_redirect(l);
+	} else if (typeof l != "undefined" && l != "") {
+		window.location = l;
+	}
+}

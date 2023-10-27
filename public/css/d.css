@@ -231,3 +231,37 @@ section.section.padding10 {
     font-style: italic;
     font-size: 90%;
 }
+
+#my_custom_alert {
+    position: fixed;
+    display: none;
+    top: 36px;
+    z-index: 9999999;
+    /* border: 1px #f00 solid; */
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+#my_custom_alert div {
+    /* position: fixed; */
+    /* z-index: 999999999; */
+    /* top: 90px; */
+    background: #008000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px #999;
+    cursor: pointer;
+    text-align: center;
+    /* display: inline-block; */
+    /* width: auto; */
+    margin-bottom: 15px;
+}
+
+#my_custom_alert div.redbg {
+    background-color: darkred;
+}
+
+#my_custom_alert div.orgbg {
+    background-color: darkorange;
+}
