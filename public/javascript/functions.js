@@ -58,7 +58,7 @@ function WGR_vuejs(app_id, obj, _callBack, max_i) {
 		el: app_id,
 		data: obj,
 		mounted: function () {
-			$(app_id + ".ng-main-content").addClass("loaded");
+			jQuery(app_id + ".ng-main-content").addClass("loaded");
 
 			//
 			if (typeof _callBack == "function") {
@@ -156,25 +156,29 @@ function WGR_alert(m, lnk) {
 
 			//
 			var htm = [
-				'<div id="' + jd + '" class="' + cl + '" onClick="$(this).fadeOut();">',
+				'<div id="' +
+					jd +
+					'" class="' +
+					cl +
+					'" onClick="jQuery(this).fadeOut();">',
 				m,
 				"</div>",
 			].join(" ");
 			//console.log(htm);
 
 			//
-			if ($("#my_custom_alert").length < 1) {
-				$("body").append('<div id="my_custom_alert"></div>');
+			if (jQuery("#my_custom_alert").length < 1) {
+				jQuery("body").append('<div id="my_custom_alert"></div>');
 			}
-			$("#my_custom_alert").append(htm).show();
+			jQuery("#my_custom_alert").append(htm).show();
 
 			//
 			setTimeout(function () {
-				$("#" + jd).remove();
+				jQuery("#" + jd).remove();
 
 				// nếu không còn div nào -> ẩn luôn
-				if ($("#my_custom_alert div").length < 1) {
-					$("#my_custom_alert").fadeOut();
+				if (jQuery("#my_custom_alert div").length < 1) {
+					jQuery("#my_custom_alert").fadeOut();
 				}
 			}, 6000);
 		} else if (lnk != "") {
