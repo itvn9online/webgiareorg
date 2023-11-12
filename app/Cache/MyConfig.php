@@ -5,7 +5,7 @@
  */
 //echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 // nếu chưa có file này
-if (defined('EB_MY_CACHE_CONFIG') && !file_exists(EB_MY_CACHE_CONFIG)) {
+if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     echo 'copy my-config to my-config <br>' . PHP_EOL;
     // copy từ file temp
     copy(WGR_BASE_PATH . 'my-config.php', EB_MY_CACHE_CONFIG);

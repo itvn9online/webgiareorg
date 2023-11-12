@@ -7,7 +7,7 @@ include __DIR__ . '/RedisCache.php';
 //
 function WGR_cache_expire($path, $t = 3600)
 {
-    if ($t > 0 && file_exists($path) && time() - filemtime($path) < $t) {
+    if ($t > 0 && is_file($path) && time() - filemtime($path) < $t) {
         // cache còn hạn
         return true;
     }
@@ -56,7 +56,7 @@ function WGR_my_cache($path, $c = '', $t = 120)
         return WGR_check_cache_content(explode($by_line, $data, 2));
     }
     // không có nội dung thì kiểm tra hạn cache
-    else if (file_exists($path)) {
+    else if (is_file($path)) {
         return WGR_check_cache_content(explode($by_line, file_get_contents($path, 1), 2));
     }
 
@@ -94,7 +94,7 @@ function WGR_display($f)
             return false;
         }
         //echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
-    } else if (!file_exists($f)) {
+    } else if (!is_file($f)) {
         return false;
     } else {
         // còn không thì cache qua file

@@ -4,7 +4,7 @@
  * Nạp config phục vụ cho cache nếu có
  */
 //echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
-if (defined('EB_MY_CACHE_CONFIG') && file_exists(EB_MY_CACHE_CONFIG)) {
+if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
     include EB_MY_CACHE_CONFIG;
 
     // nếu không kết nối được tới db

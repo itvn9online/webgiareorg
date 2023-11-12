@@ -503,7 +503,7 @@ function WGR_check_active_optimize($path)
     //echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
     $full_path = $path . 'active-optimize.txt';
     //echo $full_path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
-    if (file_exists($full_path)) {
+    if (is_file($full_path)) {
         // thử xóa file optimize -> XÓA được thì mới trả về true -> đảm bảo có quyền chỉnh sửa các file trong này
         if (unlink($full_path)) {
             return true;

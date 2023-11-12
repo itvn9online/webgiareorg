@@ -124,7 +124,7 @@ include __DIR__ . '/header_cache.php';
         /**
          * nạp top của webgiareorg (nếu có)
          **/
-        if (file_exists(WGR_CHILD_PATH . 'Views/top.php')) {
+        if (is_file(WGR_CHILD_PATH . 'Views/top.php')) {
         ?>
             <header id="header" class="header-wrapper wgr-primary-header">
                 <?php

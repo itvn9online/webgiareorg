@@ -12,7 +12,7 @@ function func_include_wgr_private_code()
 
     //
     $inc = __DIR__ . '/menu/' . $page . '.php';
-    if (!file_exists($inc)) {
+    if (!is_file($inc)) {
         echo 'file not exists! ' . $inc;
         return false;
     }

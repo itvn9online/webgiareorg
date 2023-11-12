@@ -121,7 +121,7 @@ function autoUxBuilderBackup($space_backup = 3600)
 
         // file tồn tại rồi thì thôi, backup tầm 1 tiếng 1 lần
         $file_backup = $ux_builder_dir . '/' . $v->post_type . '-' . $v->ID . '-' . $v->post_name . '-' . $post_modified_gmt . $backup_ext;
-        if (file_exists($file_backup)) {
+        if (is_file($file_backup)) {
             //echo 'Backup exist: <em>' . basename( $file_backup ) . '</em><br>' . PHP_EOL;
             continue;
         }

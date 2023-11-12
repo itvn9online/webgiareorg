@@ -22,7 +22,7 @@ $flatsome_version = file_get_contents('https://flatsome.echbay.com/wp-content/th
 // kiểm tra xem có file để download chưa
 $dir_download = dirname(dirname(__DIR__)) . '/download/flatsome-' . $flatsome_version . '.zip';
 //die($dir_download);
-if (!file_exists($dir_download)) {
+if (!is_file($dir_download)) {
     die('ERROR! File for download not exist!');
 }
 

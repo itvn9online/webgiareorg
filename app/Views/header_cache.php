@@ -1,7 +1,7 @@
 <?php
 
 // đã gọi đến header ở đây thì kiểm tra xem có file footer chưa, chưa có thì tạo luôn
-if (!file_exists(WGR_CHILD_PATH . 'footer.php')) {
+if (!is_file(WGR_CHILD_PATH . 'footer.php')) {
     copy(__DIR__ . '/footer-tmp.php', WGR_CHILD_PATH . 'footer.php') or die('ERROR! copy footer for child theme');
 }
 

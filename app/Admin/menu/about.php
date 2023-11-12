@@ -39,7 +39,7 @@ function check_and_update_webgiareorg()
         //echo $remove_version . PHP_EOL;
         $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
         echo $dest . '<br>' . PHP_EOL;
-        if (file_exists($dest)) {
+        if (is_file($dest)) {
             unlink($dest);
         }
 

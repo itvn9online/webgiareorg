@@ -7,7 +7,7 @@ if (!empty(phpversion('redis'))) {
         define('EB_REDIS_CACHE', true);
     } else {
         // xóa file my-config nếu có -> vì có mà không có 2 tham số kia thì coi như lỗi
-        if (defined('EB_MY_CACHE_CONFIG') && file_exists(EB_MY_CACHE_CONFIG)) {
+        if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
             echo 'Remove file ' . basename(EB_MY_CACHE_CONFIG) . ' because REDIS_MY_HOST not found!' . '<br>' . PHP_EOL;
             unlink(EB_MY_CACHE_CONFIG);
         }

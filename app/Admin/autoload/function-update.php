@@ -1,14 +1,15 @@
 <?php
-/*
-* Kiểm tra và cập nhật lại nội dung cho file update của flatsome -> sử dụng chức năng update do webgiare cung cấp
-*/
+
+/**
+ * Kiểm tra và cập nhật lại nội dung cho file update của flatsome -> sử dụng chức năng update do webgiare cung cấp
+ */
 
 function WGR_flatsome_function_update($f)
 {
     //echo $f . PHP_EOL;
     // nếu còn tồn tại chuỗi _site_transient_update_themes -> vẫn còn đang dùng code của flatsome
     if (
-        file_exists($f)
+        is_file($f)
         && strpos(file_get_contents($f), 'webgiare_v3_update_themes') === false
     ) {
         //die(__FILE__ . ':' . __LINE__);
