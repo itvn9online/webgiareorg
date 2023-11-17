@@ -22,7 +22,7 @@ function WGR_vuejs(app_id, obj, _callBack, max_i) {
 
 	// chưa tìm ra hàm định dạng ngày tháng tương tự angular -> tự viết hàm riêng vậy
 	// -> xác định giờ theo múi giờ hiện tại của user
-	var tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
+	let tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
 	//console.log('tzoffset:', tzoffset);
 	obj.datetime = function (t, len) {
 		if (typeof len != "number") {
@@ -106,14 +106,14 @@ function WGR_non_mark_seo(str) {
 	);
 	str = str.replace(/-+-/g, "-");
 	str = str.replace(/^\-+|\-+$/g, "");
-	for (var i = 0; i < 5; i++) {
+	for (let i = 0; i < 5; i++) {
 		str = str.replace(/--/g, "-");
 	}
 	str = (function (s) {
-		var str = "",
+		let str = "",
 			re = /^\w+$/,
 			t = "";
-		for (var i = 0; i < s.length; i++) {
+		for (let i = 0; i < s.length; i++) {
 			t = s.substr(i, 1);
 			if (t == "-" || t == "+" || re.test(t) == true) {
 				str += t;
@@ -144,7 +144,7 @@ function WGR_alert(m, lnk) {
 	} else {
 		if (m != "") {
 			// class thể hiện màu sắc của alert
-			var cl = "";
+			let cl = "";
 			if (lnk == "error") {
 				cl = "redbg";
 			} else if (lnk == "warning") {
@@ -152,10 +152,10 @@ function WGR_alert(m, lnk) {
 			}
 
 			// id dùng để hẹn giờ tự ẩn
-			var jd = "_" + Math.random().toString(32).replace(/\./gi, "_");
+			let jd = "_" + Math.random().toString(32).replace(/\./gi, "_");
 
 			//
-			var htm = [
+			let htm = [
 				'<div id="' +
 					jd +
 					'" class="' +

@@ -1,7 +1,8 @@
 <?php
-/*
-* Tạo số version dựa theo phiên bản của flatsome -> update cũng dựa theo phiên bản này luôn
-*/
+
+/**
+ * Tạo số version dựa theo phiên bản của flatsome -> update cũng dựa theo phiên bản này luôn
+ */
 
 //
 header('Access-Control-Allow-Origin: *');

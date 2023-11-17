@@ -3,7 +3,7 @@
 function a_ez_toc_link() {
 	$("a.ez-toc-link")
 		.each(function () {
-			var a = $(this).attr("href") || "";
+			let a = $(this).attr("href") || "";
 			if (a.substr(0, 1) == "#") {
 				$(this).attr({
 					href: eb_this_current_url + a,
@@ -14,14 +14,14 @@ function a_ez_toc_link() {
 		.on("click", function (e) {
 			//console.log(Math.random());
 			//e.preventDefault();
-			var a = $(this).attr("href") || "";
+			let a = $(this).attr("href") || "";
 			if (a != "") {
 				a = a.split("#");
 				if (a.length > 1) {
 					window.location.hash = a[1];
 
 					//
-					var o = jQuery('.ez-toc-section[id="' + a[1] + '"]');
+					let o = jQuery('.ez-toc-section[id="' + a[1] + '"]');
 					if (o.length > 0) {
 						o = o.offset().top;
 						o -= jQuery("#header").height() || jQuery("header").height() || 90;
@@ -41,18 +41,18 @@ function a_ez_toc_link() {
 (function ($) {
 	// tạo menu cho phần my account
 	$(".json-to-menu").each(function () {
-		var a = $.trim($(this).html());
+		let a = $.trim($(this).html());
 
 		//
 		a = JSON.parse(a);
 		//console.log(a);
 
 		//
-		var str = "";
+		let str = "";
 		if (typeof a.arr != "undefined") {
-			var arr = a.arr;
+			let arr = a.arr;
 			//console.log(arr);
-			for (var x in arr) {
+			for (let x in arr) {
 				str += '<li><a href="' + a.link + x + '">' + arr[x] + "</a></li>";
 			}
 			str = '<ul class="sub-menu">' + str + "</ul>";
@@ -62,7 +62,7 @@ function a_ez_toc_link() {
 		str = '<li><a href="' + a.link + '">' + a.name + "</a>" + str + "</li>";
 
 		//
-		var cl = "actived";
+		let cl = "actived";
 		if (typeof a.class != "undefined") {
 			cl += " " + a.class;
 		}
@@ -85,7 +85,7 @@ function a_ez_toc_link() {
 	//
 	jQuery("a").each(function () {
 		// chỉnh lại link cho phone call
-		var a = $(this).attr("href") || "";
+		let a = $(this).attr("href") || "";
 		if (a.split("tel:").length > 1) {
 			$(this).attr({
 				href: "tel:" + a.split("tel:")[1],
@@ -117,7 +117,7 @@ function a_ez_toc_link() {
 
 //
 setInterval(function () {
-	var new_scroll_top = window.scrollY || jQuery(window).scrollTop();
+	let new_scroll_top = window.scrollY || jQuery(window).scrollTop();
 
 	//
 	if (new_scroll_top > 120) {

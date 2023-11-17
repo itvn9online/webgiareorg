@@ -12,7 +12,7 @@
             zoom: jQuery('#{{map_id}}').attr('data-zoom') * 1,
         });
 
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             position: {
                 lat: jQuery('#{{map_id}}').attr('data-lat') * 1,
                 lng: jQuery('#{{map_id}}').attr('data-lng') * 1,
