@@ -19,7 +19,7 @@ function wgr_action_product_same_cat($custom_attrs = [])
 {
     $pid = get_the_ID();
     //var_dump($pid);
-    if ($pid <= 0) {
+    if ($pid < 1) {
         return false;
     }
     //var_dump($pid);
