@@ -2,7 +2,7 @@
 
 // Code chuyển 0đ thành chữ “Liên hệ”
 // https://levantoan.com/chuyen-0d-thanh-chu-lien-trong-woocommerce/
-function devvn_wc_custom_get_price_html($price, $product)
+function WGR_wc_custom_get_price_html($price, $product)
 {
     if ($product->get_price() == 0) {
         if ($product->is_on_sale() && $product->get_regular_price()) {
@@ -14,4 +14,4 @@ function devvn_wc_custom_get_price_html($price, $product)
     }
     return $price;
 }
-add_filter('woocommerce_get_price_html', 'devvn_wc_custom_get_price_html', 10, 2);
+add_filter('woocommerce_get_price_html', 'WGR_wc_custom_get_price_html', 10, 2);
