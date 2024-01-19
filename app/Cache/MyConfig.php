@@ -3,16 +3,36 @@
 /**
  * Chuẩn bị cho cache thông qua bảng memory trong db
  */
-// echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 
 // nếu chưa có file này
 if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
-    echo 'copy my-config to my-config <br>' . PHP_EOL;
+    // echo 'copy my-config to my-config <br>' . PHP_EOL;
     // copy từ file temp
     copy(WGR_BASE_PATH . 'my-config.php', EB_MY_CACHE_CONFIG);
 
+    //
+    if (!empty(phpversion('redis'))) {
+        // thử kết nối tới redis
+        try {
+            // connect thử vào redis
+            $rd = new Redis();
+            $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
+
+            // nếu không lỗi lầm gì thì set true
+            $enable_redis = 'true';
+        } catch (Exception $e) {
+            // lỗi thì set false
+            $enable_redis = 'false';
+        }
+    } else {
+        $enable_redis = 'false';
+    }
+
     // lấy nội dung file config này
     $my_content_config = file_get_contents(EB_MY_CACHE_CONFIG);
+
+    // Thay riêng cho tham số true|false
+    $my_content_config = str_replace('enable_redis', $enable_redis, $my_content_config);
 
     // thay thế nội dung từ file wp-config
     foreach ([

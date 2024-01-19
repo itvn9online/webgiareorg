@@ -4,9 +4,21 @@
  * Nạp config phục vụ cho cache nếu có
  */
 
-//echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+//
 if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
-    include EB_MY_CACHE_CONFIG;
+    // echo date('r', filemtime(EB_MY_CACHE_CONFIG)) . '<br>' . PHP_EOL;
+
+    // quá 1 ngày sẽ xóa file này 1 lần
+    if (time() - filemtime(EB_MY_CACHE_CONFIG) > 24 * 3600) {
+        // echo 'Remove file ' . basename(EB_MY_CACHE_CONFIG) . ' because REDIS_MY_HOST not found!' . '<br>' . PHP_EOL;
+        unlink(EB_MY_CACHE_CONFIG);
+
+        //
+        defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);
+    } else {
+        // còn lại sẽ include vào để dùng
+        include EB_MY_CACHE_CONFIG;
+    }
 
     // nếu không kết nối được tới db
     function WGR_rm_my_cache_config()
