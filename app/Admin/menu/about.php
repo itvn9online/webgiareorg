@@ -173,15 +173,21 @@ if (class_exists('Imagick')) {
 </p>
 <!-- END Memcached -->
 <!-- Redis -->
-<p><strong>Redis (<?php echo phpversion('redis'); ?>):</strong>
+<div class="p"><strong>Redis (<?php echo phpversion('redis'); ?>):</strong>
     <?php
     if (phpversion('redis') != '') {
     ?>
-        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này. Host/port: <?php echo WGR_REDIS_HOST; ?>/<?php echo WGR_REDIS_PORT; ?>
+        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
+        <ul>
+            <li>Redis host: <?php echo WGR_REDIS_HOST; ?></li>
+            <li>Redis port: <?php echo WGR_REDIS_PORT; ?></li>
+        </ul>
+        <div>Để tắt chức năng cache qua redis, hãy thêm đoạn mã sau vào file functions.php trong child-theme:</div>
+        <textarea cols="1" readonly style="width: 90%; max-width: 555px;">define('EB_REDIS_CACHE', false);</textarea>
     <?php
     }
     ?>
-</p>
+</div>
 <!-- END Redis -->
 <p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database -> bảng options -> option_name -> tìm và xóa hoặc đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
 <?php
