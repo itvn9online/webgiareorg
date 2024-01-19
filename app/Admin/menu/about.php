@@ -183,7 +183,7 @@ if (class_exists('Imagick')) {
             <li>Redis port: <?php echo WGR_REDIS_PORT; ?></li>
         </ul>
         <div>Để tắt chức năng cache qua redis, hãy thêm đoạn mã sau vào file functions.php trong child-theme:</div>
-        <textarea cols="1" readonly style="width: 90%; max-width: 555px;">define('EB_REDIS_CACHE', false);</textarea>
+        <textarea cols="1" readonly style="width: 90%; max-width: 555px;">defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);</textarea>
     <?php
     }
     ?>
