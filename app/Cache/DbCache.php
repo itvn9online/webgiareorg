@@ -3,6 +3,7 @@
 /**
  * Nạp config phục vụ cho cache nếu có
  */
+
 //echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
     include EB_MY_CACHE_CONFIG;
@@ -12,7 +13,7 @@ if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
     {
         // xóa file config động
         unlink(EB_MY_CACHE_CONFIG);
-        // in ra lỗi link tinh
+        // in ra lỗi linh tinh
         die(basename(__FILE__) . ':' . __LINE__);
     }
 

@@ -2,6 +2,7 @@
 
 /**
  * Chức năng này sẽ tạo 1 config để kết nối db, dành cho cache kết nối và cache qua bảng memory của db
+ * Create date: %date%
  */
 
 /** The name of the database for WordPress */

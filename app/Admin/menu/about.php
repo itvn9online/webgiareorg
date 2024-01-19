@@ -175,15 +175,23 @@ if (class_exists('Imagick')) {
 <!-- Redis -->
 <div class="p"><strong>Redis (<?php echo phpversion('redis'); ?>):</strong>
     <?php
-    if (phpversion('redis') != '') {
+    if (!empty(phpversion('redis'))) {
     ?>
         Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
         <ul>
-            <li>Redis host: <?php echo WGR_REDIS_HOST; ?></li>
-            <li>Redis port: <?php echo WGR_REDIS_PORT; ?></li>
+            <li>Redis fixed (Host/ Port): <?php echo WGR_REDIS_HOST; ?>/ <?php echo WGR_REDIS_PORT; ?></li>
+            <?php
+            if (defined('REDIS_MY_HOST')) {
+            ?>
+                <li>Redis dynamic (Host/ Port): <?php echo REDIS_MY_HOST; ?>/ <?php echo REDIS_MY_PORT; ?></li>
+            <?php
+            }
+            ?>
         </ul>
-        <div>Để tắt chức năng cache qua redis, hãy thêm đoạn mã sau vào đầu file functions.php trong child-theme:</div>
-        <textarea cols="1" ondblclick="this.select();" readonly style="width: 90%; max-width: 555px;">defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);</textarea>
+        <div class="d-none">
+            <div>Để tắt chức năng cache qua redis, hãy thêm đoạn mã sau vào đầu file functions.php trong child-theme:</div>
+            <textarea cols="1" ondblclick="this.select();" readonly style="width: 90%; max-width: 555px;">defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);</textarea>
+        </div>
     <?php
     }
     ?>

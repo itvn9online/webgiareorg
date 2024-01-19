@@ -3,7 +3,8 @@
 /**
  * Chuẩn bị cho cache thông qua bảng memory trong db
  */
-//echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+// echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+
 // nếu chưa có file này
 if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     echo 'copy my-config to my-config <br>' . PHP_EOL;
@@ -15,6 +16,7 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
 
     // thay thế nội dung từ file wp-config
     foreach ([
+        'date' => date('r'),
         'name' => DB_NAME,
         'user' => DB_USER,
         'pass' => DB_PASSWORD,
