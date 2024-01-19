@@ -15,7 +15,7 @@ if (!is_file($root_htaccess) || strpos(file_get_contents($root_htaccess), 'Rewri
     //
     $content_htaccess = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/htaccess.txt');
     if (strpos($content_htaccess, 'RewriteCond %{HTTPS} off') !== false) {
-        file_put_contents($root_htaccess, $content_htaccess);
+        file_put_contents($root_htaccess, $content_htaccess, LOCK_EX);
     }
     /*
 } else {

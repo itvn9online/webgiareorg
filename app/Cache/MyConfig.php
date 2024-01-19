@@ -25,5 +25,5 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
         $my_content_config = str_replace('%' . $k . '%', $v, $my_content_config);
     }
     // lưu mới
-    file_put_contents(EB_MY_CACHE_CONFIG, $my_content_config);
+    file_put_contents(EB_MY_CACHE_CONFIG, $my_content_config, LOCK_EX);
 }

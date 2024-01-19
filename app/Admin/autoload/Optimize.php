@@ -564,10 +564,10 @@ function WGR_optimize_css_js()
 
     // css, js chung -> nếu optimize thành công ở thư mục dùng chung -> tạo file để lát xử lý ở thư mục riêng luôn
     if (WGR_optimize_action_css(WGR_BASE_PATH . 'public') === true) {
-        file_put_contents(WGR_CHILD_PATH . 'css/active-optimize.txt', time());
+        file_put_contents(WGR_CHILD_PATH . 'css/active-optimize.txt', time(), LOCK_EX);
     }
     if (WGR_optimize_action_js(WGR_BASE_PATH . 'public') === true) {
-        file_put_contents(WGR_CHILD_PATH . 'javascript/active-optimize.txt', time());
+        file_put_contents(WGR_CHILD_PATH . 'javascript/active-optimize.txt', time(), LOCK_EX);
     }
 
     // css, js của từng theme
