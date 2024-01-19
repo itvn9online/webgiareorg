@@ -16,11 +16,11 @@ if (!empty(phpversion('redis'))) {
 
     // Connecting to Redis server on localhost
     /*
-    $redis = new Redis();
-    $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
+    $rd = new Redis();
+    $rd->connect(REDIS_MY_HOST, REDIS_MY_PORT);
     echo "Connection to server sucessfully" . '<br>' . PHP_EOL;
     // check whether server is running or not 
-    echo "Server is running: " . $redis->ping() . '<br>' . PHP_EOL;
+    echo "Server is running: " . $rd->ping() . '<br>' . PHP_EOL;
     echo "Redis: " . phpversion('redis') . '<br>' . PHP_EOL;
     */
 } else {

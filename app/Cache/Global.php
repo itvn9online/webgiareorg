@@ -31,22 +31,22 @@ function WGR_my_cache($path, $c = '', $t = 120)
         $c = (time() + ($t * 1)) . $by_line . $c;
         // cache qua redis (nếu có)
         if (EB_REDIS_CACHE === true) {
-            $redis = new Redis();
-            $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
+            $rd = new Redis();
+            $rd->connect(REDIS_MY_HOST, REDIS_MY_PORT);
             //echo "Connection to server sucessfully";
             //set the data in redis string 
-            return $redis->set(WGR_redis_key($path), $c);
+            return $rd->set(WGR_redis_key($path), $c);
         }
         return WGR_create_file($path, $c);
     }
 
     // cache qua redis (nếu có)
     if (EB_REDIS_CACHE === true) {
-        $redis = new Redis();
-        $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
+        $rd = new Redis();
+        $rd->connect(REDIS_MY_HOST, REDIS_MY_PORT);
         //echo "Connection to server sucessfully";
         // Get the stored data and print it 
-        $data = $redis->get(WGR_redis_key($path));
+        $data = $rd->get(WGR_redis_key($path));
         //var_dump($data);
         //echo "Stored string in redis: " . $data;
         //die(WGR_redis_key($f));
@@ -82,11 +82,11 @@ function WGR_display($f)
 {
     // cache qua redis (nếu có)
     if (EB_REDIS_CACHE === true) {
-        $redis = new Redis();
-        $redis->connect(REDIS_MY_HOST, REDIS_MY_PORT);
+        $rd = new Redis();
+        $rd->connect(REDIS_MY_HOST, REDIS_MY_PORT);
         //echo "Connection to server sucessfully";
         // Get the stored data and print it 
-        $data = $redis->get(WGR_redis_key($f));
+        $data = $rd->get(WGR_redis_key($f));
         //var_dump($data);
         //echo "Stored string in redis: " . $data;
         //die(WGR_redis_key($f));

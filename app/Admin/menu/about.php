@@ -177,7 +177,7 @@ if (class_exists('Imagick')) {
     <?php
     if (phpversion('redis') != '') {
     ?>
-        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
+        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này. Host/port: <?php echo WGR_REDIS_HOST; ?>/<?php echo WGR_REDIS_PORT; ?>
     <?php
     }
     ?>
