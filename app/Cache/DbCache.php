@@ -9,7 +9,7 @@ if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
     // echo date('r', filemtime(EB_MY_CACHE_CONFIG)) . '<br>' . PHP_EOL;
 
     // quá 1 ngày sẽ xóa file này 1 lần
-    if (time() - filemtime(EB_MY_CACHE_CONFIG) > 24 * 3600) {
+    if (time() - filemtime(EB_MY_CACHE_CONFIG) > 8 * 3600) {
         // echo 'Remove file ' . basename(EB_MY_CACHE_CONFIG) . ' because REDIS_MY_HOST not found!' . '<br>' . PHP_EOL;
         unlink(EB_MY_CACHE_CONFIG);
 
