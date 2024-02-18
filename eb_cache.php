@@ -86,7 +86,7 @@ include_once __DIR__ . '/app/Cache/Global.php';
 
 // chỉ cache với phương thức GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của côkie còn không
+    // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của cookie còn không
     $last_update_logeg_cache = isset($_COOKIE['wgr_ebsuppercache_timeout']) ? $_COOKIE['wgr_ebsuppercache_timeout'] : 0;
     //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . PHP_EOL;
     //echo $last_update_logeg_cache . '<br>' . PHP_EOL;

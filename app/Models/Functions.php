@@ -178,3 +178,37 @@ function WGR_cleanup_vscode($dir)
     reset($objects);
     rmdir($dir);
 }
+
+/**
+ * https://www.tutorialspoint.com/how-to-recursively-delete-a-directory-and-its-entire-contents-files-plus-sub-dirs-in-php
+ * Xóa toàn bộ file trong 1 thư mục (bao gồm cả file trong thư mục con)
+ */
+function WGR_deleteDirectory($dirPath)
+{
+    if (!is_dir($dirPath)) {
+        return false;
+    }
+
+    // 
+    $files = scandir($dirPath);
+    // print_r($files);
+    foreach ($files as $file) {
+        // echo $file . '<br>' . PHP_EOL;
+        if ($file == '.' || $file == '..') {
+            continue;
+        }
+
+        // 
+        $filePath = $dirPath . '/' . $file;
+        if (is_dir($filePath)) {
+            WGR_deleteDirectory($filePath);
+        } else if (is_file($filePath)) {
+            echo $filePath . '<br>' . PHP_EOL;
+            unlink($filePath);
+        }
+    }
+    // rmdir($dirPath);
+
+    // 
+    return true;
+}
