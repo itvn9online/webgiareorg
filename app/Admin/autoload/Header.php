@@ -12,6 +12,8 @@ function WGR_front_header()
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/admin/css/admin.css',
         WGR_BASE_PATH . 'public/css/d.css',
+        // nạp css riêng của theme
+        WGR_CHILD_PATH . 'css/admin.css',
         //WGR_CHILD_PATH . 'css/d.css',
     ], [
         'cdn' => CDN_BASE_URL,
