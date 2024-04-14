@@ -86,12 +86,12 @@ function a_ez_toc_link() {
 	jQuery("a").each(function () {
 		// chỉnh lại link cho phone call
 		let a = $(this).attr("href") || "";
-		if (a.split("tel:").length > 1) {
+		if (a.includes("tel:") == true) {
 			$(this).attr({
 				href: "tel:" + a.split("tel:")[1],
 			});
 		}
-		if (a.split("mailto:").length > 1) {
+		if (a.includes("mailto:") == true) {
 			$(this).attr({
 				href: "mailto:" + a.split("mailto:")[1],
 			});

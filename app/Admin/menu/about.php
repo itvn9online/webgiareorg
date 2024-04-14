@@ -216,7 +216,7 @@ check_and_update_webgiareorg();
 
 ?>
 <script>
-    if (window.location.href.split('update_wgr_code=').length > 1) {
+    if (window.location.href.includes('update_wgr_code=') == true) {
         window.history.pushState("", document.title, window.location.href.split('&update_wgr_code=')[0].split('?update_wgr_code=')[0]);
     }
 </script>

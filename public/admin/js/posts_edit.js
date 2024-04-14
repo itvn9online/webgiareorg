@@ -31,7 +31,7 @@
 	});
 
 	// sau khi nhân bản xong, chuyển sang bài đó luôn
-	if (window.location.href.split("&post-duplicated=").length > 1) {
+	if (window.location.href.includes("&post-duplicated=") == true) {
 		let a = jQuery("#wpbody-content .updated a").attr("href") || "";
 
 		if (a != "") {
