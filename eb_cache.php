@@ -18,39 +18,43 @@ $cache_prefix = str_replace('www.', '', str_replace('.', '', str_replace('-', '_
 $memory_cache_device = 0;
 
 //
-if (!function_exists('wp_is_mobile')) {
-    // fake function wp_is_mobile of wordpress
-    function WGR_is_mobile()
-    {
-        $is_mobile = false;
-        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-            $a = $_SERVER['HTTP_USER_AGENT'];
-            if (
-                // Many mobile devices (all iPhone, iPad, etc.)
-                strpos($a, 'Mobile') !== false ||
-                strpos($a, 'Android') !== false ||
-                strpos($a, 'Silk/') !== false ||
-                strpos($a, 'Kindle') !== false ||
-                strpos($a, 'BlackBerry') !== false ||
-                strpos($a, 'Opera Mini') !== false ||
-                strpos($a, 'Opera Mobi') !== false
-            ) {
-                $is_mobile = true;
+if (isset($_GET['amp'])) {
+    $cache_prefix .= '_amp';
+} else {
+    if (!function_exists('wp_is_mobile')) {
+        // fake function wp_is_mobile of wordpress
+        function WGR_is_mobile()
+        {
+            $is_mobile = false;
+            if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+                $a = $_SERVER['HTTP_USER_AGENT'];
+                if (
+                    // Many mobile devices (all iPhone, iPad, etc.)
+                    strpos($a, 'Mobile') !== false ||
+                    strpos($a, 'Android') !== false ||
+                    strpos($a, 'Silk/') !== false ||
+                    strpos($a, 'Kindle') !== false ||
+                    strpos($a, 'BlackBerry') !== false ||
+                    strpos($a, 'Opera Mini') !== false ||
+                    strpos($a, 'Opera Mobi') !== false
+                ) {
+                    $is_mobile = true;
+                }
             }
+
+            //
+            return $is_mobile;
         }
 
         //
-        return $is_mobile;
-    }
-
-    //
-    if (WGR_is_mobile()) {
+        if (WGR_is_mobile()) {
+            $cache_prefix .= '_m';
+            $memory_cache_device = 1;
+        }
+    } else if (wp_is_mobile()) {
         $cache_prefix .= '_m';
         $memory_cache_device = 1;
     }
-} else if (wp_is_mobile()) {
-    $cache_prefix .= '_m';
-    $memory_cache_device = 1;
 }
 $sub_dir_cache[] = $cache_prefix;
 //print_r($sub_dir_cache);
