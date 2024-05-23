@@ -9,7 +9,14 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
 // thư mục ebcache luôn cho vào uploads để đảm bảo lệnh tạo thư mục sẽ luôn được thực thi do permission
 $sub_dir_cache = ['uploads', 'ebcache'];
-$cache_prefix = str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
+
+/**
+ * nếu web nào sử dụng multi domain thì khai báo constant ở functions.php
+ */
+// defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
+// 
+defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '_');
+$cache_prefix = WGR_CACHE_PREFIX;
 
 /**
  * xác định thiết bị cache trong db memory
