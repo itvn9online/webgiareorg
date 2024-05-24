@@ -6,7 +6,7 @@
 
 function WGR_update_core_remove_html_comment($a)
 {
-    $a = explode("\n", $a);
+    $a = explode(PHP_EOL, $a);
 
     $str = '';
     foreach ($a as $v) {
@@ -24,7 +24,7 @@ function WGR_update_core_remove_html_comment($a)
 
         $str .= $v;
         if (strpos($v, '//') !== false) {
-            $str .= "\n";
+            $str .= PHP_EOL;
         } else {
             $str .= ' ';
         }
@@ -37,7 +37,7 @@ function WGR_update_core_remove_html_comment($a)
 
 function WGR_update_core_remove_php_comment($a)
 {
-    $a = explode("\n", $a);
+    $a = explode(PHP_EOL, $a);
 
     $str = '';
     foreach ($a as $v) {
@@ -308,7 +308,7 @@ function WGR_str_text_fix_js_content($str)
 
 function WGR_remove_js_comment($a, $chim = false)
 {
-    $a = explode("\n", $a);
+    $a = explode(PHP_EOL, $a);
     if (count($a) < 10) {
         return false;
     }
@@ -321,7 +321,7 @@ function WGR_remove_js_comment($a, $chim = false)
         } else {
             // thêm dấu xuống dòng với 1 số trường hợp
             if ($chim == true || strpos($v, '//') !== false || substr($v, -1) == '\\') {
-                $v .= "\n";
+                $v .= PHP_EOL;
             }
             $str .= $v;
         }
@@ -417,7 +417,7 @@ function WGR_remove_css_multi_comment($a)
     }
 
     //
-    $a = explode("\n", $str);
+    $a = explode(PHP_EOL, $str);
     if (count($a) < 10) {
         return false;
     }
@@ -439,6 +439,28 @@ function WGR_remove_css_multi_comment($a)
     $str = str_replace(', #', ',#', $str);
     $str = str_replace(': ', ':', $str);
     $str = str_replace('} .', '}.', $str);
+    $str = str_replace('{ }', '{}', $str);
+    // $str = str_replace('{ }', '{}', $str);
+    $str = str_replace('}.', '}' . PHP_EOL . '.', $str);
+    $str = str_replace('}#', '}' . PHP_EOL . '#', $str);
+    $str = str_replace('}@', '}' . PHP_EOL . '@', $str);
+
+    // 
+    $a = explode(PHP_EOL, $str);
+    $str = '';
+    foreach ($a as $v) {
+        $v = trim($v);
+        if ($v != '') {
+            if (strpos($v, '{}') !== false) {
+                $first_char = substr($v, 0, 1);
+                if ($first_char == '.' || $first_char == '#' || $first_char == '@') {
+                    continue;
+                }
+            }
+            // $str .= $v . PHP_EOL;
+            $str .= $v;
+        }
+    }
 
     // chuyển đổi tên màu sang mã màu
     $arr_colorname_to_code = [
@@ -464,7 +486,7 @@ function WGR_remove_css_multi_comment($a)
     }
 
     // loại bỏ các dòng css chưa có code
-    $str = WGR_remove_css_not_using($str);
+    // $str = WGR_remove_css_not_using($str);
 
     //
     return $str;
