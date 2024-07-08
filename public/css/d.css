@@ -85,6 +85,10 @@ form.searchform {
     margin-bottom: 0;
 }
 */
+.logo-padding0 .ux-logo-link {
+    padding: 0 !important;
+}
+
 .padding0 {
     padding: 0;
 }

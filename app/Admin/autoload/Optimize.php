@@ -457,8 +457,8 @@ function WGR_remove_css_multi_comment($a)
                     continue;
                 }
             }
-            // $str .= $v . PHP_EOL;
             $str .= $v;
+            // $str .= PHP_EOL;
         }
     }
 

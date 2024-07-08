@@ -148,10 +148,10 @@ function WGR_get_cache_file($cache_dir = '')
 
         //
         if (strlen($url) > 200) {
-            $url = md5($url);
-        } else {
-            $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
+            // $url = md5($url);
+            $url = substr($url, 0, 200);
         }
+        $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
     }
 
     //
