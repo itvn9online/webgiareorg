@@ -12,6 +12,11 @@ em.fa {
     font-family: FontAwesome;
 }
 
+.cf,
+.clearfix {
+    zoom: 1;
+}
+
 .cf:before,
 .cf:after,
 .clearfix:before,
@@ -23,11 +28,6 @@ em.fa {
 .cf:after,
 .clearfix:after {
     clear: both;
-}
-
-.cf,
-.clearfix {
-    zoom: 1;
 }
 
 .json-to-menu {

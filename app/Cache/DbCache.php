@@ -81,6 +81,9 @@ if (defined('EB_MY_CACHE_CONFIG') && is_file(EB_MY_CACHE_CONFIG)) {
     // thiết lập cache từ memory
     define('EB_MEMORY_CACHE', true);
 } else {
+    defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);
+
     // ko cache từ memory
     define('EB_MEMORY_CACHE', false);
 }
+// var_dump(EB_MEMORY_CACHE);
