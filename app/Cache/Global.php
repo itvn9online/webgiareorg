@@ -23,7 +23,8 @@ function WGR_redis_key($f)
 
 function WGR_my_cache($path, $c = '', $t = 120)
 {
-    $by_line = '¦';
+    // $by_line = '¦';
+    $by_line = '|WGR_CACHE|';
     //die($path);
 
     // có nội dung thì lưu file
@@ -103,8 +104,9 @@ function WGR_display($f)
     //die(__FILE__ . ':' . __LINE__);
 
     //
-    $content = explode('¦', $data, 2);
-    if (count($content) != 2 || !is_numeric($content[0])) {
+    // $content = explode('¦', $data, 2);
+    $content = explode('|WGR_CACHE|', $data, 2);
+    if (count($content) < 2 || !is_numeric($content[0])) {
         return false;
     }
     $reset_time = rand(1, 30);
