@@ -23,6 +23,9 @@ function WGR_redis_key($f)
 
 function WGR_my_cache($path, $c = '', $t = 120)
 {
+    // TEST
+    // return false;
+
     // $by_line = '¦';
     $by_line = '|WGR_CACHE|';
     //die($path);
