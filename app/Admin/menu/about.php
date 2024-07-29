@@ -189,8 +189,8 @@ if (class_exists('Imagick')) {
             ?>
         </ul>
         <div class="d-none">
-            <div>Để tắt chức năng cache qua redis, hãy thêm đoạn mã sau vào đầu file functions.php trong child-theme:</div>
-            <textarea cols="1" ondblclick="this.select();" readonly style="width: 90%; max-width: 555px;">defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);</textarea>
+            <div>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file functions.php trong child-theme:</div>
+            <textarea cols="1" ondblclick="this.select();" readonly style="width: 90%; max-width: 555px;">defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true|false);</textarea>
         </div>
     <?php
     }

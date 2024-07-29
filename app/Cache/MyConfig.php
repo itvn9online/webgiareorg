@@ -12,22 +12,30 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     // copy từ file temp
     copy(WGR_BASE_PATH . 'my-config.php', EB_MY_CACHE_CONFIG);
 
-    //
-    if (!empty(phpversion('redis'))) {
-        // thử kết nối tới redis
-        try {
-            // connect thử vào redis
-            $rd = new Redis();
-            $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
-
-            // nếu không lỗi lầm gì thì set true
+    // Nếu có tham số này -> fixed cứng redis cache theo nó
+    if (defined('WGR_REDIS_CACHE')) {
+        if (WGR_REDIS_CACHE === true) {
             $enable_redis = 'true';
-        } catch (Exception $e) {
-            // lỗi thì set false
+        } else {
             $enable_redis = 'false';
         }
     } else {
-        $enable_redis = 'false';
+        if (!empty(phpversion('redis'))) {
+            // thử kết nối tới redis
+            try {
+                // connect thử vào redis
+                $rd = new Redis();
+                $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
+
+                // nếu không lỗi lầm gì thì set true
+                $enable_redis = 'true';
+            } catch (Exception $e) {
+                // lỗi thì set false
+                $enable_redis = 'false';
+            }
+        } else {
+            $enable_redis = 'false';
+        }
     }
 
     // lấy nội dung file config này
