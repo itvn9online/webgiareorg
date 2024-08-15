@@ -16,7 +16,7 @@ function WGR_flatsome_function_update($f)
         echo $f . PHP_EOL;
 
         // copy 1 bản backup
-        copy($f, str_replace('/function-update.php', '/function-update-flatsome.php', $f));
+        copy($f, str_replace('/function-update.php', '/function-update-flatsome-' . date('Ymd-His') . '.php', $f));
 
         // copy file mẫu ghi đè vào file của flatsome
         copy(WGR_BASE_PATH . 'function-update.php', $f);
