@@ -40,7 +40,7 @@ function check_and_update_webgiareorg()
         //echo $version . PHP_EOL;
         //echo $remove_version . PHP_EOL;
         $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
-        echo $dest . '<br>' . PHP_EOL;
+        echo 'File zip has been save to: ' . $dest . '<br>' . PHP_EOL;
         if (is_file($dest)) {
             unlink($dest);
         }
@@ -50,7 +50,24 @@ function check_and_update_webgiareorg()
 
         //
         if (!copy($download_url, $dest)) {
-            return false;
+            echo 'ERROR copy file from link: ' . $download_url . '<br>' . PHP_EOL;
+
+            // 
+            if (!file_put_contents($dest, file_get_contents($download_url))) {
+                echo 'ERROR file_get_contents file from link: ' . $download_url . '<br>' . PHP_EOL;
+
+                // 
+                if (!file_put_contents($dest, fopen($download_url, 'r'))) {
+                    echo 'ERROR fopen file from link: ' . $download_url . '<br>' . PHP_EOL;
+                    return false;
+                } else {
+                    echo 'FOPEN file from link: ' . $download_url . '<br>' . PHP_EOL;
+                }
+            } else {
+                echo 'GET_CONTENT file from link: ' . $download_url . '<br>' . PHP_EOL;
+            }
+        } else {
+            echo 'COPY file from link: ' . $download_url . '<br>' . PHP_EOL;
         }
         chmod($dest, 0777);
 
