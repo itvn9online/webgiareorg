@@ -128,9 +128,9 @@ function check_and_update_webgiareorg()
 <?php
 
 //
-if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
 ?>
-    <p class="redcolor">Với các website sử dụng Wordpress, phiên bản PHP tối ưu nên dùng là PHP 8.0 trở lên (khuyên dùng 8.1). Nếu có thể! hãy nâng cấp phiên bản PHP cho website của bạn.</p>
+    <p class="redcolor">Với các website sử dụng Wordpress, phiên bản PHP tối ưu nên dùng là PHP 8.1 trở lên (khuyên dùng 8.2). Nếu có thể! hãy nâng cấp phiên bản PHP cho website của bạn.</p>
 <?php
 }
 
