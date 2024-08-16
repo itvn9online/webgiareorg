@@ -9,23 +9,9 @@
 //
 $root_htaccess = ABSPATH . '.htaccess';
 //echo $root_htaccess . '<br>' . PHP_EOL;
-if (is_file($root_htaccess)) {
-    $content_htaccess = file_get_contents($root_htaccess);
-} else {
-    $content_htaccess = '';
-}
 
-// 
-if (
-    // nếu chưa có file htaccess
-    !is_file($root_htaccess)
-    // 
-    || $content_htaccess == ''
-    // hoặc web chưa được chỉ định https
-    || strpos($content_htaccess, 'RewriteCond %{HTTPS} off') === false
-    // hoặc Permissions-Policy chưa chuẩn
-    // || strpos($content_htaccess, str_replace('www.', '', $_SERVER['HTTP_HOST'])) === false
-) {
+// nếu chưa có file htaccess -> khi nào cần reset lại file htaccess thì xóa file htaccess đi là được
+if (!is_file($root_htaccess)) {
     echo $root_htaccess . '<br>' . PHP_EOL;
 
     //

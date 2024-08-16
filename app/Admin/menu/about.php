@@ -9,38 +9,36 @@
 $path_htaccess = ABSPATH . ".htaccess";
 if (is_file($path_htaccess)) {
     $content_htaccess = file_get_contents($path_htaccess);
-} else {
-    $content_htaccess = '';
-}
 
-// 
-if (strpos($content_htaccess, '{my_domain.com}') !== false) {
-    if (strpos($content_htaccess, '# Header always set Permissions-Policy ') !== false) {
-        if (!defined('WGR_DISABLE_AUTO_HTACCESS')) {
-            // thay thành domain hiện tại
-            $content_htaccess = str_replace('{my_domain.com}', str_replace('www.', '', $_SERVER['HTTP_HOST']), $content_htaccess);
+    // 
+    if (strpos($content_htaccess, '{my_domain.com}') !== false) {
+        if (strpos($content_htaccess, '# Header always set Permissions-Policy ') !== false) {
+            if (!defined('WGR_DISABLE_AUTO_HTACCESS')) {
+                // thay thành domain hiện tại
+                $content_htaccess = str_replace('{my_domain.com}', str_replace('www.', '', $_SERVER['HTTP_HOST']), $content_htaccess);
 
-            // set header
-            $content_htaccess = str_replace('# Header always set Permissions-Policy ', 'Header always set Permissions-Policy ', $content_htaccess);
+                // set header
+                $content_htaccess = str_replace('# Header always set Permissions-Policy ', 'Header always set Permissions-Policy ', $content_htaccess);
 
-            // 
-            foreach (
-                [
-                    'sub_dir' => '',
-                    'sub2_dir' => '',
-                ] as $k => $v
-            ) {
-                $content_htaccess = str_replace('{tmp.' . $k . '}', $v, $content_htaccess);
+                // 
+                foreach (
+                    [
+                        'sub_dir' => '',
+                        'sub2_dir' => '',
+                    ] as $k => $v
+                ) {
+                    $content_htaccess = str_replace('{tmp.' . $k . '}', $v, $content_htaccess);
+                }
+
+                // cập nhật content
+                file_put_contents($path_htaccess, $content_htaccess, LOCK_EX);
+                echo 'update {my_domain.com} for ' . $path_htaccess . '<br>' . PHP_EOL;
+            } else {
+                echo 'WGR_DISABLE_AUTO_HTACCESS is defined' . '<br>' . PHP_EOL;
             }
-
-            // cập nhật content
-            file_put_contents($path_htaccess, $content_htaccess, LOCK_EX);
-            echo 'update {my_domain.com} for ' . $path_htaccess . '<br>' . PHP_EOL;
         } else {
-            echo 'WGR_DISABLE_AUTO_HTACCESS is defined' . '<br>' . PHP_EOL;
+            echo 'content_htaccess has {my_domain.com}' . '<br>' . PHP_EOL;
         }
-    } else {
-        echo 'content_htaccess has {my_domain.com}' . '<br>' . PHP_EOL;
     }
 }
 
