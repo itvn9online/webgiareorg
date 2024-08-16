@@ -7,7 +7,7 @@
  * Để tắt chức năng này, hãy khai báo constant WGR_DISABLE_AUTO_HTACCESS trong function của child-theme
  */
 $path_htaccess = ABSPATH . ".htaccess";
-if (is_file($root_htaccess)) {
+if (is_file($path_htaccess)) {
     $content_htaccess = file_get_contents($path_htaccess);
 } else {
     $content_htaccess = '';
