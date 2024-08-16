@@ -9,15 +9,19 @@
 //
 $root_htaccess = ABSPATH . '.htaccess';
 //echo $root_htaccess . '<br>' . PHP_EOL;
-$content_htaccess = file_get_contents($root_htaccess);
+if (is_file($root_htaccess)) {
+    $content_htaccess = file_get_contents($root_htaccess);
+} else {
+    $content_htaccess = '';
+}
 
 if (
     // nếu chưa có file htaccess
-    !is_file($root_htaccess) ||
+    !is_file($root_htaccess)
     // hoặc web chưa được chỉ định https
-    strpos($content_htaccess, 'RewriteCond %{HTTPS} off') === false ||
+    || strpos($content_htaccess, 'RewriteCond %{HTTPS} off') === false
     // hoặc Permissions-Policy chưa chuẩn
-    strpos($content_htaccess, str_replace('www.', '', $_SERVER['HTTP_HOST'])) === false
+    // || strpos($content_htaccess, str_replace('www.', '', $_SERVER['HTTP_HOST'])) === false
 ) {
     echo $root_htaccess . '<br>' . PHP_EOL;
 
