@@ -15,9 +15,12 @@ if (is_file($root_htaccess)) {
     $content_htaccess = '';
 }
 
+// 
 if (
     // nếu chưa có file htaccess
     !is_file($root_htaccess)
+    // 
+    || $content_htaccess == ''
     // hoặc web chưa được chỉ định https
     || strpos($content_htaccess, 'RewriteCond %{HTTPS} off') === false
     // hoặc Permissions-Policy chưa chuẩn
