@@ -10,8 +10,12 @@ $path_htaccess = ABSPATH . ".htaccess";
 if (is_file($path_htaccess)) {
     $content_htaccess = file_get_contents($path_htaccess);
 
-    // 
-    if (strpos($content_htaccess, '{my_domain.com}') !== false) {
+    // xóa file trong trường hợp lỗi htaccess
+    if (strpos($content_htaccess, '{tmp.sub_dir}') !== false) {
+        unlink($path_htaccess);
+    }
+    // nếu file còn tham số domain mẫu -> cập nhật lại
+    else if (strpos($content_htaccess, '{my_domain.com}') !== false) {
         if (strpos($content_htaccess, '# Header always set Permissions-Policy ') !== false) {
             if (!defined('WGR_DISABLE_AUTO_HTACCESS')) {
                 // thay thành domain hiện tại
