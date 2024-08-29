@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Echo shortcode trong flatsome thay vì dùng text của flatsome, hay bị đính kèm thẻ P
  */
 function add_echbay_call_shortcode()

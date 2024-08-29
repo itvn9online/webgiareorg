@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * code viết chủ yếu cho website sử dụng woocomerce
  */
 

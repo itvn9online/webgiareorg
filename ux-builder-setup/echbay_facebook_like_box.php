@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Chức năng tạo like box facebook
  */
 function add_echbay_facebook_like_box()
@@ -81,13 +82,15 @@ function action_echbay_facebook_like_box($atts)
 
     //
     $html = file_get_contents(__DIR__ . '/echbay_facebook_like_box.html', 1);
-    foreach ([
-        'fb_href' => urlencode($fb_href),
-        'fb_app_id' => $fb_app_id,
-        'fb_width' => $fb_width,
-        'fb_height' => $fb_height,
-        'custom_class' => $custom_class,
-    ] as $k => $v) {
+    foreach (
+        [
+            'fb_href' => urlencode($fb_href),
+            'fb_app_id' => $fb_app_id,
+            'fb_width' => $fb_width,
+            'fb_height' => $fb_height,
+            'custom_class' => $custom_class,
+        ] as $k => $v
+    ) {
         $html = str_replace('{{' . $k . '}}', $v, $html);
     }
 

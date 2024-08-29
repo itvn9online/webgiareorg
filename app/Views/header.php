@@ -3,7 +3,7 @@
 // kiểm tra nạp footer và kích hoạt cache cho web
 include __DIR__ . '/header_cache.php';
 
-/*
+/**
  * @daidq - 0984533228 - itvn9online@gmail.com
  * Chỉnh sửa và phát triển theo hướng chuyên cho thị trường Việt Nam
  * Bên dưới là header của flatsome

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * nhúng css, js cho header
  */
 function WGR_front_header()

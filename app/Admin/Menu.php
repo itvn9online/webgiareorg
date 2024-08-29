@@ -40,19 +40,19 @@ function WGR_create_admin_menu()
         $parent_slug = 'eb-about';
     }
 
-    /*
+    /**
      * EchBay menu -> mọi người đều có thể nhìn thấy menu này
      */
     add_menu_page('Danh sách đơn hàng', PARTNER_WEBSITE, 'read', $parent_slug, 'func_include_wgr_private_code', NULL, 6);
 
 
-    /*
+    /**
      * submenu -> Super Admin, Administrator, Editor, Author
      */
     add_submenu_page($parent_slug, 'Danh sách Đơn hàng', 'Đơn hàng', 'publish_posts', 'eb-order', 'func_include_wgr_private_code');
 
 
-    /*
+    /**
      * submenu -> Super Admin, Administrator, Editor, Author, Contributor
      */
     //add_submenu_page($parent_slug, 'Tổng quan về website', 'Tổng quan', 'edit_posts', 'eb-dashboard', 'func_include_wgr_private_code');
@@ -66,7 +66,7 @@ function WGR_create_admin_menu()
     add_submenu_page($parent_slug, 'Danh sách Sản phẩm', 'Sản phẩm', 'publish_pages', 'eb-products', 'func_include_wgr_private_code');
 
 
-    /*
+    /**
      * Super Admin, Administrator, Editor
      */
     add_submenu_page($parent_slug, 'Cấu hình website', 'Cấu hình website', 'publish_pages', 'eb-config', 'func_include_wgr_private_code');
@@ -78,13 +78,13 @@ function WGR_create_admin_menu()
     add_submenu_page($parent_slug, 'Thông tin Server', 'Thông tin Server', 'publish_pages', 'eb-server', 'func_include_wgr_private_code');
 
 
-    /*
+    /**
      * Mọi người đều có thể nhìn thấy menu này
      */
     add_submenu_page($parent_slug, 'Giới thiệu về tác giả', 'Giới thiệu', 'read', 'eb-about', 'func_include_wgr_private_code');
 
 
-    /*
+    /**
      * Bản nâng cao thì chỉ cần admin nhìn thôi, người khác không quan trọng
      */
     //add_submenu_page($parent_slug, 'Phiên bản cao cấp, hỗ trợ nhiều tính năng hơn', 'Phiên bản ', 'manage_options', 'eb-licenses', 'func_include_wgr_private_code');

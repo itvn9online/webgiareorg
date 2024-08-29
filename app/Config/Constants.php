@@ -18,7 +18,7 @@ if (is_user_logged_in()) {
 }
 //echo USER_ID . '<br>' . PHP_EOL;
 
-/*
+/**
  * URL động cho website để có thể chạy trên nhiều tên miền khác nhau mà không cần config lại
  */
 // tinh chỉnh protocol theo ý thích -> mặc định là https

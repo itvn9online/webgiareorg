@@ -1,9 +1,9 @@
 <?php
 
-/*
+/**
  * Trả về danh sách bình luận của sản phẩm
  *
- [WGR_product_comment]
+ * [WGR_product_comment]
  *
  */
 

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Chức năng tạo google map
  */
 function add_echbay_google_map()
@@ -94,14 +95,16 @@ function action_echbay_google_map($atts)
 
     //
     $html = file_get_contents(__DIR__ . '/echbay_google_map.html', 1);
-    foreach ([
-        'map_latitude' => $map_latitude,
-        'map_longitude' => $map_longitude,
-        'map_height' => $map_height,
-        'map_zoom' => $map_zoom,
-        'map_id' => $map_id,
-        'custom_class' => $custom_class,
-    ] as $k => $v) {
+    foreach (
+        [
+            'map_latitude' => $map_latitude,
+            'map_longitude' => $map_longitude,
+            'map_height' => $map_height,
+            'map_zoom' => $map_zoom,
+            'map_id' => $map_id,
+            'custom_class' => $custom_class,
+        ] as $k => $v
+    ) {
         $html = str_replace('{{' . $k . '}}', $v, $html);
     }
 

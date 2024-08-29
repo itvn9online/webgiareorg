@@ -10,7 +10,7 @@ function WGR_front_footer()
     //die( $pagenow );
 
 
-    /*
+    /**
      * nạp css, js theo từng admin page
      */
     $arr_css_admin = [];
@@ -38,7 +38,7 @@ function WGR_front_footer()
     ]);
 
 
-    /*
+    /**
      * các file js dùng chung
      */
     WGR_adds_js([

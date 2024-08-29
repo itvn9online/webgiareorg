@@ -8,7 +8,7 @@
  * File này chủ yếu dùng để ghi đè file function-update.php của flatsome thôi -> sử dụng link update do mình cung cấp
  */
 
-/*
+/**
  * Tham khảo từ nguồn:
  * https://rudrastyh.com/wordpress/theme-updates-from-custom-server.html
  */

@@ -13,7 +13,7 @@ global $flatsome_opt;
 </main>
 <?php
 
-/*
+/**
  * nạp top của webgiareorg (nếu có)
  */
 if (is_file(WGR_CHILD_PATH . 'Views/footer.php')) {
@@ -25,10 +25,10 @@ if (is_file(WGR_CHILD_PATH . 'Views/footer.php')) {
     </footer>
     <div onClick="window.scroll(0, 0);" class="back-to-top button icon invert plain fixed bottom z-1 is-outline circle"><i class="icon-angle-up"></i></div>
 <?php
-}
-/*
- * không thì dùng top của flatsome
- */ else {
+} else {
+    /**
+     * không thì dùng top của flatsome
+     */
 ?>
     <footer id="footer" class="footer-wrapper flatsome-primary-footer">
         <?php do_action('flatsome_footer'); ?>
@@ -70,7 +70,7 @@ WGR_adds_js([
 </html>
 <?php
 
-/*
+/**
  * Bên trên là footer của flatsome
  */
 

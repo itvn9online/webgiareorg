@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Chức năng tạo video youtube
  * https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
  */

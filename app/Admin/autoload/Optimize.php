@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Optimize css, js file
  */
 

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * Chức năng gọi tới các function dựng sẵn của webgiareorg
  */
 function add_echbay_call_function()

@@ -1,9 +1,9 @@
 <?php
 
-/*
+/**
  * In ra nội dung của sản phẩm
  *
- [WGR_product_content]
+ * [WGR_product_content]
  *
  */
 

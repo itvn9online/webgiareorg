@@ -1,8 +1,8 @@
 <?php
 
-/*
-* shortcode lấy bài viết cùng danh mục
-*/
+/**
+ * shortcode lấy bài viết cùng danh mục
+ */
 // trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_product_same_cat]
 // trả về post với 3 col trên row
 add_shortcode('wgr_product_same_cat', 'wgr_action_default_product_same_cat');

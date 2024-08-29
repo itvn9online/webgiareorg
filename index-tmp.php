@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Front to the WordPress application. This file doesn't do anything, but loads
  * wp-blog-header.php which does and tells WordPress to load the theme.
@@ -13,7 +14,7 @@
  */
 define('WP_USE_THEMES', true);
 
-/*
+/**
  * Đây là file index đã thêm chức năng ebcache vào, nhằm giúp cho việc xử lý dữ liệu được dễ dàng hơn
  */
 // tham số để không nạp lại chức năng này nhiều lần

@@ -73,7 +73,7 @@ function WGR_preloads_css($fs, $ops = [])
     }
 }
 
-/*
+/**
  * add javascript
  */
 function WGR_get_add_js($f, $ops = [], $attr = [])

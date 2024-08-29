@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Đưa ra các cảnh báo cho website
  */
 if (defined('WP_CACHE') && WP_CACHE !== false) {

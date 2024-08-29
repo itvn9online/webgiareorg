@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Tự động backup định kỳ phần UX builder
  */
 
@@ -55,7 +55,7 @@ function autoUxBuilderBackup($space_backup = 3600)
     die( __FILE__ . ':' . __LINE__ );
     */
 
-    /*
+    /**
      * backup menu
      */
     $mot_tuan = 24 * 3600 * 7;

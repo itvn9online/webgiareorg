@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Đồng bộ code và database
  */
 
@@ -26,7 +26,7 @@ function WGR_vendor_sync($check_thirdparty_exist = true)
     WGR_create_file($last_sync_vendor, time());
 }
 
-/*
+/**
  * daidq: chức năng này sẽ giải nén các code trong thư mục vendor dể sử dụng nếu chưa có
  */
 function WGR_action_vendor_sync($dir, $check_thirdparty_exist = true)
@@ -78,7 +78,7 @@ function WGR_action_vendor_sync($dir, $check_thirdparty_exist = true)
     }
 }
 
-/*
+/**
  * unzip file
  */
 function WGR_MY_unzip($file, $dir)

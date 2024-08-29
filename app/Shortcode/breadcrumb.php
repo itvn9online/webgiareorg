@@ -1,8 +1,8 @@
 <?php
 
-/*
-* shortcode tạo breadcrumb cho trang tin tức
-*/
+/**
+ * shortcode tạo breadcrumb cho trang tin tức
+ */
 // shorcode tạo breadcrumb không h1 -> cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_breadcrumb]
 add_shortcode('wgr_breadcrumb', 'action_wgr_default_breadcrumb');
 
