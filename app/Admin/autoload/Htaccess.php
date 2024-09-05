@@ -15,8 +15,8 @@ if (!is_file($root_htaccess)) {
     echo $root_htaccess . '<br>' . PHP_EOL;
 
     //
-    // $content_htaccess = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/htaccess.txt');
-    $content_htaccess = file_get_contents(WGR_BASE_PATH . 'htaccess.txt');
+    // $content_htaccess = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/tmp/.htaccess');
+    $content_htaccess = file_get_contents(WGR_BASE_PATH . 'tmp/.htaccess');
 
     // nội dung file mới phải đảm bảo được lấy thành công
     if (strpos($content_htaccess, 'RewriteCond %{HTTPS} off') !== false) {
