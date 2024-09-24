@@ -64,8 +64,15 @@ function webgiare_v3_update_themes($transient)
         //
         set_transient('webgiare-theme-update' . $version, $remote, HOUR_IN_SECONDS);
     }
+    // echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
     //echo $remote->version . PHP_EOL;
-    //print_r($remote);
+    // print_r($remote);
+
+    // nếu có lỗi thì trả về luôn
+    if (isset($remote->ERROR)) {
+        echo __FUNCTION__ . ':' . __LINE__ . ':' . $remote->ERROR . '<br>' . PHP_EOL;
+        return false;
+    }
 
     //
     $data = array(
