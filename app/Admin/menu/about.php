@@ -233,7 +233,7 @@ if (class_exists('Imagick')) {
         <div>
             <div>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</div>
             <div>
-                <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', false); // true|false</textarea>
+                <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true); // true|false</textarea>
             </div>
         </div>
     <?php
