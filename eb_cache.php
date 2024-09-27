@@ -13,9 +13,9 @@ $sub_dir_cache = ['uploads', 'ebcache'];
 /**
  * nếu web nào sử dụng multi domain thì khai báo constant ở functions.php
  */
-// defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
+defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
 // 
-defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '_');
+// defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '_');
 $cache_prefix = WGR_CACHE_PREFIX;
 
 /**

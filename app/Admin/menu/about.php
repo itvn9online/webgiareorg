@@ -54,7 +54,9 @@ if (is_file($path_htaccess)) {
 function check_and_update_webgiareorg()
 {
     $version = file_get_contents(WGR_BASE_PATH . 'VERSION');
-    $remove_version = WGR_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
+    // $remove_version = WGR_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
+    $remove_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
+    // $remove_version = '24.08.20';
     // echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
     // echo EB_THEME_CACHE . '<br>' . PHP_EOL;
 
@@ -233,7 +235,9 @@ if (class_exists('Imagick')) {
         <div>
             <div>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</div>
             <div>
-                <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true); // true|false</textarea>
+                <textarea rows="3" onclick="this.select();" readonly style="width: 90%;">
+defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true); // true|false
+defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))); ?>'); // true|false</textarea>
             </div>
         </div>
     <?php
@@ -243,7 +247,8 @@ if (class_exists('Imagick')) {
 <!-- END Redis -->
 <p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database -> bảng options -> option_name -> tìm và xóa hoặc đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
 <div>
-    <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
+    <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">
+UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
 </div>
 <?php
 
