@@ -54,7 +54,7 @@ if (is_file($path_htaccess)) {
 function check_and_update_webgiareorg()
 {
     $version = file_get_contents(WGR_BASE_PATH . 'VERSION');
-    $remove_version = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
+    $remove_version = WGR_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
     // echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
     // echo EB_THEME_CACHE . '<br>' . PHP_EOL;
 
