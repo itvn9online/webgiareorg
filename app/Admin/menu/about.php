@@ -225,7 +225,27 @@ if (class_exists('Imagick')) {
     <?php
     if (!empty(phpversion('redis'))) {
     ?>
-        Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
+        <?php
+        if (defined('WGR_REDIS_CACHE') && WGR_REDIS_CACHE == true) {
+        ?>
+            <span class="greencolor">
+                Xin chúc mừng, <strong>Redis</strong> đã được thiết lập làm cache cho website này!
+                <?php
+                if (defined('WGR_CACHE_PREFIX')) {
+                ?>
+                    &nbsp;
+                    Với cache prefix là: <?php echo WGR_CACHE_PREFIX; ?>
+                <?php
+                }
+                ?>
+            </span>
+        <?php
+        } else {
+        ?>
+            Hiện khả dụng trên hosting của bạn, hãy cân nhắc việc kích hoạt nó cho website này.
+        <?php
+        }
+        ?>
         <ul>
             <li>Redis fixed (Host/ Port): <?php echo WGR_REDIS_HOST; ?>/ <?php echo WGR_REDIS_PORT; ?></li>
             <?php
@@ -237,11 +257,13 @@ if (class_exists('Imagick')) {
             ?>
         </ul>
         <div>
-            <div>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</div>
+            <p>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
             <div>
-                <textarea rows="3" onclick="this.select();" readonly style="width: 90%;">
-defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true); // true|false
-defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))); ?>'); // true|false</textarea>
+                <textarea rows="5" onclick="this.select();" readonly style="width: 90%;">
+// bật tắt chức năng cache qua redis: true|false
+defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true);
+// thiết lập prefix cho cache để tránh xung đột với site khác
+defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))); ?>');</textarea>
             </div>
         </div>
     <?php

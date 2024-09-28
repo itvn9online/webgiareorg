@@ -17,7 +17,7 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
 
     // Nếu có tham số này -> fixed cứng redis cache theo nó
     if (defined('WGR_REDIS_CACHE')) {
-        if (WGR_REDIS_CACHE === true) {
+        if (WGR_REDIS_CACHE == true) {
             $enable_redis = 'true';
         }
     } else if (1 > 2) {
