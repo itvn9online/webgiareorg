@@ -71,6 +71,7 @@ else {
     }
 
     //
+    // echo basename(__FILE__ . ':') . __LINE__ . '<br>' . PHP_EOL;
     include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
     include WGR_BASE_PATH . 'app/Guest/contact-price.php';
     include WGR_BASE_PATH . 'app/ThirdParty/rank_math_the_breadcrumbs.php';

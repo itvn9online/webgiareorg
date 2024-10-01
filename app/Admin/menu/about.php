@@ -259,7 +259,7 @@ if (class_exists('Imagick')) {
         <div>
             <p>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
             <div>
-                <textarea rows="5" onclick="this.select();" readonly style="width: 90%;">
+                <textarea rows="5" ondblclick="this.select();" readonly style="width: 90%;">
 // bật tắt chức năng cache qua redis: true|false
 defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true);
 // thiết lập prefix cho cache để tránh xung đột với site khác
@@ -273,7 +273,7 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replac
 <!-- END Redis -->
 <p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database -> bảng options -> option_name -> tìm và xóa hoặc đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
 <div>
-    <textarea rows="2" onclick="this.select();" readonly style="width: 90%;">
+    <textarea rows="2" ondblclick="this.select();" readonly style="width: 90%;">
 UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
 </div>
 <?php

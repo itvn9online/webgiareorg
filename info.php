@@ -5,6 +5,7 @@
  */
 
 //
+ob_end_clean();
 header('Access-Control-Allow-Origin: *');
 
 // hiển thị lịch sử thay đổi
