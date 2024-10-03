@@ -8,41 +8,23 @@
 
 // nếu chưa có file này
 if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
-    // echo 'copy my-config to my-config <br>' . PHP_EOL;
-    // copy từ file temp
-    copy(WGR_BASE_PATH . 'my-config.php', EB_MY_CACHE_CONFIG);
-
-    // 
     $enable_redis = 'false';
-
     // Nếu có tham số này -> fixed cứng redis cache theo nó
-    if (defined('WGR_REDIS_CACHE')) {
-        if (WGR_REDIS_CACHE == true) {
-            $enable_redis = 'true';
-        }
-    } else if (1 > 2) {
-        // tạm bỏ chế độ cache qua redis -> lỗi trùng key trong server
-        if (!empty(phpversion('redis'))) {
-            // thử kết nối tới redis
-            try {
-                // connect thử vào redis
-                $rd = new Redis();
-                $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
-
-                // nếu không lỗi lầm gì thì set true
-                $enable_redis = 'true';
-            } catch (Exception $e) {
-                // lỗi thì set false
-                $enable_redis = 'false';
-            }
-        }
+    if (defined('WGR_REDIS_CACHE') && WGR_REDIS_CACHE == true) {
+        $enable_redis = 'true';
     }
 
     // lấy nội dung file config này
-    $my_content_config = file_get_contents(EB_MY_CACHE_CONFIG);
+    $my_content_config = file_get_contents(WGR_BASE_PATH . 'my-config.php');
 
     // Thay riêng cho tham số true|false
     $my_content_config = str_replace('enable_redis', $enable_redis, $my_content_config);
+    // gán prefix cho cache luôn
+    if (defined('WGR_CACHE_PREFIX') && !empty(WGR_CACHE_PREFIX)) {
+        $my_content_config = str_replace('str_cache_prefix', WGR_CACHE_PREFIX, $my_content_config);
+    } else {
+        $my_content_config = str_replace('str_cache_prefix', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))), $my_content_config);
+    }
 
     // thay thế nội dung từ file wp-config
     foreach (
@@ -60,4 +42,14 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     }
     // lưu mới
     file_put_contents(EB_MY_CACHE_CONFIG, $my_content_config, LOCK_EX);
+
+    // tìm và xóa các file cache cũ hơn
+    $dir_config = dirname(EB_MY_CACHE_CONFIG);
+    for ($i = 2; $i < 10; $i++) {
+        $file_config = $dir_config . '/my-config-' . date('Ymd', time() - 24 * 3600 * $i) . '.php';
+        // echo $file_config . '<br>' . PHP_EOL;
+        if (is_file($file_config)) {
+            unlink($file_config);
+        }
+    }
 }

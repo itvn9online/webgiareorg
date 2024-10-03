@@ -255,6 +255,13 @@ if (class_exists('Imagick')) {
             <?php
             }
             ?>
+            <?php
+            if (defined('EB_MY_CACHE_CONFIG')) {
+            ?>
+                <li>Cache config path: <?php echo EB_MY_CACHE_CONFIG; ?></li>
+            <?php
+            }
+            ?>
         </ul>
         <div>
             <p>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>

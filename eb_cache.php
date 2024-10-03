@@ -9,14 +9,7 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', 300);
 
 // thư mục ebcache luôn cho vào uploads để đảm bảo lệnh tạo thư mục sẽ luôn được thực thi do permission
 $sub_dir_cache = ['uploads', 'ebcache'];
-
-/**
- * nếu web nào sử dụng multi domain thì khai báo constant ở functions.php
- */
-defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
-// 
-// defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '_');
-$cache_prefix = WGR_CACHE_PREFIX;
+$cache_prefix = '_';
 
 /**
  * xác định thiết bị cache trong db memory
@@ -81,7 +74,6 @@ foreach ($sub_dir_cache as $v) {
 
 //
 //define('EB_DEVICE_CACHE', $memory_cache_device);
-define('EB_PREFIX_CACHE', $cache_prefix);
 
 // thư mục lưu ebcache
 define('EB_THEME_CACHE', $root_dir_cache . '/');
@@ -89,11 +81,19 @@ define('EB_THEME_CACHE', $root_dir_cache . '/');
 //die( __FILE__ . ':' . __LINE__ );
 
 // file nạp config kết nối database
-define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config.php');
+define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config-' . date('Ymd') . '.php');
 // echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
 
 // nạp function tạo cache
 include_once __DIR__ . '/app/Cache/Global.php';
+
+/**
+ * tạo prefix để tránh xung đột cho cache của các website khác nhau
+ */
+defined('EB_CACHE_PREFIX') || define('EB_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
+
+// 
+define('EB_PREFIX_CACHE', EB_CACHE_PREFIX . $cache_prefix);
 
 // chỉ cache với phương thức GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

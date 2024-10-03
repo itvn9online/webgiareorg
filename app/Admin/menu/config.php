@@ -20,6 +20,7 @@ if (defined('EB_THEME_CACHE')) {
 
 // 
 $my_config_php = $root_dir_cache . '/my-config.php';
+// echo $my_config_php . '<br>' . PHP_EOL;
 $my_config_content = '';
 if (is_file($my_config_php)) {
     $my_config_content = 'Nội dung này chỉ coder mới có thể xem!';
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         include $my_config_php;
 
         // 
-        if (defined('EB_REDIS_CACHE') && EB_REDIS_CACHE === true && !empty(phpversion('redis'))) {
+        if (defined('EB_REDIS_CACHE') && EB_REDIS_CACHE == true && !empty(phpversion('redis'))) {
             // print_r(EB_REDIS_CACHE);
 
             // 
