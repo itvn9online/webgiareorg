@@ -9,7 +9,8 @@ define('WGR_BASE_PATH', __DIR__ . '/');
 define('WGR_BASE_URI', str_replace(ABSPATH, '', __DIR__) . '/');
 
 // khai báo qua tham số này để khi cần có thể chuyển url cho partner
-defined('PARTNER_WEBSITE') || define('PARTNER_WEBSITE', 'WebGiaRe.org');
+defined('WGR_PARTNER_NAME') || define('WGR_PARTNER_NAME', 'WebGiaRe');
+defined('WGR_PARTNER_WEBSITE') || define('WGR_PARTNER_WEBSITE', 'webgiare.org');
 
 // bật chế độ auto update nếu chưa có
 defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);

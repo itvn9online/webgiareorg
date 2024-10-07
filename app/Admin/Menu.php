@@ -43,7 +43,7 @@ function WGR_create_admin_menu()
     /**
      * EchBay menu -> mọi người đều có thể nhìn thấy menu này
      */
-    add_menu_page('Danh sách đơn hàng', PARTNER_WEBSITE, 'read', $parent_slug, 'func_include_wgr_private_code', NULL, 6);
+    add_menu_page('Danh sách đơn hàng', WGR_PARTNER_NAME, 'read', $parent_slug, 'func_include_wgr_private_code', NULL, 6);
 
 
     /**
