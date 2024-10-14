@@ -25,7 +25,7 @@ function WGR_front_header()
         WGR_BASE_PATH . 'public/thirdparty/bootstrap-5.1.3/js/bootstrap.bundle.min.js',
         //WGR_BASE_PATH . 'public/thirdparty/bootstrap-5.1.3/js/bootstrap.min.js',
         // vue.js | vue.min.js
-        // WGR_BASE_PATH . 'public/thirdparty/vuejs/vue' . (WP_DEBUG === true ? '.min' : '') . '.js',
+        // WGR_BASE_PATH . 'public/thirdparty/vuejs/vue' . (WP_DEBUG === true ? '' : '.min') . '.js',
         // code của mình nạp sau
         WGR_BASE_PATH . 'public/javascript/functions.js',
     ], [
