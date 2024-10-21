@@ -53,8 +53,9 @@ wp_footer();
 
 // các file js có thể để chế độ defer
 WGR_adds_js([
-    WGR_BASE_PATH . 'public/thirdparty/vuejs/vue.min.js',
-    //WGR_BASE_PATH . 'public/thirdparty/vuejs/vue' . ( WP_DEBUG === true ? '.min' : '' ) . '.js',
+    // vue.js | vue.min.js
+    // WGR_BASE_PATH . 'public/thirdparty/vuejs/vue.min.js',
+    // WGR_BASE_PATH . 'public/thirdparty/vuejs/vue' . (WP_DEBUG === true ? '.min' : '') . '.js',
     WGR_BASE_PATH . 'public/javascript/footer.js',
     WGR_CHILD_PATH . 'javascript/d.js',
 ], [
