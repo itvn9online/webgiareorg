@@ -7,7 +7,7 @@ function WGR_front_footer()
 
     //
     global $pagenow;
-    //die( $pagenow );
+    // die($pagenow);
 
 
     /**
