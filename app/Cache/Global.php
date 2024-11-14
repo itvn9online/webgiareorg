@@ -45,6 +45,11 @@ function WGR_my_cache($path, $c = '', $t = 120)
 
     // có nội dung thì lưu file
     if ($c != '') {
+        if (EB_CDN_UPLOADS_URL != '') {
+            $c = str_replace(DYNAMIC_BASE_URL . 'wp-content/uploads/', EB_CDN_UPLOADS_URL . 'wp-content/uploads/', $c);
+        }
+
+        // 
         $c = (time() + ($t * 1)) . $by_line . $c;
         // cache qua redis (nếu có)
         if (EB_REDIS_CACHE == true) {

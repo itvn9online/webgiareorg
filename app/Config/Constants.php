@@ -26,8 +26,12 @@ defined('BASE_PROTOCOL') || define('BASE_PROTOCOL', 'https');
 // -> url động cho website
 //define('DYNAMIC_BASE_URL', BASE_PROTOCOL . '://' . $_SERVER['HTTP_HOST'] . '/');
 define('DYNAMIC_BASE_URL', get_home_url() . '/');
-//die( DYNAMIC_BASE_URL );
+// print_r(DYNAMIC_BASE_URL);
 
 // khi cần chuyển các file tĩnh sang url khác để giảm tải cho server chính thì dùng chức năng này
 defined('CDN_BASE_URL') || define('CDN_BASE_URL', DYNAMIC_BASE_URL);
-//echo CDN_BASE_URL . '<br>' . PHP_EOL;
+// print_r(CDN_BASE_URL);
+
+// khi cần chuyển các file ảnh trong thư mục wp-content/uploads/ sang url khác để giảm tải cho server chính thì dùng chức năng này
+defined('EB_CDN_UPLOADS_URL') || define('EB_CDN_UPLOADS_URL', '');
+// print_r(EB_CDN_UPLOADS_URL);
