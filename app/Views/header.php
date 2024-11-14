@@ -32,6 +32,8 @@ include __DIR__ . '/header_cache.php';
     // 
     if (EB_CDN_UPLOADS_URL != '') {
     ?>
+        <meta http-equiv="x-dns-prefetch-control" content="on">
+        <link rel="dns-prefetch" href="<?php echo EB_CDN_UPLOADS_URL; ?>" />
         <script type="text/javascript">
             if ('<?php echo EB_CDN_UPLOADS_URL; ?>'.includes('/' + window.location.host + '/') != false) {
                 window.location = '<?php echo get_site_url(); ?>' + window.location.pathname;
