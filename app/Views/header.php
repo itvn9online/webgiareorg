@@ -27,7 +27,18 @@ include __DIR__ . '/header_cache.php';
     <?php
 
     // đặt tham số này để không nạp lại base nữa
-    //define( 'HAS_BASE_HREF', true );
+    // define('HAS_BASE_HREF', true);
+
+    // 
+    if (EB_CDN_UPLOADS_URL != '') {
+    ?>
+        <script type="text/javascript">
+            if ('<?php echo EB_CDN_UPLOADS_URL; ?>'.includes('/' + window.location.host + '/') != false) {
+                window.location = '<?php echo get_site_url(); ?>' + window.location.pathname;
+            }
+        </script>
+    <?php
+    }
 
     // nạp phần css inline để phục vụ cho bản mobile
     ?>

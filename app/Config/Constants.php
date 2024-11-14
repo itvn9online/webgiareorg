@@ -35,3 +35,7 @@ defined('CDN_BASE_URL') || define('CDN_BASE_URL', DYNAMIC_BASE_URL);
 // khi cần chuyển các file ảnh trong thư mục wp-content/uploads/ sang url khác để giảm tải cho server chính thì dùng chức năng này
 defined('EB_CDN_UPLOADS_URL') || define('EB_CDN_UPLOADS_URL', '');
 // print_r(EB_CDN_UPLOADS_URL);
+if (EB_CDN_UPLOADS_URL != '' && strpos(EB_CDN_UPLOADS_URL, '/' . $_SERVER['HTTP_HOST'] . '/') !== false) {
+    header('HTTP/1.1 403 Forbidden');
+    die('DNS Prefetch');
+}
