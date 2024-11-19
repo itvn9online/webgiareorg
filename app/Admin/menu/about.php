@@ -167,12 +167,28 @@ function check_and_update_webgiareorg()
     }
 }
 
+function WGR_getIPAddress()
+{
+    $client_ip = $_SERVER['REMOTE_ADDR'];
+    if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        $client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        // $client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        $client_ip = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
+    } else if (isset($_SERVER['HTTP_X_REAL_IP'])) {
+        $client_ip = $_SERVER['HTTP_X_REAL_IP'];
+        // $client_ip = trim(explode(',', $_SERVER['HTTP_X_REAL_IP'])[0]);
+    }
+    return $client_ip;
+}
+
 ?>
 <h1>Về tác giả</h1>
 <p>Phiên bản WebGiaRe code: <strong><?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></strong></p>
 <p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
 <p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
 <p>Server IP: <strong><?php echo $_SERVER['SERVER_ADDR']; ?></strong></p>
+<p>Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
 <?php
 
 //
