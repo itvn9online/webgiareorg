@@ -13,7 +13,7 @@ if (isset($_GET['changes'])) {
     header('Content-Type: text/plain; charset=UTF-8');
 
     //
-    //die(file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt'));
+    //die(file_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/changes.txt'));
     die(file_get_contents('https://webgiare.org/wp-content/themes/flatsome/changes.txt'));
 }
 
@@ -46,7 +46,7 @@ die(json_encode([
     "requires_php" => "5.6.20",
     // log thay đổi
     //"details_url" => "https://flatsome.echbay.com/wp-content/webgiareorg/info.php?changes=log",
-    //"details_url" => "https://raw.githubusercontent.com/itvn9online/webgiareorg/main/changes.txt",
+    //"details_url" => "https://raw.echbay.com/itvn9online/webgiareorg/main/changes.txt",
     "details_url" => "https://webgiare.org/wp-content/themes/flatsome/changes.txt",
     // link download
     "download_url" => "https://flatsome.echbay.com/download/flatsome-" . $flatsome_version . ".zip"

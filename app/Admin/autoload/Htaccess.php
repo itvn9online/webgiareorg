@@ -15,7 +15,7 @@ if (!is_file($root_htaccess)) {
     echo $root_htaccess . '<br>' . PHP_EOL;
 
     //
-    // $content_htaccess = file_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/tmp/.htaccess');
+    // $content_htaccess = file_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/.htaccess');
     $content_htaccess = file_get_contents(WGR_BASE_PATH . 'tmp/.htaccess');
 
     // nội dung file mới phải đảm bảo được lấy thành công

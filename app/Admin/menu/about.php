@@ -10,9 +10,18 @@ global $wpdb;
  * Chức năng này sẽ tự động chỉnh nội dung trong file htaccess cho phù hợp
  * Để tắt chức năng này, hãy khai báo constant WGR_DISABLE_AUTO_HTACCESS trong function của child-theme
  */
+
+// 
+// print_r(explode('//', get_home_url()));
+// var_dump(strpos(explode('//', get_home_url())[1], '/'));
+
+// 
 $path_htaccess = ABSPATH . ".htaccess";
-// 1 > 2 -> bỏ chức năng này đi, thi thoảng gây lỗi không kiểm soát nên thôi
-if (1 > 2 && is_file($path_htaccess)) {
+// chỉ xử lý file htaccess đối với website chạy bằng tên miền chính, không xử lý khi web dạng sub-dir
+if (is_file($path_htaccess) && strpos(explode('//', get_home_url())[1], '/') === false) {
+    // echo __FILE__ . ':' . __LINE__;
+
+    // lấy nội dùng file hiện tại
     $content_htaccess = file_get_contents($path_htaccess);
 
     // xóa file trong trường hợp lỗi htaccess
@@ -55,7 +64,7 @@ if (1 > 2 && is_file($path_htaccess)) {
 function check_and_update_webgiareorg()
 {
     $version = file_get_contents(WGR_BASE_PATH . 'VERSION');
-    // $remove_version = WGR_get_contents('https://raw.githubusercontent.com/itvn9online/webgiareorg/main/VERSION');
+    // $remove_version = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/VERSION');
     if (isset($_GET['update_wgr_code'])) {
         $remove_version = $version;
     } else {
