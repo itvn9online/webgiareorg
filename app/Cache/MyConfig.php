@@ -46,7 +46,7 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     // tìm và xóa các file cache cũ hơn
     $dir_config = dirname(EB_MY_CACHE_CONFIG);
     for ($i = 2; $i < 10; $i++) {
-        $file_config = $dir_config . '/my-config-' . date('Ymd', time() - 24 * 3600 * $i) . '.php';
+        $file_config = $dir_config . '/my-config-' . date('Ymd', time() - 86400 * $i) . '.php';
         // echo $file_config . '<br>' . PHP_EOL;
         if (is_file($file_config)) {
             unlink($file_config);

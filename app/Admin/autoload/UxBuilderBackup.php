@@ -58,7 +58,7 @@ function autoUxBuilderBackup($space_backup = 3600)
     /**
      * backup menu
      */
-    $mot_tuan = 24 * 3600 * 7;
+    $mot_tuan = 86400 * 7;
     $data = wp_get_nav_menus();
     //print_r( $data );
     foreach ($data as $v) {

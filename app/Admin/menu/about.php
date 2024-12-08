@@ -11,7 +11,8 @@ global $wpdb;
  * Để tắt chức năng này, hãy khai báo constant WGR_DISABLE_AUTO_HTACCESS trong function của child-theme
  */
 $path_htaccess = ABSPATH . ".htaccess";
-if (is_file($path_htaccess)) {
+// 1 > 2 -> bỏ chức năng này đi, thi thoảng gây lỗi không kiểm soát nên thôi
+if (1 > 2 && is_file($path_htaccess)) {
     $content_htaccess = file_get_contents($path_htaccess);
 
     // xóa file trong trường hợp lỗi htaccess
