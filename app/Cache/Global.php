@@ -164,7 +164,8 @@ function WGR_get_cache_file($cache_dir = '')
             'fbclid=',
             'gclid=',
             'fb_comment_id=',
-            'utm_'
+            'utm_',
+            'v',
         );
         foreach ($arr_cat_social_parameter as $v) {
             $url = explode('?' . $v, $url);
