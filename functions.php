@@ -19,6 +19,9 @@ defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
 defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
 
+// chuyển giá 0 đồng thành liên hệ
+defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', false);
+
 
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
 //defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
@@ -74,6 +77,8 @@ else {
     //
     // echo basename(__FILE__ . ':') . __LINE__ . '<br>' . PHP_EOL;
     include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
-    include WGR_BASE_PATH . 'app/Guest/contact-price.php';
+    if (WGR_CONTACT_PRICE == true) {
+        include WGR_BASE_PATH . 'app/Guest/contact-price.php';
+    }
     include WGR_BASE_PATH . 'app/ThirdParty/rank_math_the_breadcrumbs.php';
 }

@@ -87,7 +87,7 @@ function action_echbay_call_shortcode($atts)
     }
 
     // gọi tới function của widget shortcode
-    $html = do_shortcode('[' . ltrim(rtrim($for_shortcode, ']'), '[') . ']');
+    $html = do_shortcode('[' . trim(ltrim(rtrim($for_shortcode, ']'), '[')) . ']');
     if ($custom_class != '') {
         $html = '<div class="' . $custom_class . '">' . $html . '</div>';
     }
