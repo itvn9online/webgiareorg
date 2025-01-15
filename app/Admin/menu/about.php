@@ -309,6 +309,13 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replac
     <textarea rows="2" ondblclick="this.select();" readonly style="width: 90%;">
 UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
 </div>
+<br />
+<div class="bold">
+    <h3>This theme recommends the following plugins</h3>
+    <ol id="wgr-recommends-following-plugins">
+    </ol>
+</div>
+<br />
 <?php
 
 //
@@ -330,4 +337,39 @@ check_and_update_webgiareorg();
     if (window.location.href.includes('update_wgr_code=') == true) {
         window.history.pushState("", document.title, window.location.href.split('&update_wgr_code=')[0].split('?update_wgr_code=')[0]);
     }
+
+    // tạo danh sách các plugin khuyên dùng
+    (function(arr) {
+        let str = '',
+            w = Math.ceil(jQuery(window).width() / 100 * 70),
+            h = Math.ceil(jQuery(window).height() / 100 * 80);
+        for (let x in arr) {
+            str += '<li>' +
+                '<a href="' + web_link + 'wp-admin/plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h + '" class="thickbox">' + arr[x] + '</a>' +
+                '</li>';
+        }
+        jQuery('#wgr-recommends-following-plugins').html(str);
+    })({
+        'advanced-custom-fields': 'Advanced Custom Fields (ACF)',
+        'tinymce-advanced': 'Advanced Editor Tools',
+        'amp': 'AMP',
+        'classic-editor': 'Classic Editor',
+        // 'classic-widgets': 'Classic Widgets',
+        'contact-form-7': 'Contact Form 7',
+        'echbay-admin-security': 'EchBay Admin Security',
+        'echbay-phonering-alo': 'EchBay Phonering Alo',
+        'echbay-search-everything': 'EchBay Search Everything',
+        'ajax-search-for-woocommerce': 'FiboSearch – Ajax Search for WooCommerce',
+        'flamingo': 'Flamingo',
+        'polylang': 'Polylang',
+        'post-duplicator': 'Post Duplicator',
+        'seo-by-rank-math': 'Rank Math SEO',
+        'wp-smushit': 'Smush Image Optimization',
+        'speculation-rules': 'Speculative Loading',
+        'tiny-compress-images': 'TinyPNG',
+        'woocommerce': 'WooCommerce',
+        'woo-vietnam-checkout': 'Woocommerce Vietnam Checkout',
+        'wp-mail-smtp': 'WP Mail SMTP',
+        'yith-woocommerce-wishlist': 'YITH WooCommerce Wishlist',
+    });
 </script>

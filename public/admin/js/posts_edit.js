@@ -1,6 +1,6 @@
 // hiển thị nút nhân bản
 (function ($) {
-	$("#wgr-for-duplicator").removeClass("d-none").show();
+	jQuery("#wgr-for-duplicator").removeClass("d-none").show();
 	jQuery(".show-if-duplicator-null div").click(function () {
 		jQuery(".show-if-duplicator-null").fadeOut();
 	});
@@ -8,7 +8,7 @@
 	//
 	jQuery(".click-set-nhanban").click(function () {
 		// sử dụng plugin Post duplicator
-		if ($("#duplicator").length === 0) {
+		if (jQuery("#duplicator").length === 0) {
 			jQuery(".show-if-duplicator-null").fadeIn();
 
 			setTimeout(function () {

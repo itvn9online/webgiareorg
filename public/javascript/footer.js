@@ -1,11 +1,11 @@
 //console.log(typeof jQuery);
 
 function a_ez_toc_link() {
-	$("a.ez-toc-link")
+	jQuery("a.ez-toc-link")
 		.each(function () {
-			let a = $(this).attr("href") || "";
+			let a = jQuery(this).attr("href") || "";
 			if (a.substr(0, 1) == "#") {
-				$(this).attr({
+				jQuery(this).attr({
 					href: eb_this_current_url + a,
 				});
 			}
@@ -14,7 +14,7 @@ function a_ez_toc_link() {
 		.on("click", function (e) {
 			//console.log(Math.random());
 			//e.preventDefault();
-			let a = $(this).attr("href") || "";
+			let a = jQuery(this).attr("href") || "";
 			if (a != "") {
 				a = a.split("#");
 				if (a.length > 1) {
@@ -40,8 +40,8 @@ function a_ez_toc_link() {
 //
 (function ($) {
 	// tạo menu cho phần my account
-	$(".json-to-menu").each(function () {
-		let a = $.trim($(this).html());
+	jQuery(".json-to-menu").each(function () {
+		let a = $.trim(jQuery(this).html());
 
 		//
 		a = JSON.parse(a);
@@ -68,7 +68,7 @@ function a_ez_toc_link() {
 		}
 
 		//
-		$(this).html(str).removeClass("d-none").addClass(cl);
+		jQuery(this).html(str).removeClass("d-none").addClass(cl);
 	});
 
 	//
@@ -85,30 +85,32 @@ function a_ez_toc_link() {
 	//
 	jQuery("a").each(function () {
 		// chỉnh lại link cho phone call
-		let a = $(this).attr("href") || "";
+		let a = jQuery(this).attr("href") || "";
 		if (a.includes("tel:") == true) {
-			$(this).attr({
+			jQuery(this).attr({
 				href: "tel:" + a.split("tel:")[1],
 			});
 		}
 		if (a.includes("mailto:") == true) {
-			$(this).attr({
+			jQuery(this).attr({
 				href: "mailto:" + a.split("mailto:")[1],
 			});
 		}
 
 		//
 		if ((jQuery(this).attr("aria-label") || "") == "") {
-			$(this).attr({
+			jQuery(this).attr({
 				"aria-label":
-					$(this).attr("title") || $(this).attr("data-title") || "External",
+					jQuery(this).attr("title") ||
+					jQuery(this).attr("data-title") ||
+					"External",
 			});
 		}
 	});
 
 	//
-	$(document).ready(function () {
-		$("body").addClass("document-ready");
+	jQuery(document).ready(function () {
+		jQuery("body").addClass("document-ready");
 
 		//
 		//a_ez_toc_link();
