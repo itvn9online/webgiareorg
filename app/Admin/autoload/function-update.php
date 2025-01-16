@@ -24,7 +24,18 @@ function WGR_flatsome_function_update($f)
 }
 
 //
-if (strpos($_SERVER['HTTP_HOST'], 'webgiare.org') === false) {
+if (
+    !in_array(
+        $_SERVER['HTTP_HOST'],
+        [
+            'webgiare.org',
+            'www.webgiare.org',
+            // 'world.webgiare.org',
+        ]
+    )
+    // && is_admin()
+    //&& defined('EB_CHILD_THEME_URL')
+) {
     WGR_flatsome_function_update(dirname(WGR_CHILD_PATH) . '/flatsome/inc/functions/function-update.php');
     /*
 } else {
