@@ -32,7 +32,7 @@ function WGR_vuejs(app_id, obj, _callBack, max_i) {
 			.toISOString()
 			.split(".")[0]
 			.replace("T", " ")
-			.substr(0, len);
+			.slice(0, len);
 	};
 	obj.date = function (t) {
 		return new Date(t - tzoffset).toISOString().split("T")[0];
@@ -45,7 +45,7 @@ function WGR_vuejs(app_id, obj, _callBack, max_i) {
 			.toISOString()
 			.split(".")[0]
 			.split("T")[1]
-			.substr(0, len);
+			.slice(0, len);
 	};
 	obj.number_format = function (n) {
 		return new Intl.NumberFormat().format(n);
@@ -114,7 +114,7 @@ function WGR_non_mark_seo(str) {
 			re = /^\w+$/,
 			t = "";
 		for (let i = 0; i < s.length; i++) {
-			t = s.substr(i, 1);
+			t = s.slice(i, i + 1);
 			if (t == "-" || t == "+" || re.test(t) == true) {
 				str += t;
 			}

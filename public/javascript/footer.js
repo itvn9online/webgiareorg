@@ -4,7 +4,7 @@ function a_ez_toc_link() {
 	jQuery("a.ez-toc-link")
 		.each(function () {
 			let a = jQuery(this).attr("href") || "";
-			if (a.substr(0, 1) == "#") {
+			if (a.slice(0, 1) == "#") {
 				jQuery(this).attr({
 					href: eb_this_current_url + a,
 				});
