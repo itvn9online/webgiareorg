@@ -60,6 +60,25 @@ if (is_file($path_htaccess) && strpos(explode('//', get_home_url())[1], '/') ===
     }
 }
 
+// tạo file htaccess chặn truy cập vào file php trong thư mục uploads
+// echo ABSPATH . '<br>' . PHP_EOL;
+if (is_dir(ABSPATH . 'wp-content') && is_dir(ABSPATH . 'wp-content/uploads')) {
+    $path_htaccess = ABSPATH . 'wp-content/uploads/.htaccess';
+    if (!is_file($path_htaccess)) {
+        // tạo file htaccess với nội dung chặn truy cập vào file php
+        file_put_contents($path_htaccess, trim('
+#Begin Really Simple Security
+<Files *.php>
+deny from all
+</Files>
+#End Really Simple Security
+'), LOCK_EX);
+
+        // 
+        echo 'update uploads/*.php for ' . $path_htaccess . '<br>' . PHP_EOL;
+    }
+}
+
 // kiểm tra và cập nhật phiên bản mới nếu có
 function check_and_update_webgiareorg()
 {
