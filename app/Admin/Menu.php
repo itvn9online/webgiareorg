@@ -77,6 +77,8 @@ function WGR_create_admin_menu()
 
     add_submenu_page($parent_slug, 'Thông tin Server', 'Thông tin Server', 'publish_pages', 'eb-server', 'func_include_wgr_private_code');
 
+    add_submenu_page($parent_slug, 'Công cụ hỗ trợ', 'Công cụ hỗ trợ', 'publish_pages', 'eb-tools', 'func_include_wgr_private_code');
+
 
     /**
      * Mọi người đều có thể nhìn thấy menu này
