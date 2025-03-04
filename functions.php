@@ -20,7 +20,7 @@ defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
 defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
 
 // chuyển giá 0 đồng thành liên hệ
-defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', false);
+defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', true);
 
 
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
