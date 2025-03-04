@@ -24,7 +24,7 @@
 		}
 
 		//
-		jQuery("#duplicator a").click();
+		jQuery("#duplicator a").trigger("click");
 
 		//
 		return true;
@@ -32,11 +32,18 @@
 
 	// sau khi nhân bản xong, chuyển sang bài đó luôn
 	if (window.location.href.includes("&post-duplicated=") == true) {
-		let a = jQuery("#wpbody-content .updated a").attr("href") || "";
+		jQuery("#wpbody-content .updated a").each(function () {
+			let a = jQuery(this).attr("href") || "";
 
-		if (a != "") {
-			window.location = a;
-			return false;
-		}
+			if (
+				a != "" &&
+				a.includes("/post.php?post=") &&
+				a.includes("&action=edit")
+			) {
+				console.log("a", a);
+				window.location = a;
+				return false;
+			}
+		});
 	}
 })(jQuery);
