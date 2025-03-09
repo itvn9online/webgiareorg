@@ -61,8 +61,9 @@ function WGR_my_cache($path, $c = '', $t = 120)
             // echo "Connection to server sucessfully";
             $rd_key = WGR_redis_key($path);
 
-            // set the data in redis string
+            // 
             if (1 > 2) {
+                // set the data in redis string
                 $rd->set($rd_key, $c);
                 // key will be deleted after 10 seconds
                 $rd->expire($rd_key, $t);
