@@ -60,16 +60,17 @@ function WGR_my_cache($path, $c = '', $t = 120)
             $rd->connect(REDIS_MY_HOST, REDIS_MY_PORT);
             // echo "Connection to server sucessfully";
             $rd_key = WGR_redis_key($path);
+            // echo $rd_key;
 
-            // 
-            if (1 > 2) {
+            // try catch
+            try {
+                // key will be deleted after 10 seconds
+                $rd->setex($rd_key, $t, $c);
+            } catch (Exception $e) {
                 // set the data in redis string
                 $rd->set($rd_key, $c);
                 // key will be deleted after 10 seconds
                 $rd->expire($rd_key, $t);
-            } else {
-                // key will be deleted after 10 seconds
-                $rd->setex($rd_key, $t, $c);
             }
             return true;
         }
@@ -163,13 +164,16 @@ function WGR_get_cache_file($cache_dir = '')
 {
     if (isset($_SERVER['REQUEST_URI'])) {
         $url = $_SERVER['REQUEST_URI'];
+        // echo $url . '<br>' . PHP_EOL;
     } else {
         $url = $_SERVER['SCRIPT_NAME'];
         $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
+        // echo $url . '<br>' . PHP_EOL;
     }
     if ($url == '/' || $url == '') {
         $url = '-';
     } else {
+        // echo $url . '<br>' . PHP_EOL;
         $arr_cat_social_parameter = array(
             'fbclid=',
             'gclid=',
@@ -188,7 +192,22 @@ function WGR_get_cache_file($cache_dir = '')
             // $url = md5($url);
             $url = substr($url, 0, 200);
         }
-        $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
+        // echo $url . '<br>' . PHP_EOL;
+        // $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
+        $url = str_replace([
+            '&amp%3B',
+            '&amp;',
+            '/',
+            '?',
+            '&',
+            ',',
+            '=',
+        ], '-', $url);
+        // echo $url . '<br>' . PHP_EOL;
+
+        // 
+        $url = rtrim(ltrim($url, '-'), '-');
+        // echo $url . '<br>' . PHP_EOL;
     }
 
     //
@@ -197,6 +216,7 @@ function WGR_get_cache_file($cache_dir = '')
     }
     // $url = EB_THEME_CACHE . $cache_dir . $url;
     $url = EB_THEME_CACHE . $cache_dir . $url . '.txt';
+    // echo $url . '<br>' . PHP_EOL;
 
     //
     return $url;

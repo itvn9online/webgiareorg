@@ -20,7 +20,10 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     // Thay riêng cho tham số true|false
     $my_content_config = str_replace('enable_redis', $enable_redis, $my_content_config);
     // gán prefix cho cache luôn
-    defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
+    defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', str_replace([
+        'www.',
+        '.'
+    ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
     $my_content_config = str_replace('str_cache_prefix', WGR_CACHE_PREFIX, $my_content_config);
 
     // thay thế nội dung từ file wp-config

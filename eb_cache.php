@@ -90,7 +90,10 @@ include_once __DIR__ . '/app/Cache/Global.php';
 /**
  * tạo prefix để tránh xung đột cho cache của các website khác nhau
  */
-defined('EB_CACHE_PREFIX') || define('EB_CACHE_PREFIX', str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))));
+defined('EB_CACHE_PREFIX') || define('EB_CACHE_PREFIX', str_replace([
+    'www.',
+    '.'
+], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
 
 // 
 define('EB_PREFIX_CACHE', EB_CACHE_PREFIX . $cache_prefix);

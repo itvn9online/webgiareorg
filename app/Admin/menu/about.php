@@ -315,7 +315,7 @@ if (class_exists('Imagick')) {
 // bật tắt chức năng cache qua redis: true|false
 defined('WGR_REDIS_CACHE') || define('WGR_REDIS_CACHE', true);
 // thiết lập prefix cho cache để tránh xung đột với site khác
-defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replace('www.', '', str_replace('.', '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0]))); ?>');</textarea>
+defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo str_replace(['www.', '.'], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])); ?>');</textarea>
             </div>
         </div>
     <?php
