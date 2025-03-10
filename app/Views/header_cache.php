@@ -56,8 +56,13 @@ else if (is_single()) {
 }
 //
 else if (is_archive()) {
-    // xác nhận có sử dụng ebcache
-    $active_using_ebcache = 'is archive';
+    // không cache với bộ lọc tìm kiếm
+    if (isset($_GET['filtering']) || isset($_GET['filter_product_brand']) || isset($_GET['min_price']) || isset($_GET['max_price'])) {
+        $why_ebcache_not_active = 'EchBay Cache not cache in: filter page';
+    } else {
+        // xác nhận có sử dụng ebcache
+        $active_using_ebcache = 'is archive';
+    }
 }
 // chưa hỗ trợ với page template
 else if (is_page_template() || is_page()) {
