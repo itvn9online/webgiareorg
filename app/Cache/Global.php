@@ -29,7 +29,9 @@ function WGR_cache_expire($path, $t = 3600)
 function WGR_redis_key($f)
 {
     // dùng redis thì cắt bỏ đuôi txt cho nhẹ
+    // echo $f . '<br>' . PHP_EOL;
     $f = str_replace('.', '-', explode('.txt', basename($f))[0]);
+    // echo $f . '<br>' . PHP_EOL;
     if (defined('EB_PREFIX_CACHE')) {
         return EB_PREFIX_CACHE . $f;
     }
@@ -209,12 +211,17 @@ function WGR_get_cache_file($cache_dir = '')
 
         // thay thế 2- thành 1-  
         $url = preg_replace('!\-+!', '-', $url);
+        // echo $url . '<br>' . PHP_EOL;
 
         // cắt bỏ ký tự - ở đầu và cuối chuỗi
         $url = rtrim(ltrim($url, '-'), '-');
         $url = rtrim(ltrim($url, '.'), '.');
         $url = trim($url);
         // echo $url . '<br>' . PHP_EOL;
+        if ($url == '') {
+            $url = '-';
+            // echo $url . '<br>' . PHP_EOL;
+        }
     }
 
     //
