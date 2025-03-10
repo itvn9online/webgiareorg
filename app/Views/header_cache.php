@@ -45,6 +45,9 @@ else if (is_home() || is_front_page()) {
         echo 'copy index-tmp to index <br>' . PHP_EOL;
         copy(WGR_BASE_PATH . 'index-tmp.php', ABSPATH . 'index.php');
     }
+
+    // 
+    defined('WGR_IS_HOME') || define('WGR_IS_HOME', true);
 }
 //
 else if (is_single()) {

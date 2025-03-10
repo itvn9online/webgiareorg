@@ -172,7 +172,7 @@ function WGR_get_cache_file($cache_dir = '')
         $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
         // echo $url . '<br>' . PHP_EOL;
     }
-    if ($url == '/' || $url == '') {
+    if (defined('WGR_IS_HOME') || $url == '/' || $url == '') {
         $url = '-';
     } else {
         // echo $url . '<br>' . PHP_EOL;
