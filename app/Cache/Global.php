@@ -207,8 +207,13 @@ function WGR_get_cache_file($cache_dir = '')
         ], '-', $url);
         // echo $url . '<br>' . PHP_EOL;
 
-        // 
+        // thay thế 2- thành 1-  
+        $url = preg_replace('!\-+!', '-', $url);
+
+        // cắt bỏ ký tự - ở đầu và cuối chuỗi
         $url = rtrim(ltrim($url, '-'), '-');
+        $url = rtrim(ltrim($url, '.'), '.');
+        $url = trim($url);
         // echo $url . '<br>' . PHP_EOL;
     }
 
