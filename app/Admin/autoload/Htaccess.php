@@ -55,5 +55,6 @@ if (!is_file($root_htaccess)) {
     /*
 } else {
     echo $root_htaccess . '<br>' . PHP_EOL;
+    echo file_get_contents($root_htaccess, 1) . '<br>' . PHP_EOL;
     */
 }
