@@ -97,6 +97,27 @@ function WGR_non_mark(str) {
 	return str;
 }
 
+function WGR_strip_tags(input, allowed) {
+	if (typeof input == "undefined" || input == "") {
+		return "";
+	}
+
+	//
+	if (typeof allowed == "undefined") {
+		allowed = "";
+	}
+
+	//
+	allowed = (
+		((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []
+	).join("");
+	let tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+		cm = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+	return input.replace(cm, "").replace(tags, function ($0, $1) {
+		return allowed.indexOf("<" + $1.toLowerCase() + ">") > -1 ? $0 : "";
+	});
+}
+
 function WGR_non_mark_seo(str) {
 	str = WGR_non_mark(str);
 	str = str.replace(/\s/g, "-");
