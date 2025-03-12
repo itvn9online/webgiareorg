@@ -208,6 +208,7 @@ function WGR_edit_post_quick_tab() {
 jQuery(document).ready(function () {
 	WGR_find_taxonomy_for_edit("category");
 	WGR_find_taxonomy_for_edit("product_cat");
+	WGR_find_taxonomy_for_edit("product_brand");
 
 	//
 	WGR_edit_post_quick_tab();
