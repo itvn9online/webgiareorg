@@ -58,10 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
 
                 // chỉ lấy cache theo prefix của từng tên miền
-                $cache_prefix = strtolower(str_replace([
-                    'www.',
-                    '.'
-                ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
+                if (defined('WGR_CACHE_PREFIX')) {
+                    $cache_prefix = WGR_CACHE_PREFIX;
+                } else {
+                    $cache_prefix = strtolower(str_replace([
+                        'www.',
+                        '.'
+                    ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
+                }
                 $cache_prefix .= '*';
                 // print_r($cache_prefix);
 
