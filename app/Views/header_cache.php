@@ -47,7 +47,11 @@ else if (is_home() || is_front_page()) {
     }
 
     // 
-    defined('WGR_IS_HOME') || define('WGR_IS_HOME', true);
+    // if (!empty($_GET)) {
+    // defined('WGR_IS_HOME') || define('WGR_IS_HOME', true);
+    // } else {
+    // print_r($_GET);
+    // }
 }
 //
 else if (is_single()) {
@@ -79,17 +83,10 @@ else if (is_page_template() || is_page()) {
         //$why_ebcache_not_active = 'EchBay Cache (ebcache) not running because (is page template) enable';
 
         // xác nhận có sử dụng ebcache
-        //$active_using_ebcache = 'is page template';
+        // $active_using_ebcache = 'is page template';
         $active_using_ebcache = 'is page';
     }
 }
-//
-/*
-else if ( is_page() ) {
-    // xác nhận có sử dụng ebcache
-    $active_using_ebcache = 'is page';
-}
-*/
 // chỉ cache với 1 số trang cụ thể thôi
 else {
     $why_ebcache_not_active = 'EchBay Cache cache only home page, category page, post details page';
