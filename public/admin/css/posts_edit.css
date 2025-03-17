@@ -55,3 +55,8 @@
 .edit-post-wgr-tab:hover li {
     background: #fff;
 }
+
+/* fixed lại css cho editer trong flatsome */
+#wp-uxbuilder-editor-container .mce-menubar .mce-container-body.mce-flow-layout {
+    display: block !important;
+}
