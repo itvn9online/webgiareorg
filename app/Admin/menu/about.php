@@ -83,20 +83,20 @@ deny from all
 function check_and_update_webgiareorg()
 {
     $version = file_get_contents(WGR_BASE_PATH . 'VERSION');
-    // $remove_version = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/VERSION');
     if (isset($_GET['update_wgr_code'])) {
-        $remove_version = $version;
+        $remote_version = $version;
     } else {
-        $remove_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
+        $remote_version = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/VERSION');
+        // $remote_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
     }
-    // $remove_version = '24.08.20';
+    // $remote_version = '24.08.20';
     // echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
     // echo EB_THEME_CACHE . '<br>' . PHP_EOL;
 
     //
-    if (isset($_GET['update_wgr_code']) || version_compare($version, $remove_version, '<')) {
-        //echo $version . PHP_EOL;
-        //echo $remove_version . PHP_EOL;
+    if (isset($_GET['update_wgr_code']) || version_compare($version, $remote_version, '<')) {
+        // echo $version . PHP_EOL;
+        // echo $remote_version . PHP_EOL;
         $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
         echo 'File zip has been save to: ' . $dest . '<br>' . PHP_EOL;
         if (is_file($dest)) {

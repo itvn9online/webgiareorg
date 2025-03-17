@@ -13,7 +13,7 @@ if (isset($_GET['changes'])) {
     header('Content-Type: text/plain; charset=UTF-8');
 
     //
-    //die(file_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/changes.txt'));
+    //die(WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/changes.txt'));
     die(file_get_contents('https://webgiare.org/wp-content/themes/flatsome/changes.txt'));
 }
 
@@ -22,7 +22,7 @@ header('Content-Type: application/json');
 
 //
 $flatsome_version = file_get_contents('https://flatsome.echbay.com/wp-content/themes/VERSION', 1);
-//die($flatsome_version);
+// die($flatsome_version);
 
 // kiểm tra xem có file để download chưa
 $dir_download = dirname(dirname(__DIR__)) . '/download/flatsome-' . $flatsome_version . '.zip';

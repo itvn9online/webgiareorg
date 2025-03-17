@@ -15,7 +15,7 @@ if (!is_file($root_robots_txt)) {
     echo $root_robots_txt . '<br>' . PHP_EOL;
 
     //
-    // $content_robotstxt = file_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/robots.txt');
+    // $content_robotstxt = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/robots.txt');
     $content_robotstxt = file_get_contents(WGR_BASE_PATH . 'tmp/robots.txt');
 
     // nội dung file mới phải đảm bảo được lấy thành công

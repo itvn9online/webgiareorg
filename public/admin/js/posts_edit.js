@@ -154,62 +154,67 @@ function WGR_edit_post_quick_tab() {
 	});
 }
 
-// hiển thị nút nhân bản
-(function () {
-	jQuery("#wgr-for-duplicator").removeClass("d-none").show();
-	jQuery(".show-if-duplicator-null div").click(function () {
-		jQuery(".show-if-duplicator-null").fadeOut();
-	});
+// tính năng này ko chạy trong ifram -> thường là uxbuilder
+if (top == self) {
+	console.log("posts_edit script disabled in iframe");
 
-	//
-	jQuery(".click-set-nhanban").click(function () {
-		// sử dụng plugin Post duplicator
-		if (jQuery("#duplicator").length === 0) {
-			jQuery(".show-if-duplicator-null").fadeIn();
-
-			setTimeout(function () {
-				jQuery(".show-if-duplicator-null").fadeOut();
-			}, 5000);
-
-			return false;
-		}
+	// hiển thị nút nhân bản
+	(function () {
+		jQuery("#wgr-for-duplicator").removeClass("d-none").show();
+		jQuery(".show-if-duplicator-null div").click(function () {
+			jQuery(".show-if-duplicator-null").fadeOut();
+		});
 
 		//
-		if (confirm("Xác nhận nhân bản bài viết này") == false) {
-			return false;
-		}
+		jQuery(".click-set-nhanban").click(function () {
+			// sử dụng plugin Post duplicator
+			if (jQuery("#duplicator").length === 0) {
+				jQuery(".show-if-duplicator-null").fadeIn();
 
-		//
-		jQuery("#duplicator a").trigger("click");
+				setTimeout(function () {
+					jQuery(".show-if-duplicator-null").fadeOut();
+				}, 5000);
 
-		//
-		return true;
-	});
-
-	// sau khi nhân bản xong, chuyển sang bài đó luôn
-	if (window.location.href.includes("&post-duplicated=") == true) {
-		jQuery("#wpbody-content .updated a").each(function () {
-			let a = jQuery(this).attr("href") || "";
-
-			if (
-				a != "" &&
-				a.includes("/post.php?post=") &&
-				a.includes("&action=edit")
-			) {
-				console.log("a", a);
-				window.location = a;
 				return false;
 			}
-		});
-	}
-})();
 
-//
-jQuery(document).ready(function () {
-	WGR_find_taxonomy_for_edit("category");
-	WGR_find_taxonomy_for_edit("product_cat");
-	WGR_find_taxonomy_for_edit("product_brand");
+			//
+			if (confirm("Xác nhận nhân bản bài viết này") == false) {
+				return false;
+			}
+
+			//
+			jQuery("#duplicator a").trigger("click");
+
+			//
+			return true;
+		});
+
+		// sau khi nhân bản xong, chuyển sang bài đó luôn
+		if (window.location.href.includes("&post-duplicated=") == true) {
+			jQuery("#wpbody-content .updated a").each(function () {
+				let a = jQuery(this).attr("href") || "";
+
+				if (
+					a != "" &&
+					a.includes("/post.php?post=") &&
+					a.includes("&action=edit")
+				) {
+					console.log("a", a);
+					window.location = a;
+					return false;
+				}
+			});
+		}
+	})();
 
 	//
-	WGR_edit_post_quick_tab();
-});
+	jQuery(document).ready(function () {
+		WGR_find_taxonomy_for_edit("category");
+		WGR_find_taxonomy_for_edit("product_cat");
+		WGR_find_taxonomy_for_edit("product_brand");
+
+		//
+		WGR_edit_post_quick_tab();
+	});
+}
