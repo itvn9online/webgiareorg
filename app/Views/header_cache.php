@@ -47,6 +47,8 @@ else if (is_home() || is_front_page()) {
     }
 
     // 
+    // var_dump(is_home());
+    // var_dump(is_front_page());
     // if (!empty($_GET)) {
     // defined('WGR_IS_HOME') || define('WGR_IS_HOME', true);
     // } else {
