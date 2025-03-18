@@ -332,6 +332,48 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_download
 <div class="bold">
     <h3>This theme recommends the following plugins</h3>
     <ol id="wgr-recommends-following-plugins">
+        <?php
+        // lấy thư mục plugin
+        // echo WP_PLUGIN_DIR . '<br>' . PHP_EOL;
+
+        // 
+        foreach (
+            [
+                'advanced-custom-fields' => 'Advanced Custom Fields (ACF)',
+                'tinymce-advanced' => 'Advanced Editor Tools',
+                'amp' => 'AMP',
+                'classic-editor' => 'Classic Editor',
+                // 'classic-widgets' => 'Classic Widgets',
+                'contact-form-7' => 'Contact Form 7',
+                'echbay-admin-security' => 'EchBay Admin Security',
+                'echbay-phonering-alo' => 'EchBay Phonering Alo',
+                'echbay-search-everything' => 'EchBay Search Everything',
+                'ajax-search-for-woocommerce' => 'FiboSearch – Ajax Search for WooCommerce',
+                'flamingo' => 'Flamingo',
+                'polylang' => 'Polylang',
+                'post-duplicator' => 'Post Duplicator',
+                'seo-by-rank-math' => 'Rank Math SEO',
+                'wp-smushit' => 'Smush Image Optimization',
+                'speculation-rules' => 'Speculative Loading',
+                'tiny-compress-images' => 'TinyPNG',
+                'woocommerce' => 'WooCommerce',
+                'woo-vietnam-checkout' => 'Woocommerce Vietnam Checkout',
+                'wp-mail-smtp' => 'WP Mail SMTP',
+                'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
+            ] as $k => $v
+        ) {
+            // nếu thư mục code có rồi thì bỏ qua
+            if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
+        ?>
+                <li><?php echo $v; ?></li>
+            <?php
+            } else {
+            ?>
+                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
+        <?php
+            }
+        }
+        ?>
     </ol>
 </div>
 <br />
@@ -362,33 +404,13 @@ check_and_update_webgiareorg();
         let str = '',
             w = Math.ceil(jQuery(window).width() / 100 * 70),
             h = Math.ceil(jQuery(window).height() / 100 * 80);
-        for (let x in arr) {
-            str += '<li>' +
-                '<a href="' + web_link + 'wp-admin/plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h + '" class="thickbox">' + arr[x] + '</a>' +
-                '</li>';
-        }
-        jQuery('#wgr-recommends-following-plugins').html(str);
-    })({
-        'advanced-custom-fields': 'Advanced Custom Fields (ACF)',
-        'tinymce-advanced': 'Advanced Editor Tools',
-        'amp': 'AMP',
-        'classic-editor': 'Classic Editor',
-        // 'classic-widgets': 'Classic Widgets',
-        'contact-form-7': 'Contact Form 7',
-        'echbay-admin-security': 'EchBay Admin Security',
-        'echbay-phonering-alo': 'EchBay Phonering Alo',
-        'echbay-search-everything': 'EchBay Search Everything',
-        'ajax-search-for-woocommerce': 'FiboSearch – Ajax Search for WooCommerce',
-        'flamingo': 'Flamingo',
-        'polylang': 'Polylang',
-        'post-duplicator': 'Post Duplicator',
-        'seo-by-rank-math': 'Rank Math SEO',
-        'wp-smushit': 'Smush Image Optimization',
-        'speculation-rules': 'Speculative Loading',
-        'tiny-compress-images': 'TinyPNG',
-        'woocommerce': 'WooCommerce',
-        'woo-vietnam-checkout': 'Woocommerce Vietnam Checkout',
-        'wp-mail-smtp': 'WP Mail SMTP',
-        'yith-woocommerce-wishlist': 'YITH WooCommerce Wishlist',
-    });
+        jQuery('#wgr-recommends-following-plugins a').each(function() {
+            let x = jQuery(this).attr('data-name') || '';
+            if (x != '') {
+                jQuery(this).attr({
+                    href: web_link + 'wp-admin/plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h
+                })
+            }
+        });
+    })();
 </script>
