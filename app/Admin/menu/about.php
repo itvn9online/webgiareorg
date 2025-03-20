@@ -329,7 +329,7 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo strtolower
 UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
 </div>
 <br />
-<div class="bold">
+<div>
     <h3>This theme recommends the following plugins</h3>
     <ol id="wgr-recommends-following-plugins">
         <?php
@@ -369,7 +369,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_download
             <?php
             } else {
             ?>
-                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
+                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a></li>
         <?php
             }
         }

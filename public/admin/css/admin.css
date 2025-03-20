@@ -2,7 +2,7 @@
 
 .click-set-nhanban {
     position: fixed;
-    z-index: 9999;
+    z-index: 9;
     right: 120px;
     top: 42px;
     left: 50%;
