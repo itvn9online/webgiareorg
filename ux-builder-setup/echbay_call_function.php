@@ -34,7 +34,6 @@ function add_echbay_call_function()
     add_ux_builder_shortcode('echbay_call_function', array(
         'name' => 'Echbay Call Function',
         'category' => 'Echbay',
-        //'priority' => 1,
         'options' => array(
             'call_function' => array(
                 'type' => 'select',

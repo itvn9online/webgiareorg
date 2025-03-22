@@ -269,3 +269,14 @@ section.section.padding10 {
 #my_custom_alert div.orgbg {
     background-color: darkorange;
 }
+
+.echbay-items-contact-item {
+    padding-bottom: .3em;
+    padding-top: .3em;
+}
+
+.echbay-items-contact-text {
+    padding-left: .5em;
+}
+
+.echbay-items-contact-link {}

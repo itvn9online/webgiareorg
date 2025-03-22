@@ -10,10 +10,6 @@ function add_echbay_facebook_like_box()
         array(
             'name' => 'Echbay Facebook Like Box',
             'category' => 'Echbay',
-            //'priority' => 1,
-            //'type' => 'container',
-            //'thumbnail' => flatsome_ux_builder_thumbnail('image_box'),
-            //'wrap' => false,
             'options' => array(
                 'fb_href' => array(
                     'type' => 'textfield',

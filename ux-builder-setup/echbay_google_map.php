@@ -10,10 +10,6 @@ function add_echbay_google_map()
         array(
             'name' => 'Echbay Google Map',
             'category' => 'Echbay',
-            //'priority' => 1,
-            //'type' => 'container',
-            //'thumbnail' => flatsome_ux_builder_thumbnail('image_box'),
-            //'wrap' => false,
             'options' => array(
                 'map_height' => array(
                     'type' => 'textfield',

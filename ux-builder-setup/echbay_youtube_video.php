@@ -24,10 +24,6 @@ function add_echbay_youtube_video()
         array(
             'name' => 'Echbay Youtube Video',
             'category' => 'Echbay',
-            //'priority' => 1,
-            //'type' => 'container',
-            //'thumbnail' => flatsome_ux_builder_thumbnail('image_box'),
-            //'wrap' => false,
             'options' => array(
                 'video_id' => array(
                     'type' => 'textfield',

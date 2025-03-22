@@ -18,7 +18,6 @@ function add_echbay_call_menu()
     add_ux_builder_shortcode('echbay_call_menu', array(
         'name' => 'Echbay Call Menu',
         'category' => 'Echbay',
-        //'priority' => 1,
         'options' => array(
             'call_menu' => array(
                 'type' => 'select',

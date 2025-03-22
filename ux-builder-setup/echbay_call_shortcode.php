@@ -38,7 +38,6 @@ function add_echbay_call_shortcode()
         array(
             'name' => 'Echbay call Shortcode',
             'category' => 'Echbay',
-            //'priority' => 1,
             'options' => array(
                 'call_shortcode' => array(
                     'type' => 'select',
