@@ -9,12 +9,18 @@ function add_echbay_item_contact()
     add_ux_builder_shortcode(
         'echbay_item_contact',
         array(
-            'name' => 'Echbay LI Contact',
+            'name' => 'Echbay item Contact',
             'category' => 'Echbay',
             // 'info'      => '{{ label }}',
             'require'   => array('echbay_menu_contact'),
             // 'type' => 'container',
             'wrap' => false,
+            'presets'   => array(
+                array(
+                    'name'    => 'Default',
+                    'content' => '[echbay_item_contact menu_text="Menu title"]',
+                ),
+            ),
             'options' => array(
                 'menu_text' => array(
                     'type' => 'textfield',

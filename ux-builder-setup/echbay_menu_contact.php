@@ -14,6 +14,17 @@ function add_echbay_menu_contact()
             'allow' => array('echbay_item_contact'),
             'wrap' => false,
             'nested'    => false,
+            'presets'   => array(
+                array(
+                    'name'    => 'Default',
+                    'content' => '
+                    [echbay_menu_contact]
+                        [echbay_item_contact menu_text="Menu title 1"]
+                        [echbay_item_contact menu_text="Menu title 2"]
+                    [/echbay_menu_contact]
+                    ',
+                ),
+            ),
             'options' => array(
                 'custom_class' => array(
                     'type' => 'textfield',
