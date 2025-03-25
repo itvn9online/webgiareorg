@@ -34,7 +34,7 @@ function add_echbay_item_contact()
                     'default' => '',
                     'options' => [
                         ''                     => 'None',
-                        'icon-500px'           => '500px',
+                        // 'icon-500px'           => '500px',
                         'icon-angle-down'      => 'Arrow Down',
                         'icon-angle-left'      => 'Arrow Left',
                         'icon-angle-right'     => 'Arrow Right',
@@ -93,6 +93,22 @@ function add_echbay_item_contact()
                     'heading' => 'URL',
                     'default' => '',
                 ),
+                'menu_tag' => array(
+                    'type' => 'select',
+                    'heading' => 'Tag',
+                    'default' => 'div',
+                    'options' => [
+                        'div' => 'Div',
+                        'h1' => 'H1',
+                        'h2' => 'H2',
+                        'h3' => 'H3',
+                        'h4' => 'H4',
+                        'h5' => 'H5',
+                        'h6' => 'H6',
+                        'p' => 'P',
+                        'span' => 'Span',
+                    ],
+                ),
                 'custom_class' => array(
                     'type' => 'textfield',
                     'heading' => 'Class CSS',
@@ -114,6 +130,7 @@ function action_echbay_item_contact($atts)
                 'menu_text' => '',
                 'menu_icon' => '',
                 'menu_link' => '',
+                'menu_tag' => '',
                 'custom_class' => '',
             ),
             $atts
@@ -135,10 +152,13 @@ function action_echbay_item_contact($atts)
 
     // 
     if ($menu_icon != '') {
-        if ($menu_icon == 'icon-phone') {
-            $menu_link = 'tel:' . $the_link;
-        } else if ($menu_icon == 'icon-envelop') {
-            $menu_link = 'mailto:' . $the_link;
+        // nếu menu link ko được thiết lập thì tạo link tự động luôn
+        if ($menu_link == '') {
+            if ($menu_icon == 'icon-phone') {
+                $menu_link = 'tel:' . $the_link;
+            } else if ($menu_icon == 'icon-envelop') {
+                $menu_link = 'mailto:' . $the_link;
+            }
         }
 
         // 
@@ -154,7 +174,7 @@ function action_echbay_item_contact($atts)
     }
 
     // 
-    $html = '<div class="' . trim($custom_class . ' echbay-items-contact-item') . '">' . $menu_text . '</div>';
+    $html = '<' . $menu_tag . ' class="' . trim($custom_class . ' echbay-items-contact-item') . '">' . $menu_text . '</' . $menu_tag . '>';
 
     //
     return $html;
