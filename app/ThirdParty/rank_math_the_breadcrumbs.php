@@ -1,7 +1,15 @@
 <?php
 
 /**
+ * 
  * Sử dụng breadcrumbs của Rank Math SEO
+ * 
+ * How to NoIndex Paginated Pages:
+ * https://rankmath.com/kb/how-to-noindex-paginated-pages/
+ * 
+ * How to Noindex URLs With Rank Math:
+ * https://rankmath.com/kb/how-to-noindex-urls/
+ * 
  */
 if (function_exists('rank_math_the_breadcrumbs')) {
     function WGR_rank_math_the_breadcrumbs()

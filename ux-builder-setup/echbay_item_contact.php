@@ -26,7 +26,7 @@ function add_echbay_item_contact()
                     'type' => 'textfield',
                     'heading' => 'Text',
                     'default' => '',
-                    'auto_focus' => true,
+                    // 'auto_focus' => true,
                 ),
                 'menu_icon' => array(
                     'type' => 'select',

@@ -31,7 +31,7 @@ function add_echbay_menu_contact()
                     'heading' => 'Class CSS',
                     'default' => '',
                     'placeholder' => 'Tùy chỉnh CSS',
-                    'auto_focus' => true,
+                    // 'auto_focus' => true,
                 ),
             ),
         )
