@@ -174,6 +174,9 @@ function action_echbay_item_contact($atts)
     }
 
     // 
+    if ($menu_tag == '') {
+        $menu_tag = 'div';
+    }
     $html = '<' . $menu_tag . ' class="' . trim($custom_class . ' echbay-items-contact-item') . '">' . $menu_text . '</' . $menu_tag . '>';
 
     //
