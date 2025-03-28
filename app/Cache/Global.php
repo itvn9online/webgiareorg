@@ -174,8 +174,10 @@ function WGR_get_cache_file($cache_dir = '')
         $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
         // echo $url . '<br>' . PHP_EOL;
     }
-    if (defined('WGR_IS_HOME') || $url == '/' || $url == '') {
+    if ($url == '/' || $url == '') {
         $url = '-';
+    } else if (1 > 2 && defined('WGR_IS_HOME')) {
+        $url = WGR_IS_HOME;
     } else {
         // echo $url . '<br>' . PHP_EOL;
         $arr_cat_social_parameter = array(

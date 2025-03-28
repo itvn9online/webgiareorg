@@ -37,8 +37,22 @@ else if (defined('DONOTCACHEPAGE')) {
 }
 //
 else if (is_home() || is_front_page()) {
+    $home_key = '';
     // xác nhận có sử dụng ebcache
-    $active_using_ebcache = 'is home';
+    if (1 > 2) {
+        if (is_home() && is_front_page()) {
+            $active_using_ebcache = 'Default home';
+            $home_key = 'd';
+        } else if (is_front_page()) {
+            $active_using_ebcache = 'Static home';
+            $home_key = 's';
+        } else {
+            $active_using_ebcache = 'Blog home';
+            $home_key = 'b';
+        }
+    } else {
+        $active_using_ebcache = 'Is home';
+    }
 
     // copy file index để sử dụng cache
     if (!defined('WP_COPY_WGR_SUPPER_CACHE')) {
@@ -50,7 +64,7 @@ else if (is_home() || is_front_page()) {
     // var_dump(is_home());
     // var_dump(is_front_page());
     // if (!empty($_GET)) {
-    // defined('WGR_IS_HOME') || define('WGR_IS_HOME', true);
+    // defined('WGR_IS_HOME') || define('WGR_IS_HOME', '-' . $home_key . 'home');
     // } else {
     // print_r($_GET);
     // }

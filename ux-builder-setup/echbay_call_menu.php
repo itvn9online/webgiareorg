@@ -86,7 +86,7 @@ function action_echbay_call_menu($atts)
 
     // lưu cache nếu có path cache file
     if ($filename != '') {
-        WGR_my_cache($filename, $html, rand(300, 600));
+        WGR_my_cache($filename, $html, rand(120, 180));
     }
 
     //

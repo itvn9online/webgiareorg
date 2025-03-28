@@ -26,7 +26,7 @@
     box-shadow: 0 0 20px #ccc;
     min-width: 220px;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 999;
     -moz-transition: all 0.8s ease;
     -o-transition: all 0.8s ease;
     -webkit-transition: all 0.8s ease;
