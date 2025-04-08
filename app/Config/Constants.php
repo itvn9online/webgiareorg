@@ -5,7 +5,7 @@ define('WGR_FOR_WOOCOMERCE', class_exists('WooCommerce') ? true : false);
 //echo WGR_FOR_WOOCOMERCE . '<br>' . PHP_EOL;
 
 // thời gian lưu cache
-defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', rand(300, 600));
+defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', rand(600, 900));
 
 //
 if (is_user_logged_in()) {
