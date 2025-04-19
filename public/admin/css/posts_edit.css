@@ -33,6 +33,10 @@
     transition: all 0.8s ease;
 }
 
+..edit-post-wgr-tab:hover {
+    z-index: 9999;
+}
+
 .edit-post-wgr-tab li {
     border-bottom: 1px #ccc solid;
     margin: 0;

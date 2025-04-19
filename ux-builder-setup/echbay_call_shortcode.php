@@ -22,6 +22,7 @@ function add_echbay_call_shortcode()
         'wgr_product_same_col4_cat',
         'wgr_product_same_col6_cat',
         'wgr_product_same_vertical_cat',
+        'WGR_get_quick_register',
         //
         //'wgr_facebook_like_box',
     ];

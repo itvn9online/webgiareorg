@@ -350,6 +350,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_download
                 'echbay-search-everything' => 'EchBay Search Everything',
                 'ajax-search-for-woocommerce' => 'FiboSearch – Ajax Search for WooCommerce',
                 'flamingo' => 'Flamingo',
+                // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
                 'polylang' => 'Polylang',
                 'post-duplicator' => 'Post Duplicator',
                 'seo-by-rank-math' => 'Rank Math SEO',
