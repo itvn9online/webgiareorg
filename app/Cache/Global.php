@@ -184,6 +184,8 @@ function WGR_get_cache_file($cache_dir = '')
             'fbclid=',
             'gclid=',
             'fb_comment_id=',
+            'add_to_wishlist=',
+            '_wpnonce=',
             'utm_',
             'v',
         );
