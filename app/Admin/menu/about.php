@@ -323,12 +323,29 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo strtolower
     ?>
 </div>
 <!-- END Redis -->
-<p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database -> bảng options -> option_name -> tìm và xóa hoặc đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
+<p>Thêm đoạn code này vào file wp-config.php nếu muốn cố định URL cho website:</p>
+<div>
+    <textarea rows="4" ondblclick="this.select();" readonly style="width: 90%;">
+// set static siteurl
+define('WP_SITEURL', 'https://<?php echo $_SERVER['HTTP_HOST']; ?>'); // add by Webgiareorg
+define('WP_HOME', WP_SITEURL); // add by Webgiareorg</textarea>
+</div>
+<br />
+<!-- -->
+<p class="bluecolor">Khi chuyển host mà bị lỗi font, vào database (phpmyadmin) -> bảng options -> option_name -> tìm và Xóa hoặc Đổi tên: <span class="bold">kirki_downloaded_font_files</span></p>
 <div>
     <textarea rows="2" ondblclick="this.select();" readonly style="width: 90%;">
 UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_downloaded_font_files_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = 'kirki_downloaded_font_files';</textarea>
 </div>
 <br />
+<!-- -->
+<p class="bluecolor">Khi chuyển host mà bị cảnh báo liên quan đến open_basedir, vào database (phpmyadmin) -> bảng options -> option_name -> tìm và Xóa hoặc Đổi tên: <span class="bold">_site_transient_woocommerce_blocks_patterns</span></p>
+<div>
+    <textarea rows="2" ondblclick="this.select();" readonly style="width: 90%;">
+UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transient_woocommerce_blocks_patterns_<?php echo time(); ?>' WHERE `<?php echo $wpdb->prefix; ?>options`.`option_name` = '_site_transient_woocommerce_blocks_patterns';</textarea>
+</div>
+<br />
+<!-- -->
 <div>
     <h3>This theme recommends the following plugins</h3>
     <ol id="wgr-recommends-following-plugins">
@@ -375,6 +392,8 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = 'kirki_download
             }
         }
         ?>
+        <li><a href="https://github.com/itvn9online/devvn-quick-buy">devvn-quick-buy</a></li>
+        <li><a href="https://github.com/itvn9online/devvn-woocommerce-reviews">devvn-woocommerce-reviews</a></li>
     </ol>
 </div>
 <br />

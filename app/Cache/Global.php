@@ -190,9 +190,8 @@ function WGR_get_cache_file($cache_dir = '')
             'v',
         );
         foreach ($arr_cat_social_parameter as $v) {
-            $url = explode('?' . $v, $url);
-            $url = explode('&' . $v, $url[0]);
-            $url = $url[0];
+            $url = explode('?' . $v, $url)[0];
+            $url = explode('&' . $v, $url)[0];
         }
 
         //
