@@ -3,6 +3,12 @@ var web_link =
 	window.location.protocol + "//" + document.domain + "/";
 var eb_this_current_url = window.location.href.split("#")[0];
 
+// định dạng số -> tương tự number_format trong php
+var numFormatter = new Intl.NumberFormat("en-US");
+
+// định dạng tiền tệ
+// var moneyFormatter = numFormatter;
+
 // chờ vuejs nạp xong để khởi tạo nội dung
 function WGR_vuejs(app_id, obj, _callBack, max_i) {
 	if (typeof max_i != "number") {
@@ -217,4 +223,16 @@ function WGR_redirect(l) {
 	} else if (typeof l != "undefined" && l != "") {
 		window.location = l;
 	}
+}
+
+function WGR_number_format(str) {
+	// loại bỏ số 0 ở đầu chuỗi số
+	str = str.toString().replace(/\,/g, "") * 1;
+	// console.log(str);
+	if (isNaN(str)) {
+		return "NaN";
+	} else if (str < 1000 && str > -999) {
+		return str;
+	}
+	return numFormatter.format(str);
 }

@@ -30,7 +30,7 @@ function autoUxBuilderBackup($space_backup = 3600)
     // tạo file htaccess chặn truy cập vào thư mục này
     $htaccess_deny_all = file_get_contents(WGR_BASE_PATH . 'app/Helpers/templates/htaccess_deny_all.txt');
     $arr_deny_all = [
-        'base_url' => get_home_url(),
+        'base_url' => rtrim(get_home_url(), '/'),
     ];
     foreach ($arr_deny_all as $k => $v) {
         $htaccess_deny_all = str_replace('{{' . $k . '}}', $v, $htaccess_deny_all);

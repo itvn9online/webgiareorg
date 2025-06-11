@@ -7,4 +7,4 @@
 </IfModule>
 
 # too many redirect for all extensions -> in apache, openlitespeed
-RewriteRule ^(.*) {{base_url}}$1 [F]
+RewriteRule ^(.*) {{base_url}}/$1 [F]
