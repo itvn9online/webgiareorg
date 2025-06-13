@@ -67,11 +67,11 @@ if (is_dir(ABSPATH . 'wp-content') && is_dir(ABSPATH . 'wp-content/uploads')) {
     if (!is_file($path_htaccess)) {
         // tạo file htaccess với nội dung chặn truy cập vào file php
         file_put_contents($path_htaccess, trim('
-#Begin Really Simple Security
+# Begin Really Simple Security
 <Files *.php>
 deny from all
 </Files>
-#End Really Simple Security
+# End Really Simple Security
 '), LOCK_EX);
 
         // 
@@ -354,6 +354,12 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
         // echo WP_PLUGIN_DIR . '<br>' . PHP_EOL;
 
         // 
+        $github_plugin = [
+            'devvn-quick-buy' => 'https://github.com/itvn9online/devvn-quick-buy',
+            'devvn-woocommerce-reviews' => 'https://github.com/itvn9online/devvn-woocommerce-reviews',
+        ];
+
+        // 
         foreach (
             [
                 'advanced-custom-fields' => 'Advanced Custom Fields (ACF)',
@@ -365,7 +371,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 'echbay-admin-security' => 'EchBay Admin Security',
                 'echbay-phonering-alo' => 'EchBay Phonering Alo',
                 'echbay-search-everything' => 'EchBay Search Everything',
-                'ajax-search-for-woocommerce' => 'FiboSearch – Ajax Search for WooCommerce',
+                'ajax-search-for-woocommerce' => 'FiboSearch - Ajax Search for WooCommerce',
                 'flamingo' => 'Flamingo',
                 // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
                 'polylang' => 'Polylang',
@@ -378,12 +384,19 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 'woo-vietnam-checkout' => 'Woocommerce Vietnam Checkout',
                 'wp-mail-smtp' => 'WP Mail SMTP',
                 'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
+                // plugin in github
+                'devvn-quick-buy' => 'devvn-quick-buy',
+                'devvn-woocommerce-reviews' => 'devvn-woocommerce-reviews',
             ] as $k => $v
         ) {
             // nếu thư mục code có rồi thì bỏ qua
             if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
         ?>
                 <li><?php echo $v; ?></li>
+            <?php
+            } else if (isset($github_plugin[$k])) {
+            ?>
+                <li><a href="<?php echo $github_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a></li>
             <?php
             } else {
             ?>
@@ -392,8 +405,6 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             }
         }
         ?>
-        <li><a href="https://github.com/itvn9online/devvn-quick-buy">devvn-quick-buy</a></li>
-        <li><a href="https://github.com/itvn9online/devvn-woocommerce-reviews">devvn-woocommerce-reviews</a></li>
     </ol>
 </div>
 <br />
