@@ -1,10 +1,7 @@
-# chan moi truy cap toi thu muc nay
-<IfModule authz_core_module>
-	Require all denied
+# .htaccess to deny all access to the app directory
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^.*$ - [F,L]
 </IfModule>
-<IfModule !authz_core_module>
-	Deny from all
-</IfModule>
-
-# too many redirect for all extensions -> in apache, openlitespeed
-RewriteRule ^(.*) {{base_url}}/$1 [F]
+# Alternatively, for Apache 2.4+
+# Require all denied
