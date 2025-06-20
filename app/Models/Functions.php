@@ -212,3 +212,16 @@ function WGR_deleteDirectory($dirPath)
     // 
     return true;
 }
+
+// tạo file htaccess chặn truy cập vào thư mục
+function WGR_htaccess_deny_all($f)
+{
+    $c = file_get_contents(WGR_BASE_PATH . 'app/Helpers/templates/htaccess_deny_all.txt');
+    $arr_deny_all = [
+        'base_url' => rtrim(get_home_url(), '/'),
+    ];
+    foreach ($arr_deny_all as $k => $v) {
+        $c = str_replace('{{' . $k . '}}', $v, $c);
+    }
+    return WGR_create_file($f, $c);
+}

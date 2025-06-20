@@ -16,7 +16,14 @@ if (!is_file($root_htaccess)) {
 
     //
     // $WGR_get_contents = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/htaccess.txt');
-    $content_htaccess = file_get_contents(WGR_BASE_PATH . 'tmp/htaccess.txt');
+    if (is_file(WGR_CHILD_PATH . 'tmp/htaccess.txt')) {
+        $content_htaccess = file_get_contents(WGR_CHILD_PATH . 'tmp/htaccess.txt');
+        if (!is_file(WGR_CHILD_PATH . 'tmp/.htaccess')) {
+            WGR_htaccess_deny_all(WGR_CHILD_PATH . 'tmp/.htaccess');
+        }
+    } else {
+        $content_htaccess = file_get_contents(WGR_BASE_PATH . 'tmp/htaccess.txt');
+    }
 
     // nội dung file mới phải đảm bảo được lấy thành công
     if (strpos($content_htaccess, 'RewriteCond %{HTTPS} off') !== false) {
