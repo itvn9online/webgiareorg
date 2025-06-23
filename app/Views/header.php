@@ -64,7 +64,7 @@ include __DIR__ . '/header_cache.php';
         $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome47/css/font-awesome.before.css', [
             'get_content' => 1
         ]);
-        $font_awesome_before = str_replace('../fonts/', WGR_BASE_URI . 'public/thirdparty/awesome47/fonts/', $font_awesome_before);
+        $font_awesome_before = str_replace('../fonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/fonts/', $font_awesome_before);
         echo $font_awesome_before;
     } else {
     ?>
