@@ -6,13 +6,13 @@
 
 function WGR_flatsome_function_update($f)
 {
-    //echo $f . PHP_EOL;
+    // echo $f . PHP_EOL;
     // nếu còn tồn tại chuỗi _site_transient_update_themes -> vẫn còn đang dùng code của flatsome
     if (
         is_file($f)
         && strpos(file_get_contents($f), 'webgiare_v3_update_themes') === false
     ) {
-        //die(__FILE__ . ':' . __LINE__);
+        // die(__FILE__ . ':' . __LINE__);
         echo $f . PHP_EOL;
 
         // copy 1 bản backup
@@ -34,7 +34,7 @@ if (
         ]
     )
     // && is_admin()
-    //&& defined('EB_CHILD_THEME_URL')
+    // && defined('EB_CHILD_THEME_URL')
 ) {
     WGR_flatsome_function_update(dirname(WGR_CHILD_PATH) . '/flatsome/inc/functions/function-update.php');
     /*

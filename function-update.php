@@ -14,23 +14,23 @@
  */
 function webgiare_v3_update_themes($transient)
 {
-    //print_r($transient);
+    // print_r($transient);
 
     // lấy thông tin theme flatsome
     $theme = wp_get_theme(get_template());
     $template = $theme->get_template();
     $version = $theme->get('Version');
-    //echo $version . PHP_EOL;
+    // echo $version . PHP_EOL;
 
     //
-    //var_dump(get_transient('webgiare-theme-update' . $version));
-    //echo HOUR_IN_SECONDS . PHP_EOL;
-    //die(__FILE__ . ':' . __LINE__);
+    // var_dump(get_transient('webgiare-theme-update' . $version));
+    // echo HOUR_IN_SECONDS . PHP_EOL;
+    // die(__FILE__ . ':' . __LINE__);
     // tránh việc request liên tục gây chậm web thì dùng hàm này
     $remote = get_transient('webgiare-theme-update' . $version);
-    //print_r($remote);
+    // print_r($remote);
     // TEST
-    //$remote = false;
+    // $remote = false;
     if (false == $remote) {
         // connect to a remote server where the update information is stored
         $remote = wp_remote_get(
@@ -42,7 +42,7 @@ function webgiare_v3_update_themes($transient)
                 )
             )
         );
-        //print_r($remote);
+        // print_r($remote);
 
         // do nothing if errors
         if (
@@ -57,15 +57,16 @@ function webgiare_v3_update_themes($transient)
         $remote = json_decode(wp_remote_retrieve_body($remote));
 
         if (!$remote) {
-            return $transient; // who knows, maybe JSON is not valid
+            // who knows, maybe JSON is not valid
+            return $transient;
         }
-        //print_r($remote);
+        // print_r($remote);
 
         //
         set_transient('webgiare-theme-update' . $version, $remote, HOUR_IN_SECONDS);
     }
     // echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
-    //echo $remote->version . PHP_EOL;
+    // echo $remote->version . PHP_EOL;
     // print_r($remote);
 
     // nếu có lỗi thì trả về luôn
@@ -77,8 +78,8 @@ function webgiare_v3_update_themes($transient)
     //
     $data = array(
         'theme' => $template,
-        //'url' => $remote->details_url,
-        //'url' => esc_url(admin_url('admin.php?page=wgr-version-flatsome')),
+        // 'url' => $remote->details_url,
+        // 'url' => esc_url(admin_url('admin.php?page=wgr-version-flatsome')),
         'url' => esc_url(get_site_url() . '/wp-content/webgiareorg/info.php?changes=log'),
         'requires' => $remote->requires,
         'requires_php' => $remote->requires_php,
@@ -86,8 +87,8 @@ function webgiare_v3_update_themes($transient)
         'new_version' => $remote->version,
         'package' => $remote->download_url,
     );
-    //print_r($data);
-    //print_r($transient);
+    // print_r($data);
+    // print_r($transient);
 
     // check all the versions now
     if (
@@ -101,8 +102,8 @@ function webgiare_v3_update_themes($transient)
     } else if (isset($transient->no_update)) {
         $transient->no_update[$template] = $data;
     }
-    //print_r($transient);
-    //die(__FILE__ . ':' . __LINE__);
+    // print_r($transient);
+    // die(__FILE__ . ':' . __LINE__);
 
     return $transient;
 }
@@ -121,4 +122,4 @@ if (!defined('WGR_CHECKED_UPDATE_THEME')) {
         add_filter('site_transient_update_themes', 'webgiare_v3_update_themes');
     }
 }
-//die(__FILE__ . ':' . __LINE__);
+// die(__FILE__ . ':' . __LINE__);

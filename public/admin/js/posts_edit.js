@@ -160,7 +160,7 @@ if (top == self) {
 
 	// hiển thị nút nhân bản
 	(function () {
-		jQuery("#wgr-for-duplicator").removeClass("d-none").show();
+		// jQuery("#wgr-for-duplicator").removeClass("d-none").show();
 		jQuery(".show-if-duplicator-null div").click(function () {
 			jQuery(".show-if-duplicator-null").fadeOut();
 		});

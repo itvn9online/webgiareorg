@@ -3,7 +3,7 @@
 //
 function WGR_front_footer()
 {
-    include WGR_BASE_PATH . 'app/Views/Admin/global_admin_html.php';
+    // include WGR_BASE_PATH . 'app/Views/Admin/global_admin_html.php';
 
     //
     global $pagenow;
