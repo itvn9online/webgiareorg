@@ -32,7 +32,7 @@ function autoUxBuilderBackup($space_backup = 3600)
 
     // bắt đầu backup dữ liệu
     global $wpdb;
-    //die( $wpdb->posts );
+    // die($wpdb->posts);
 
     //
     $backup_ext = '.tpl';
