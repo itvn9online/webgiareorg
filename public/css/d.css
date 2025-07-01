@@ -280,3 +280,14 @@ section.section.padding10 {
 }
 
 .echbay-items-contact-link {}
+
+/* desktop only */
+@media only screen and (min-width:748px) {
+
+    /* định dạng lại form review của woocommerce cho dễ nhìn */
+    #reviews.woocommerce-Reviews.row #comments,
+    #reviews.woocommerce-Reviews.row #review_form_wrapper {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
