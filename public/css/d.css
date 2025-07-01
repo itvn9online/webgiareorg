@@ -281,6 +281,14 @@ section.section.padding10 {
 
 .echbay-items-contact-link {}
 
+/* ẩn các div không cần thiết ở giỏ hàng */
+/* body.woocommerce-cart #header, */
+/* body.woocommerce-checkout #header, */
+body.woocommerce-checkout #footer,
+body.woocommerce-cart #footer {
+    display: none;
+}
+
 /* desktop only */
 @media only screen and (min-width:748px) {
 
