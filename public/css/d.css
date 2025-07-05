@@ -308,7 +308,16 @@ body.woocommerce-cart #footer {
     }
 
     /* chỉnh lại phần tìm kiếm nhanh của flatsome trên mobile cho dễ nhìn hơn */
-    .live-search-results .autocomplete-suggestions .autocomplete-suggestion {
+    .autocomplete-suggestion {
+        display: block;
+    }
+
+    .autocomplete-suggestion img+.search-name {
+        padding-left: 0;
+    }
+
+    .autocomplete-suggestion .search-price {
+        margin-left: 0;
         display: block;
     }
 }
