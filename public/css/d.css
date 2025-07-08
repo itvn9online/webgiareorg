@@ -298,6 +298,12 @@ body.woocommerce-cart #footer {
         flex-basis: 100%;
         max-width: 100%;
     }
+
+    /* chỉnh lại giới hạn chiều rộng cho sticky-add-to-cart của flatsome */
+    .sticky-add-to-cart__product .product-title-small {
+        max-width: 333px;
+        line-height: normal;
+    }
 }
 
 @media only screen and (max-width:588px) {
