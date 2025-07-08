@@ -75,6 +75,8 @@ function WGR_create_admin_menu()
 
     //add_submenu_page($parent_slug, 'Các chức năng danh cho kỹ thuật viên', 'Kỹ thuật', 'manage_options', 'eb-coder', 'func_include_wgr_private_code');
 
+    add_submenu_page($parent_slug, 'Shortcode', 'Shortcode', 'publish_pages', 'eb-shortcode', 'func_include_wgr_private_code');
+
     add_submenu_page($parent_slug, 'Thông tin Server', 'Thông tin Server', 'publish_pages', 'eb-server', 'func_include_wgr_private_code');
 
     add_submenu_page($parent_slug, 'Công cụ hỗ trợ', 'Công cụ hỗ trợ', 'publish_pages', 'eb-tools', 'func_include_wgr_private_code');

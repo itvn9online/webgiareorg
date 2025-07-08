@@ -4,14 +4,14 @@
  * shortcode lấy bài viết cùng danh mục
  */
 // trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_product_same_cat]
-// trả về post với 3 col trên row
+// trả về product với 3 col trên row
 add_shortcode('wgr_product_same_cat', 'wgr_action_default_product_same_cat');
-// trả về post với 4 col trên row
+// trả về product với 4 col trên row
 add_shortcode('wgr_product_same_col4_cat', 'wgr_action_col4_product_same_cat');
-// trả về post với 2 col trên row
+// trả về product với 2 col trên row
 add_shortcode('wgr_product_same_col6_cat', 'wgr_action_col6_product_same_cat');
 
-// trả về danh sách bài viết dạng row>col cách sử dụng -> vào phần nội dung bài viết rồi nhập: [wgr_same_vertical_cat]
+// Trả về product với 1 col trên row và hiển thị hình ảnh dọc (dạng vertical)
 add_shortcode('wgr_product_same_vertical_cat', 'wgr_action_vertical_product_same_cat');
 
 //

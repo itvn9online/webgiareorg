@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ * Chức năng tạo menu liên hệ, hỗ trợ icon và link
  */
 function add_echbay_item_contact()
 {
