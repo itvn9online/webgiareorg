@@ -9,19 +9,19 @@
             'wgr_h1_breadcrumb' => 'Tạo breadcrumb có h1',
             'wgr_h2_breadcrumb' => 'Tạo breadcrumb có h2',
             // 
-            'wgr_same_cat' => 'Trả về post với 3 col trên row',
-            'wgr_same_col4_cat' => 'Trả về post với 4 col trên row',
-            'wgr_same_col6_cat' => 'Trả về post với 2 col trên row',
-            'wgr_same_vertical_cat' => 'Trả về post với 1 col trên row và hiển thị hình ảnh dọc (dạng vertical)',
+            'wgr_same_cat' => 'Trả về post cùng nhóm với 3 col trên row',
+            'wgr_same_col4_cat' => 'Trả về post cùng nhóm với 4 col trên row',
+            'wgr_same_col6_cat' => 'Trả về post cùng nhóm với 2 col trên row',
+            'wgr_same_vertical_cat' => 'Trả về post cùng nhóm với 1 col trên row và hiển thị hình ảnh dọc (dạng vertical)',
             // 
             'WGR_product_comment' => 'Trả về danh sách bình luận của sản phẩm',
             // 
             'WGR_product_content' => 'In ra nội dung của sản phẩm',
             // 
-            'wgr_product_same_cat' => 'Trả về product với 3 col trên row',
-            'wgr_product_same_col4_cat' => 'Trả về product với 4 col trên row',
-            'wgr_product_same_col6_cat' => 'Trả về product với 2 col trên row',
-            'wgr_product_same_vertical_cat' => 'Trả về product với 1 col trên row và hiển thị hình ảnh dọc (dạng vertical)',
+            'wgr_product_same_cat' => 'Trả về product cùng nhóm với 3 col trên row',
+            'wgr_product_same_col4_cat' => 'Trả về product cùng nhóm với 4 col trên row',
+            'wgr_product_same_col6_cat' => 'Trả về product cùng nhóm với 2 col trên row',
+            'wgr_product_same_vertical_cat' => 'Trả về product cùng nhóm với 1 col trên row và hiển thị hình ảnh dọc (dạng vertical)',
             // 
             'WGR_get_quick_register' => 'Tạo from đăng ký nhanh',
             // 

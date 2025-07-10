@@ -58,7 +58,7 @@ function action_echbay_call_menu($atts)
 
     // sử dụng cache cho menu -> tránh duplicate query
     $filename = '';
-    if (function_exists('my_builder_path_cache')) {
+    if (WHY_EBCACHE_DISABLE == '' && function_exists('my_builder_path_cache')) {
         $filename = my_builder_path_cache(__FUNCTION__ .  $call_menu);
 
         //
@@ -76,6 +76,15 @@ function action_echbay_call_menu($atts)
         'menu_class' => 'eb-set-menu-selected eb-menu cf',
     ]);
 
+    // lấy tên menu từ term (bỏ chức năng lấy tự động vì 1 số trường hợp không muốn hiển thị tên menu)
+    if (1 > 2 && $menu_title == '') {
+        $menu_title = get_term($call_menu, 'nav_menu');
+        if (is_object($menu_title) && isset($menu_title->name)) {
+            $menu_title = $menu_title->name;
+        } else {
+            $menu_title = 'Menu ' . $call_menu;
+        }
+    }
     if ($menu_title != '') {
         $html = '<h4 class="echbayflatsome-title-menu">' . $menu_title . '</h4>' . $html;
     }

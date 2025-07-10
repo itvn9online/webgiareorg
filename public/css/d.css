@@ -326,4 +326,9 @@ body.woocommerce-cart #footer {
         margin-left: 0;
         display: block;
     }
+
+    #footer .col {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
 }
