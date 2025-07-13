@@ -16,6 +16,62 @@ global $wpdb;
 // var_dump(strpos(explode('//', get_home_url())[1], '/'));
 
 // 
+$githubs_plugin = [
+    'devvn-quick-buy' => 'https://github.com/itvn9online/devvn-quick-buy',
+    'devvn-woocommerce-reviews' => 'https://github.com/itvn9online/devvn-woocommerce-reviews',
+];
+
+/**
+ * Nếu tồn tại tham số download_github_plugin thì sẽ tải plugin từ github về
+ * Ví dụ:
+ * wp-admin/admin.php?page=eb-about&download_github_plugin=devvn-quick-buy
+ * Sẽ tải plugin devvn-quick-buy từ github về thư mục wp-content/plugins/devvn-quick-buy-main
+ * https://github.com/itvn9online/$_GET['download_github_plugin']/archive/refs/heads/main.zip
+ */
+if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plugin'])) {
+    $plugin_name = sanitize_text_field($_GET['download_github_plugin']);
+    if (isset($githubs_plugin[$plugin_name])) {
+        $dest = WP_PLUGIN_DIR . '/' . $plugin_name . '-main.zip';
+        if (is_file($dest)) {
+            unlink($dest);
+        }
+        if (copy($githubs_plugin[$plugin_name] . '/archive/refs/heads/main.zip', $dest)) {
+            echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . PHP_EOL;
+            echo 'File has been save to: <strong>' . $dest . '</strong><br>' . PHP_EOL;
+
+            // giải nén file zip
+            if (class_exists('ZipArchive')) {
+                $zip = new ZipArchive;
+                if ($zip->open($dest) === TRUE) {
+                    $zip->extractTo(WP_PLUGIN_DIR);
+                    $zip->close();
+
+                    // đổi tên thư mục
+                    $myoldfolder = WP_PLUGIN_DIR . '/' . $plugin_name;
+                    $mynewfolder = WP_PLUGIN_DIR . '/' . $plugin_name . '-' . date('Ymd-His');
+                    rename($myoldfolder, $mynewfolder);
+
+                    echo 'Unzip to: <strong>' . $myoldfolder . '</strong><br>' . PHP_EOL;
+
+                    // xóa file zip sau khi giải nén
+                    unlink($dest);
+                    echo 'Unzip file success!<br>' . PHP_EOL;
+                    echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . PHP_EOL;
+                } else {
+                    echo 'Unzip file faild!<br>' . PHP_EOL;
+                }
+            } else {
+                echo 'ZipArchive class not found!<br>' . PHP_EOL;
+            }
+        } else {
+            echo 'Download plugin: <strong>' . $plugin_name . '</strong> faild!<br>' . PHP_EOL;
+        }
+    } else {
+        echo 'Plugin: <strong>' . $plugin_name . '</strong> not found!<br>' . PHP_EOL;
+    }
+}
+
+// 
 $path_htaccess = ABSPATH . ".htaccess";
 // chỉ xử lý file htaccess đối với website chạy bằng tên miền chính, không xử lý khi web dạng sub-dir
 if (is_file($path_htaccess) && strpos(explode('//', get_home_url())[1], '/') === false) {
@@ -354,12 +410,6 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
         // echo WP_PLUGIN_DIR . '<br>' . PHP_EOL;
 
         // 
-        $github_plugin = [
-            'devvn-quick-buy' => 'https://github.com/itvn9online/devvn-quick-buy',
-            'devvn-woocommerce-reviews' => 'https://github.com/itvn9online/devvn-woocommerce-reviews',
-        ];
-
-        // 
         foreach (
             [
                 'advanced-custom-fields' => 'Advanced Custom Fields (ACF)',
@@ -393,13 +443,19 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
         ?>
                 <li><?php echo $v; ?></li>
-            <?php
-            } else if (isset($github_plugin[$k])) {
-            ?>
-                <li><a href="<?php echo $github_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a></li>
-            <?php
+                <?php
+            } else if (isset($githubs_plugin[$k])) {
+                if (is_dir(WP_PLUGIN_DIR . '/' . $k . '-main')) {
+                ?>
+                    <li><?php echo $v; ?></li>
+                <?php
+                } else {
+                ?>
+                    <li><a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a> (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)</li>
+                <?php
+                }
             } else {
-            ?>
+                ?>
                 <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a></li>
         <?php
             }
@@ -444,4 +500,9 @@ check_and_update_webgiareorg();
             }
         });
     })();
+
+    // nếu url có tham số download_github_plugin thì sẽ xóa nó đi
+    if (window.location.href.includes('&download_github_plugin=') == true) {
+        window.history.pushState("", document.title, window.location.href.split('&download_github_plugin=')[0].split('?download_github_plugin=')[0]);
+    }
 </script>
