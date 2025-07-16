@@ -485,6 +485,11 @@ check_and_update_webgiareorg();
 <script>
     if (window.location.href.includes('update_wgr_code=') == true) {
         window.history.pushState("", document.title, window.location.href.split('&update_wgr_code=')[0].split('?update_wgr_code=')[0]);
+
+        // tải lại trang sau khi cập nhật
+        setTimeout(function() {
+            window.location.reload();
+        }, 1000);
     }
 
     // tạo danh sách các plugin khuyên dùng
