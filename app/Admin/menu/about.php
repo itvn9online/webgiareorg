@@ -421,6 +421,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 'echbay-admin-security' => 'EchBay Admin Security',
                 'echbay-phonering-alo' => 'EchBay Phonering Alo',
                 'echbay-search-everything' => 'EchBay Search Everything',
+                'easy-table-of-contents' => 'Easy Table of Contents',
                 'ajax-search-for-woocommerce' => 'FiboSearch - Ajax Search for WooCommerce',
                 'flamingo' => 'Flamingo',
                 // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
