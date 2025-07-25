@@ -289,6 +289,16 @@ body.woocommerce-cart #footer {
     display: none;
 }
 
+.social-icons .button.icon.zalo {
+    background-color: #0165f7 !important;
+}
+
+.icon-zalo::before {
+    content: "Z";
+    font-family: sans-serif;
+    font-weight: 700;
+}
+
 /* desktop only */
 @media only screen and (min-width:748px) {
 
