@@ -483,14 +483,19 @@ check_and_update_webgiareorg();
 
 ?>
 <script>
-    if (window.location.href.includes('update_wgr_code=') == true) {
-        window.history.pushState("", document.title, window.location.href.split('&update_wgr_code=')[0].split('?update_wgr_code=')[0]);
+    // nếu tồn tại tham số update_wgr_code trên URL thì xóa nó đi sau đó tải lại trang sau 1 giây
+    (function() {
+        if (window.location.href.includes('update_wgr_code=') == true) {
+            var url = new URL(window.location.href);
+            url.searchParams.delete("update_wgr_code");
+            window.history.replaceState({}, document.title, url);
 
-        // tải lại trang sau khi cập nhật
-        setTimeout(function() {
-            window.location.reload();
-        }, 1000);
-    }
+            // tải lại trang sau khi cập nhật
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+    })();
 
     // tạo danh sách các plugin khuyên dùng
     (function(arr) {
@@ -507,8 +512,10 @@ check_and_update_webgiareorg();
         });
     })();
 
-    // nếu url có tham số download_github_plugin thì sẽ xóa nó đi
-    if (window.location.href.includes('&download_github_plugin=') == true) {
-        window.history.pushState("", document.title, window.location.href.split('&download_github_plugin=')[0].split('?download_github_plugin=')[0]);
-    }
+    // nếu tồn tại tham số download_github_plugin trên URL thì xóa nó đi
+    (function() {
+        var url = new URL(window.location.href);
+        url.searchParams.delete("download_github_plugin");
+        window.history.replaceState({}, document.title, url);
+    })();
 </script>
