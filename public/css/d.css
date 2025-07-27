@@ -127,6 +127,8 @@ section.section.padding10 {
     text-transform: uppercase;
 }
 
+b,
+strong,
 .bold,
 .strong {
     font-weight: bold;
