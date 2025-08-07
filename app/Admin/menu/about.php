@@ -425,6 +425,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 'ajax-search-for-woocommerce' => 'FiboSearch - Ajax Search for WooCommerce',
                 'flamingo' => 'Flamingo',
                 // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
+                'google-site-kit' => 'Google Site Kit',
                 'polylang' => 'Polylang',
                 'post-duplicator' => 'Post Duplicator',
                 'seo-by-rank-math' => 'Rank Math SEO',
