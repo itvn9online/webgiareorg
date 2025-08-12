@@ -174,10 +174,15 @@ function WGR_get_cache_file($cache_dir = '')
         $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
         // echo $url . '<br>' . PHP_EOL;
     }
-    if ($url == '/' || $url == '') {
+
+    // Kiểm tra xem đây có phải là trang chủ không
+    $is_home = explode('?', $url)[0];
+
+    // Nếu là trang chủ thì đổi tên file cache
+    if ($is_home == '/' || $is_home == '') {
         $url = '-';
-    } else if (1 > 2 && defined('WGR_IS_HOME')) {
-        $url = WGR_IS_HOME;
+        // } else if (1 > 2 && defined('WGR_IS_HOME')) {
+        // $url = WGR_IS_HOME;
     } else {
         // echo $url . '<br>' . PHP_EOL;
         $arr_cat_social_parameter = array(
@@ -189,12 +194,13 @@ function WGR_get_cache_file($cache_dir = '')
             'utm_',
             'v',
         );
+        // loại bỏ các tham số không cần thiết
         foreach ($arr_cat_social_parameter as $v) {
             $url = explode('?' . $v, $url)[0];
             $url = explode('&' . $v, $url)[0];
         }
 
-        //
+        // Kiểm tra độ dài URL
         if (strlen($url) > 200) {
             // $url = md5($url);
             $url = substr($url, 0, 200);
@@ -212,7 +218,7 @@ function WGR_get_cache_file($cache_dir = '')
         ], '-', $url);
         // echo $url . '<br>' . PHP_EOL;
 
-        // thay thế 2- thành 1-  
+        // thay thế 2- thành 1-
         $url = preg_replace('!\-+!', '-', $url);
         // echo $url . '<br>' . PHP_EOL;
 
