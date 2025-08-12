@@ -65,8 +65,16 @@ function WGR_json_to_menu($arr)
 }
 
 // xóa các dòng trống cho HTML trước khi in ra
-function WGR_remove_html_empty_line($str)
+function WGR_remove_html_empty_line(string $str): string
 {
+    /**
+     * v2 -> viết bởi AI
+     */
+    return preg_replace('/^\s*[\r\n]+/m', '', $str);
+
+    /**
+     * v1
+     */
     $str = explode("\n", $str);
 
     //

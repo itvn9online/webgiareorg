@@ -49,7 +49,9 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
                     // đổi tên thư mục
                     $myoldfolder = WP_PLUGIN_DIR . '/' . $plugin_name;
                     $mynewfolder = WP_PLUGIN_DIR . '/' . $plugin_name . '-' . date('Ymd-His');
-                    rename($myoldfolder, $mynewfolder);
+                    if (is_dir($myoldfolder)) {
+                        rename($myoldfolder, $mynewfolder);
+                    }
 
                     echo 'Unzip to: <strong>' . $myoldfolder . '</strong><br>' . PHP_EOL;
 
