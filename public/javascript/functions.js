@@ -1,6 +1,4 @@
-var web_link =
-	jQuery("base").attr("href") ||
-	window.location.protocol + "//" + document.domain + "/";
+var web_link = window.location.origin + "/";
 var eb_this_current_url = window.location.href.split("#")[0];
 
 // định dạng số -> tương tự number_format trong php

@@ -31,7 +31,7 @@
     //
     (function (b, e, v, t, s) {
         if (window.location.protocol != "https:") {
-            window.location = "https://" + document.domain;
+            window.location = window.location.origin;
             return false;
         }
 
