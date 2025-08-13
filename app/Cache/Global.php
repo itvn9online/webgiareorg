@@ -166,70 +166,74 @@ function WGR_display($f)
 //
 function WGR_get_cache_file($cache_dir = '')
 {
-    if (isset($_SERVER['REQUEST_URI'])) {
-        $url = $_SERVER['REQUEST_URI'];
-        // echo $url . '<br>' . PHP_EOL;
+    if (isset($GLOBALS['wgr_cache_key']) && $GLOBALS['wgr_cache_key'] != '') {
+        $url = $GLOBALS['wgr_cache_key'];
     } else {
-        $url = $_SERVER['SCRIPT_NAME'];
-        $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
-        // echo $url . '<br>' . PHP_EOL;
-    }
-
-    // Kiểm tra xem đây có phải là trang chủ không
-    $is_home = explode('?', $url)[0];
-
-    // Nếu là trang chủ thì đổi tên file cache
-    if ($is_home == '/' || $is_home == '') {
-        $url = '-';
-        // } else if (1 > 2 && defined('WGR_IS_HOME')) {
-        // $url = WGR_IS_HOME;
-    } else {
-        // echo $url . '<br>' . PHP_EOL;
-        $arr_cat_social_parameter = array(
-            'fbclid=',
-            'gclid=',
-            'fb_comment_id=',
-            'add_to_wishlist=',
-            '_wpnonce=',
-            'utm_',
-            'v',
-        );
-        // loại bỏ các tham số không cần thiết
-        foreach ($arr_cat_social_parameter as $v) {
-            $url = explode('?' . $v, $url)[0];
-            $url = explode('&' . $v, $url)[0];
-        }
-
-        // Kiểm tra độ dài URL
-        if (strlen($url) > 200) {
-            // $url = md5($url);
-            $url = substr($url, 0, 200);
-        }
-        // echo $url . '<br>' . PHP_EOL;
-        // $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
-        $url = str_replace([
-            '&amp%3B',
-            '&amp;',
-            '/',
-            '?',
-            '&',
-            ',',
-            '=',
-        ], '-', $url);
-        // echo $url . '<br>' . PHP_EOL;
-
-        // thay thế 2- thành 1-
-        $url = preg_replace('!\-+!', '-', $url);
-        // echo $url . '<br>' . PHP_EOL;
-
-        // cắt bỏ ký tự - ở đầu và cuối chuỗi
-        $url = rtrim(ltrim($url, '-'), '-');
-        $url = rtrim(ltrim($url, '.'), '.');
-        $url = trim($url);
-        // echo $url . '<br>' . PHP_EOL;
-        if ($url == '') {
-            $url = '-';
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $url = $_SERVER['REQUEST_URI'];
             // echo $url . '<br>' . PHP_EOL;
+        } else {
+            $url = $_SERVER['SCRIPT_NAME'];
+            $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
+            // echo $url . '<br>' . PHP_EOL;
+        }
+
+        // Kiểm tra xem đây có phải là trang chủ không
+        $is_home = explode('?', $url)[0];
+
+        // Nếu là trang chủ thì đổi tên file cache
+        if ($is_home == '/' || $is_home == '') {
+            $url = '-';
+            // } else if (1 > 2 && defined('WGR_IS_HOME')) {
+            // $url = WGR_IS_HOME;
+        } else {
+            // echo $url . '<br>' . PHP_EOL;
+            $arr_cat_social_parameter = array(
+                'fbclid=',
+                'gclid=',
+                'fb_comment_id=',
+                'add_to_wishlist=',
+                '_wpnonce=',
+                'utm_',
+                'v',
+            );
+            // loại bỏ các tham số không cần thiết
+            foreach ($arr_cat_social_parameter as $v) {
+                $url = explode('?' . $v, $url)[0];
+                $url = explode('&' . $v, $url)[0];
+            }
+
+            // Kiểm tra độ dài URL
+            if (strlen($url) > 200) {
+                // $url = md5($url);
+                $url = substr($url, 0, 200);
+            }
+            // echo $url . '<br>' . PHP_EOL;
+            // $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
+            $url = str_replace([
+                '&amp%3B',
+                '&amp;',
+                '/',
+                '?',
+                '&',
+                ',',
+                '=',
+            ], '-', $url);
+            // echo $url . '<br>' . PHP_EOL;
+
+            // thay thế 2- thành 1-
+            $url = preg_replace('!\-+!', '-', $url);
+            // echo $url . '<br>' . PHP_EOL;
+
+            // cắt bỏ ký tự - ở đầu và cuối chuỗi
+            $url = rtrim(ltrim($url, '-'), '-');
+            $url = rtrim(ltrim($url, '.'), '.');
+            $url = trim($url);
+            // echo $url . '<br>' . PHP_EOL;
+            if ($url == '') {
+                $url = '-';
+                // echo $url . '<br>' . PHP_EOL;
+            }
         }
     }
 
