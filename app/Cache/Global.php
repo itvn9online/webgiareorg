@@ -178,16 +178,8 @@ function WGR_get_cache_file($cache_dir = '')
             // echo $url . '<br>' . PHP_EOL;
         }
 
-        // Kiểm tra xem đây có phải là trang chủ không
-        // post shortlink
-        // if (isset($_GET['p'])) {
-        $is_home = $url;
-        // } else {
-        // $is_home = explode('?', $url)[0];
-        // }
-
         // Nếu là trang chủ thì đổi tên file cache
-        if ($is_home == '/' || $is_home == '') {
+        if ($url == '/' || $url == '') {
             $url = '-';
             // } else if (1 > 2 && defined('WGR_IS_HOME')) {
             // $url = WGR_IS_HOME;
