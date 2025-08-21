@@ -179,7 +179,12 @@ function WGR_get_cache_file($cache_dir = '')
         }
 
         // Kiểm tra xem đây có phải là trang chủ không
-        $is_home = explode('?', $url)[0];
+        // post shortlink
+        if (isset($_GET['p'])) {
+            $is_home = $url;
+        } else {
+            $is_home = explode('?', $url)[0];
+        }
 
         // Nếu là trang chủ thì đổi tên file cache
         if ($is_home == '/' || $is_home == '') {
