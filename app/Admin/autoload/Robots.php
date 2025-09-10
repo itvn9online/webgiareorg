@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Cập nhật lại nội dung cho file htacess nếu chưa đúng chuẩn
- * Thiếu redirect HTTPS
- * Thiếu redirect non-www
+ * Cập nhật lại nội dung cho file robots txt nếu chưa đúng chuẩn
  **/
 
 //
