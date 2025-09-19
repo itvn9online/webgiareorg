@@ -275,7 +275,7 @@ function WGR_getIPAddress()
 <p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
 <p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
 <p>Server IP: <strong><?php echo $_SERVER['SERVER_ADDR']; ?></strong> | Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
-<p>Server date: <strong><?php echo date('r'); ?></strong> (date) | <strong><?php echo date_i18n('r'); ?></strong> (date_i18n) | <strong><?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format')); ?></strong></p>
+<p>Server date: <strong><?php echo date('r'); ?></strong> | date_i18n: <strong><?php echo date_i18n('r'); ?></strong> | date_i18n (date_format time_format): <strong><?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format')); ?></strong> | current_time (mysql): <strong><?php echo current_time('mysql'); ?></strong></p>
 <p>Wordpress timezone: <strong><?php echo get_option('timezone_string'); ?></strong></p>
 <?php
 

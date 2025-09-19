@@ -5,7 +5,7 @@
 //echo session_id();
 
 // thời gian lưu cache
-defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', rand(600, 900));
+defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', mt_rand(600, 900));
 
 // thư mục ebcache luôn cho vào uploads để đảm bảo lệnh tạo thư mục sẽ luôn được thực thi do permission
 $sub_dir_cache = ['uploads', 'ebcache'];

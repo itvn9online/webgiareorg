@@ -148,7 +148,7 @@ function WGR_display($f)
     if (count($content) < 2 || !is_numeric($content[0])) {
         return false;
     }
-    $reset_time = rand(1, 30);
+    $reset_time = mt_rand(1, 30);
     $active_reset = ($content[0] * 1) - time() - $reset_time;
     //echo $active_reset . '<br>' . PHP_EOL;
     //echo $reset_time . '<br>' . PHP_EOL;

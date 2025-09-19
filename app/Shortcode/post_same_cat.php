@@ -29,19 +29,20 @@ function wgr_action_same_cat($custom_attrs = [])
     $cat_ids = [];
     $arr_list_cat = get_the_category($pid);
     if (empty($arr_list_cat)) {
+        // return 'empty arr_list_cat';
         return null;
     }
     foreach ($arr_list_cat as $v) {
         $cat_ids[] = $v->term_id;
     }
     if (empty($cat_ids)) {
+        // return 'empty cat_ids';
         return null;
     }
     // print_r($cat_ids);
 
-    // 
-    $placeholders = implode(',', $cat_ids);
-    // echo $placeholders . '<br>' . PHP_EOL;
+    // Tạo placeholders cho prepared statement
+    $placeholders = implode(',', array_fill(0, count($cat_ids), '%d'));
 
     // 
     global $wpdb;
@@ -54,43 +55,24 @@ function wgr_action_same_cat($custom_attrs = [])
     }
     // echo $limit . '<br>' . PHP_EOL;
 
-    // tạo query lấy ID bài viết có ID lớn hơn $pid
-    $sql = "SELECT p.ID FROM {$wpdb->posts} p
+    // Query tối ưu: lấy tất cả bài viết cùng danh mục, loại trừ bài hiện tại
+    $sql = "SELECT DISTINCT p.ID FROM {$wpdb->posts} p
         INNER JOIN {$wpdb->term_relationships} tr ON (p.ID = tr.object_id)
         INNER JOIN {$wpdb->term_taxonomy} tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id)
         WHERE p.post_type = 'post' AND p.post_status = 'publish'
         AND tt.taxonomy = 'category' AND tt.term_id IN ($placeholders)
-        AND p.ID > %d
-        GROUP BY p.ID ASC
-        LIMIT 1";
-    // echo $sql . '<br>' . PHP_EOL;
-    $query = $wpdb->prepare($sql, $pid);
-    // echo $query . '<br>' . PHP_EOL;
-    $first_id = $wpdb->get_var($query);
-    // echo $first_id . '<br>' . PHP_EOL;
-    if ($first_id) {
-        $limit--;
-    }
-    // echo $limit . '<br>' . PHP_EOL;
-
-    // tạo query lấy ID bài viết có ID nhỏ hơn $pid
-    $sql = "SELECT p.ID FROM {$wpdb->posts} p
-        INNER JOIN {$wpdb->term_relationships} tr ON (p.ID = tr.object_id)
-        INNER JOIN {$wpdb->term_taxonomy} tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id)
-        WHERE p.post_type = 'post' AND p.post_status = 'publish'
-        AND tt.taxonomy = 'category' AND tt.term_id IN ($placeholders)
-        AND p.ID < %d
-        GROUP BY p.ID DESC
+        AND p.ID != %d
+        ORDER BY p.post_date DESC
         LIMIT $limit";
-    $query = $wpdb->prepare($sql, $pid);
+
+    // Chuẩn bị parameters: cat_ids + current post id
+    $query_params = array_merge($cat_ids, [$pid]);
+    $query = $wpdb->prepare($sql, ...$query_params);
     // echo $query . '<br>' . PHP_EOL;
     $ids = $wpdb->get_col($query);
     if (empty($ids)) {
+        // return 'empty ids';
         return null;
-    }
-    if ($first_id) {
-        // nếu có bài viết đầu tiên thì thêm vào đầu mảng
-        array_unshift($ids, $first_id);
     }
     // print_r($ids);
 
