@@ -185,19 +185,24 @@ function WGR_get_cache_file($cache_dir = '')
             // $url = WGR_IS_HOME;
         } else {
             // echo $url . '<br>' . PHP_EOL;
-            $arr_cat_social_parameter = array(
-                'fbclid=',
-                'gclid=',
-                'fb_comment_id=',
-                'add_to_wishlist=',
-                '_wpnonce=',
-                'utm_',
-                'v',
-            );
-            // loại bỏ các tham số không cần thiết
-            foreach ($arr_cat_social_parameter as $v) {
-                $url = explode('?' . $v, $url)[0];
-                $url = explode('&' . $v, $url)[0];
+            // loại bỏ các tham số không cần thiết như fbclid, gclid, fb_comment_id, utm_source, utm_medium, utm_campaign...
+            $url = preg_replace('/([&?]fbclid|gclid|fb_comment_id|add_to_wishlist|_wpnonce|v|utm_source|utm_medium|utm_campaign)=[^&]+(&|$)/', '', $url);
+            $url = rtrim($url, '&?');
+            if (1 > 2) {
+                $arr_cat_social_parameter = array(
+                    'fbclid=',
+                    'gclid=',
+                    'fb_comment_id=',
+                    'add_to_wishlist=',
+                    '_wpnonce=',
+                    'utm_',
+                    'v',
+                );
+                // loại bỏ các tham số không cần thiết
+                foreach ($arr_cat_social_parameter as $v) {
+                    $url = explode('?' . $v, $url)[0];
+                    $url = explode('&' . $v, $url)[0];
+                }
             }
 
             // Kiểm tra độ dài URL

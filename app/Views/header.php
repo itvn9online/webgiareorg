@@ -66,9 +66,23 @@ include __DIR__ . '/header_cache.php';
         ]);
         $font_awesome_before = str_replace('../fonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/fonts/', $font_awesome_before);
         echo $font_awesome_before;
+    } elseif (defined('ADD_FONT_AWESOME5')) {
+        // nạp file font theo kiểu inline
+        $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome51/css/solid.css', [
+            'get_content' => 1
+        ]);
+        $font_awesome_before = str_replace('../webfonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome51/webfonts/', $font_awesome_before);
+        echo $font_awesome_before;
+    } elseif (defined('ADD_FONT_AWESOME6')) {
+        // nạp file font theo kiểu inline
+        $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome67/css/solid.css', [
+            'get_content' => 1
+        ]);
+        $font_awesome_before = str_replace('../webfonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/webfonts/', $font_awesome_before);
+        echo $font_awesome_before;
     } else {
     ?>
-        <!-- Font Awesome4 disable by webgiareorg default -->
+        <!-- Font Awesome disable by webgiareorg default -->
         <?php
     }
 
@@ -76,6 +90,8 @@ include __DIR__ . '/header_cache.php';
     // nạp một số css ở dạng preload
     $arr_preload_bootstrap = [
         defined('ADD_FONT_AWESOME4') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/css/font-awesome.min.css?v=4.7' : '',
+        defined('ADD_FONT_AWESOME5') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome51/css/fontawesome.min.css?v=5.15.4' : '',
+        defined('ADD_FONT_AWESOME6') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/css/fontawesome.min.css?v=6.7.2' : '',
 
         // bản full
         //CDN_BASE_URL . 'thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',
