@@ -51,8 +51,7 @@ include __DIR__ . '/header_cache.php';
     ?>
     <style>
         <?php
-        // var_dump(get_option('wgr_term_description_order', '0'));
-        if (get_option('wgr_term_description_order', '0') == '1') {
+        if (WGR_TERM_DESCRIPTION_ORDER != '0') {
             echo file_get_contents(WGR_BASE_PATH . 'public/css/term-description-order.css', 1);
         }
         echo file_get_contents(WGR_BASE_PATH . 'public/css/mobile-usability.css', 1);
@@ -64,27 +63,34 @@ include __DIR__ . '/header_cache.php';
     wp_head();
 
     // nếu có lệnh này trong child-theme -> sẽ add fontawesome 4
-    if (defined('ADD_FONT_AWESOME4')) {
+    $url_font_awesome = null;
+    if (WGR_ADD_FONT_AWESOME == '4') {
         // nạp file font theo kiểu inline
         $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome47/css/font-awesome.before.css', [
             'get_content' => 1
         ]);
         $font_awesome_before = str_replace('../fonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/fonts/', $font_awesome_before);
         echo $font_awesome_before;
-    } elseif (defined('ADD_FONT_AWESOME5')) {
+
+        $url_font_awesome = CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/css/font-awesome.min.css?v=4.7';
+    } elseif (WGR_ADD_FONT_AWESOME == '5') {
         // nạp file font theo kiểu inline
         $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome51/css/solid.css', [
             'get_content' => 1
         ]);
         $font_awesome_before = str_replace('../webfonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome51/webfonts/', $font_awesome_before);
         echo $font_awesome_before;
-    } elseif (defined('ADD_FONT_AWESOME6')) {
+
+        $url_font_awesome = CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome51/css/fontawesome.min.css?v=5.15.4';
+    } elseif (WGR_ADD_FONT_AWESOME == '6') {
         // nạp file font theo kiểu inline
         $font_awesome_before = WGR_get_add_css(WGR_BASE_PATH . 'public/thirdparty/awesome67/css/solid.css', [
             'get_content' => 1
         ]);
         $font_awesome_before = str_replace('../webfonts/', CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/webfonts/', $font_awesome_before);
         echo $font_awesome_before;
+
+        $url_font_awesome = CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/css/fontawesome.min.css?v=6.7.2';
     } else {
     ?>
         <!-- Font Awesome disable by webgiareorg default -->
@@ -94,9 +100,7 @@ include __DIR__ . '/header_cache.php';
 
     // nạp một số css ở dạng preload
     $arr_preload_bootstrap = [
-        defined('ADD_FONT_AWESOME4') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome47/css/font-awesome.min.css?v=4.7' : '',
-        defined('ADD_FONT_AWESOME5') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome51/css/fontawesome.min.css?v=5.15.4' : '',
-        defined('ADD_FONT_AWESOME6') ? CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/css/fontawesome.min.css?v=6.7.2' : '',
+        $url_font_awesome != null ? $url_font_awesome : '',
 
         // bản full
         //CDN_BASE_URL . 'thirdparty/bootstrap-5.1.3/css/bootstrap.min.css',

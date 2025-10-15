@@ -8,6 +8,14 @@
 define('WGR_BASE_PATH', __DIR__ . '/');
 define('WGR_BASE_URI', str_replace(ABSPATH, '', __DIR__) . '/');
 
+// nạp custom config nếu có
+if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
+    include WGR_CHILD_PATH . 'custom_config.php';
+}
+// khai báo các hằng số để phòng custom config không có
+defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
+defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
+
 // khai báo qua tham số này để khi cần có thể chuyển url cho partner
 defined('WGR_PARTNER_NAME') || define('WGR_PARTNER_NAME', 'WebGiaRe');
 defined('WGR_PARTNER_WEBSITE') || define('WGR_PARTNER_WEBSITE', 'webgiare.org');
