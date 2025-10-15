@@ -179,7 +179,7 @@ $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
                         <option value="5" <?php selected($wgr_add_font_awesome, '5'); ?>>Font Awesome 5</option>
                         <option value="6" <?php selected($wgr_add_font_awesome, '6'); ?>>Font Awesome 6</option>
                     </select>
-                    <p class="description">Chọn phiên bản Font Awesome để sử dụng trên website.</p>
+                    <p class="description">Chọn phiên bản Font Awesome để sử dụng trên website. Chỉ kích hoạt khi có nội dung sử dụng Font Awesome và không có plugin nào nạp font tương tự để nhẹ website.</p>
                 </td>
             </tr>
         </tbody>
