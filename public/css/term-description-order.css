@@ -1,0 +1,8 @@
+.shop-container {
+    display: grid;
+    flex-direction: column;
+}
+
+.term-description {
+    order: 999;
+}

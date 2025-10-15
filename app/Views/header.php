@@ -50,7 +50,12 @@ include __DIR__ . '/header_cache.php';
     // nạp phần css inline để phục vụ cho bản mobile
     ?>
     <style>
-        <?php echo file_get_contents(WGR_BASE_PATH . 'public/css/mobile-usability.css', 1);
+        <?php
+        // var_dump(get_option('wgr_term_description_order', '0'));
+        if (get_option('wgr_term_description_order', '0') == '1') {
+            echo file_get_contents(WGR_BASE_PATH . 'public/css/term-description-order.css', 1);
+        }
+        echo file_get_contents(WGR_BASE_PATH . 'public/css/mobile-usability.css', 1);
         ?>
     </style>
     <?php

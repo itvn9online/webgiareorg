@@ -96,6 +96,72 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
 </form>
 <br>
 <!-- END Cleanup site cache -->
+
+<!-- WGR Options Form -->
+<?php
+// Xử lý lưu options
+if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_options'], 'save_wgr_options_action')) {
+    $options_to_save = [
+        // 'wgr_test_text_option' => esc_url_raw($_POST['wgr_test_text_option'] ?? ''),
+        'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
+    ];
+
+    $success_count = 0;
+    foreach ($options_to_save as $option_name => $option_value) {
+        if (update_option($option_name, $option_value)) {
+            $success_count++;
+        }
+    }
+
+    if ($success_count > 0) {
+        echo '<div class="notice notice-success"><p>Đã lưu ' . $success_count . ' options thành công!</p></div>';
+    } else {
+        echo '<div class="notice notice-info"><p>Không có thay đổi nào được lưu.</p></div>';
+    }
+}
+
+// Lấy giá trị hiện tại của options
+$wgr_test_text_option = get_option('wgr_test_text_option', '');
+$wgr_term_description_order = get_option('wgr_term_description_order', '0');
+?>
+<br>
+<h2>Cấu hình Options</h2>
+<form action="" method="post">
+    <?php wp_nonce_field('save_wgr_options_action', '_wpnonce_wgr_options'); ?>
+
+    <table class="form-table" role="presentation">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="wgr_test_text_option">Test Text Option</label>
+                </th>
+                <td>
+                    <input type="url" name="wgr_test_text_option" id="wgr_test_text_option" value="<?php echo esc_attr($wgr_test_text_option); ?>" class="regular-text" placeholder="Your text">
+                    <p class="description">Đây chỉ là một trường văn bản thử nghiệm.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">Term description</th>
+                <td>
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" name="wgr_term_description_order" value="1" <?php checked($wgr_term_description_order, '1'); ?>>
+                            To footer
+                        </label>
+                        <p class="description">Chuyển mô tả danh mục xuống footer.</p>
+                    </fieldset>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="submit">
+        <button type="submit" name="save_wgr_options" class="button button-primary button-large">Lưu Options</button>
+    </p>
+</form>
+<!-- END WGR Options Form -->
+
 <!-- Edit robots.txt -->
 <?php
 // Logic lấy nội dung robots.txt
