@@ -16,6 +16,9 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
 defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 
+// chuyển giá 0 đồng thành liên hệ
+defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
+
 // khai báo qua tham số này để khi cần có thể chuyển url cho partner
 defined('WGR_PARTNER_NAME') || define('WGR_PARTNER_NAME', 'WebGiaRe');
 defined('WGR_PARTNER_WEBSITE') || define('WGR_PARTNER_WEBSITE', 'webgiare.org');
@@ -27,15 +30,12 @@ defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
 defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
 
-// chuyển giá 0 đồng thành liên hệ
-defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
-
 
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
-//defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
+// defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
 
 // nạp function tạo cache
-//echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . PHP_EOL;
+// echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . PHP_EOL;
 include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
 
@@ -50,19 +50,19 @@ foreach (glob(WGR_BASE_PATH . 'app/Config/*.php') as $filename) {
 
 // nạp model
 foreach (glob(WGR_BASE_PATH . 'app/Models/*.php') as $filename) {
-    //echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
 // nạp Shortcode
 foreach (glob(WGR_BASE_PATH . 'app/Shortcode/*.php') as $filename) {
-    //echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
 // nạp ux kết hợp với flatsome
 foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
-    //echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . PHP_EOL;
     include $filename;
 }
 
