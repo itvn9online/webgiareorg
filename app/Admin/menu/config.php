@@ -103,8 +103,10 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
 if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_options'], 'save_wgr_options_action')) {
     $options_to_save = [
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
-        'wgr_contact_price' => esc_url_raw($_POST['wgr_contact_price'] ?? ''),
+        'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
+        'cdn_base_url' => esc_url_raw($_POST['cdn_base_url'] ?? ''),
+        'eb_cdn_uploads_url' => esc_url_raw($_POST['eb_cdn_uploads_url'] ?? ''),
     ];
 
     $success_count = 0;
@@ -123,6 +125,24 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
             $success_count++;
         }
 
+        // các trường chỉ ghi khi có giá trị
+        if (empty($option_value)) {
+            continue;
+        } else if ($option_name == 'cdn_base_url') {
+            // Nếu không phải là URL hợp lệ hoặc trùng với giá trị mặc định thì bỏ qua
+            if (strpos($option_value, '//') === false || $option_value == DYNAMIC_BASE_URL) {
+                continue;
+            }
+            $option_value = rtrim($option_value, '/') . '/';
+        } else if ($option_name == 'eb_cdn_uploads_url') {
+            // Nếu không phải là URL hợp lệ hoặc trùng với giá trị mặc định thì bỏ qua
+            if (strpos($option_value, '//') === false) {
+                continue;
+            }
+            $option_value = rtrim($option_value, '/') . '/';
+        }
+
+        // Ghi vào file config
         file_put_contents($wgr_config_path, 'define(\'' . strtoupper($option_name) . '\', \'' . $option_value . '\');' . PHP_EOL, FILE_APPEND);
     }
 
@@ -137,6 +157,8 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
 $wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
+$cdn_base_url = get_option('cdn_base_url', '');
+$eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
 ?>
 <br>
 <h2>Custom Config</h2>
@@ -180,6 +202,26 @@ $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
                         <option value="6" <?php selected($wgr_add_font_awesome, '6'); ?>>Font Awesome 6</option>
                     </select>
                     <p class="description">Chọn phiên bản Font Awesome để sử dụng trên website. Chỉ kích hoạt khi có nội dung sử dụng Font Awesome và không có plugin nào nạp font tương tự để nhẹ website.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">
+                    <label for="cdn_base_url">CDN Base URL</label>
+                </th>
+                <td>
+                    <input type="url" name="cdn_base_url" id="cdn_base_url" value="<?php echo esc_attr($cdn_base_url); ?>" class="regular-text" placeholder="https://cdn.example.com">
+                    <p class="description">Nhập URL của CDN để sử dụng cho các tài nguyên tĩnh.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">
+                    <label for="eb_cdn_uploads_url">CDN Uploads URL</label>
+                </th>
+                <td>
+                    <input type="url" name="eb_cdn_uploads_url" id="eb_cdn_uploads_url" value="<?php echo esc_attr($eb_cdn_uploads_url); ?>" class="regular-text" placeholder="https://media.example.com">
+                    <p class="description">Nhập URL của CDN để sử dụng cho các tài nguyên tĩnh trong thư mục uploads.</p>
                 </td>
             </tr>
         </tbody>
