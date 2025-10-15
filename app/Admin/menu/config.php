@@ -102,8 +102,8 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
 // Xử lý lưu options
 if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_options'], 'save_wgr_options_action')) {
     $options_to_save = [
-        // 'wgr_test_text_option' => esc_url_raw($_POST['wgr_test_text_option'] ?? ''),
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
+        'wgr_contact_price' => esc_url_raw($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
     ];
 
@@ -134,27 +134,17 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 }
 
 // Lấy giá trị hiện tại của options
-$wgr_test_text_option = get_option('wgr_test_text_option', '');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
+$wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
 ?>
 <br>
-<h2>Cấu hình Options</h2>
+<h2>Custom Config</h2>
 <form action="" method="post">
     <?php wp_nonce_field('save_wgr_options_action', '_wpnonce_wgr_options'); ?>
 
     <table class="form-table" role="presentation">
         <tbody>
-            <tr>
-                <th scope="row">
-                    <label for="wgr_test_text_option">Test Text Option</label>
-                </th>
-                <td>
-                    <input type="url" name="wgr_test_text_option" id="wgr_test_text_option" value="<?php echo esc_attr($wgr_test_text_option); ?>" class="regular-text" placeholder="Your text">
-                    <p class="description">Đây chỉ là một trường văn bản thử nghiệm.</p>
-                </td>
-            </tr>
-
             <tr>
                 <th scope="row">Term description</th>
                 <td>
@@ -165,6 +155,16 @@ $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
                         </label>
                         <p class="description">Chuyển mô tả danh mục xuống footer.</p>
                     </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">
+                    <label for="wgr_contact_price">Contact Price</label>
+                </th>
+                <td>
+                    <input type="url" name="wgr_contact_price" id="wgr_contact_price" value="<?php echo esc_attr($wgr_contact_price); ?>" class="regular-text" placeholder="Liên hệ">
+                    <p class="description">Chuyển giá sản phẩm từ `0 đ` thành `Liên hệ`. Để trống sẽ tắt chức năng này.</p>
                 </td>
             </tr>
 
