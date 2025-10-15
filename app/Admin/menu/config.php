@@ -151,9 +151,9 @@ $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
                     <fieldset>
                         <label>
                             <input type="checkbox" name="wgr_term_description_order" value="1" <?php checked($wgr_term_description_order, '1'); ?>>
-                            To footer
+                            To bottom of the page
                         </label>
-                        <p class="description">Chuyển mô tả danh mục xuống footer.</p>
+                        <p class="description">Chuyển mô tả danh mục xuống cuối trang.</p>
                     </fieldset>
                 </td>
             </tr>
