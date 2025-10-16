@@ -29,9 +29,9 @@ function WGR_cache_expire($path, $t = 3600)
 function WGR_redis_key($f)
 {
     // dùng redis thì cắt bỏ đuôi txt cho nhẹ
-    // echo $f . '<br>' . PHP_EOL;
+    // echo $f . '<br>' . "\n";
     $f = str_replace('.', '-', explode('.txt', basename($f))[0]);
-    // echo $f . '<br>' . PHP_EOL;
+    // echo $f . '<br>' . "\n";
     if (defined('EB_PREFIX_CACHE')) {
         return EB_PREFIX_CACHE . $f;
     }
@@ -128,7 +128,7 @@ function WGR_display($f)
         if ($data === false) {
             return false;
         }
-        // echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+        // echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
 
         // với redis cache thì print ra luôn
         header('X-Cache: HIT from Redis');
@@ -151,8 +151,8 @@ function WGR_display($f)
     }
     $reset_time = mt_rand(1, 30);
     $active_reset = ($content[0] * 1) - time() - $reset_time;
-    //echo $active_reset . '<br>' . PHP_EOL;
-    //echo $reset_time . '<br>' . PHP_EOL;
+    //echo $active_reset . '<br>' . "\n";
+    //echo $reset_time . '<br>' . "\n";
     //die(__FILE__ . ':' . __LINE__);
     if ($active_reset < 0) {
         return false;
@@ -173,11 +173,11 @@ function WGR_get_cache_file($cache_dir = '')
     } else {
         if (isset($_SERVER['REQUEST_URI'])) {
             $url = $_SERVER['REQUEST_URI'];
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
         } else {
             $url = $_SERVER['SCRIPT_NAME'];
             $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
         }
 
         // Nếu là trang chủ thì đổi tên file cache
@@ -186,7 +186,7 @@ function WGR_get_cache_file($cache_dir = '')
             // } else if (1 > 2 && defined('WGR_IS_HOME')) {
             // $url = WGR_IS_HOME;
         } else {
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
             // loại bỏ các tham số không cần thiết như fbclid, gclid, fb_comment_id, utm_source, utm_medium, utm_campaign...
             $url = preg_replace('/([&?]fbclid|gclid|fb_comment_id|add_to_wishlist|_wpnonce|v|utm_source|utm_medium|utm_campaign)=[^&]+(&|$)/', '', $url);
             $url = rtrim($url, '&?');
@@ -212,7 +212,7 @@ function WGR_get_cache_file($cache_dir = '')
                 // $url = md5($url);
                 $url = substr($url, 0, 200);
             }
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
             // $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
             $url = str_replace([
                 '&amp%3B',
@@ -223,20 +223,20 @@ function WGR_get_cache_file($cache_dir = '')
                 ',',
                 '=',
             ], '-', $url);
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
 
             // thay thế 2- thành 1-
             $url = preg_replace('!\-+!', '-', $url);
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
 
             // cắt bỏ ký tự - ở đầu và cuối chuỗi
             $url = rtrim(ltrim($url, '-'), '-');
             $url = rtrim(ltrim($url, '.'), '.');
             $url = trim($url);
-            // echo $url . '<br>' . PHP_EOL;
+            // echo $url . '<br>' . "\n";
             if ($url == '') {
                 $url = '-';
-                // echo $url . '<br>' . PHP_EOL;
+                // echo $url . '<br>' . "\n";
             }
         }
     }
@@ -247,7 +247,7 @@ function WGR_get_cache_file($cache_dir = '')
     }
     // $url = EB_THEME_CACHE . $cache_dir . $url;
     $url = EB_THEME_CACHE . $cache_dir . $url . '.txt';
-    // echo $url . '<br>' . PHP_EOL;
+    // echo $url . '<br>' . "\n";
 
     //
     return $url;

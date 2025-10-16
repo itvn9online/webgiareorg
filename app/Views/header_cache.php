@@ -6,14 +6,14 @@ if (!is_file(WGR_CHILD_PATH . 'footer.php')) {
 }
 
 //
-//echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+//echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
 
 //
 $why_ebcache_not_active = '';
 $active_using_ebcache = '';
 
 // không cache khi user đang đăng nhập
-//echo USER_ID . '<br>' . PHP_EOL;
+//echo USER_ID . '<br>' . "\n";
 if (USER_ID > 0) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but not caching requests by known users';
 }
@@ -56,7 +56,7 @@ else if (is_home() || is_front_page()) {
 
     // copy file index để sử dụng cache
     if (!defined('WP_COPY_WGR_SUPPER_CACHE')) {
-        echo 'copy index-tmp to index <br>' . PHP_EOL;
+        echo 'copy index-tmp to index <br>' . "\n";
         copy(WGR_BASE_PATH . 'index-tmp.php', ABSPATH . 'index.php');
     }
 
@@ -107,7 +107,7 @@ else if (is_page_template() || is_page()) {
 else {
     $why_ebcache_not_active = 'EchBay Cache cache only home page, category page, post details page';
 }
-//echo $active_using_ebcache . '<br>' . PHP_EOL;
+//echo $active_using_ebcache . '<br>' . "\n";
 
 //
 define('WHY_EBCACHE_DISABLE', $why_ebcache_not_active);

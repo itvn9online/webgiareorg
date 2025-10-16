@@ -33,7 +33,7 @@ defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
 // defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
 
 // nạp function tạo cache
-// echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . PHP_EOL;
+// echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
 include_once WGR_BASE_PATH . 'app/Cache/Global.php';
 
@@ -42,25 +42,25 @@ include WGR_BASE_PATH . 'app/Helpers/Viewport.php';
 
 // nạp config
 foreach (glob(WGR_BASE_PATH . 'app/Config/*.php') as $filename) {
-    //echo $filename . '<br>' . PHP_EOL;
+    //echo $filename . '<br>' . "\n";
     include $filename;
 }
 
 // nạp model
 foreach (glob(WGR_BASE_PATH . 'app/Models/*.php') as $filename) {
-    // echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . "\n";
     include $filename;
 }
 
 // nạp Shortcode
 foreach (glob(WGR_BASE_PATH . 'app/Shortcode/*.php') as $filename) {
-    // echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . "\n";
     include $filename;
 }
 
 // nạp ux kết hợp với flatsome
 foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
-    // echo $filename . '<br>' . PHP_EOL;
+    // echo $filename . '<br>' . "\n";
     include $filename;
 }
 
@@ -81,7 +81,7 @@ else {
     }
 
     //
-    // echo basename(__FILE__ . ':') . __LINE__ . '<br>' . PHP_EOL;
+    // echo basename(__FILE__ . ':') . __LINE__ . '<br>' . "\n";
     include WGR_BASE_PATH . 'app/Guest/woo-for-fb.php';
     if (WGR_CONTACT_PRICE != '') {
         include WGR_BASE_PATH . 'app/Guest/contact-price.php';

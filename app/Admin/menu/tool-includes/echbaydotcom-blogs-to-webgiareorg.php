@@ -18,7 +18,7 @@ $query = "SELECT ID, post_type, post_status
         ID ASC
     LIMIT 0, 50";
 // AND post_status = 'publish'
-echo $query . '<br>' . PHP_EOL;
+echo $query . '<br>' . "\n";
 
 $data = $wpdb->get_results($query, OBJECT);
 // print_r($data);
@@ -27,7 +27,7 @@ $data = $wpdb->get_results($query, OBJECT);
 $has_post = false;
 foreach ($data as $v) {
     print_r($v);
-    echo '<br>' . PHP_EOL;
+    echo '<br>' . "\n";
 
     // 
     $has_post = true;
@@ -40,7 +40,7 @@ foreach ($data as $v) {
     WHERE
         post_id = '" . $min_id . "'";
     // AND meta_key LIKE '_eb_%'";
-    echo $query . '<br>' . PHP_EOL;
+    echo $query . '<br>' . "\n";
 
     $metas = $wpdb->get_results($query, OBJECT);
     print_r($metas);
@@ -65,13 +65,13 @@ foreach ($data as $v) {
 
         // 
         if ($has_thumbnail === false && !empty($product_avatar)) {
-            echo 'product_avatar: ' . $product_avatar . '<br>' . PHP_EOL;
+            echo 'product_avatar: ' . $product_avatar . '<br>' . "\n";
             die(__FILE__ . ':' . __LINE__);
         }
 
         // 
         var_dump($run_update);
-        echo '<br>' . PHP_EOL;
+        echo '<br>' . "\n";
         if ($run_update === true) {
             // TEST
             // break;

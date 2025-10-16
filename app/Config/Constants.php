@@ -2,7 +2,7 @@
 
 // thuộc tính này để xác định code áp dụng cho plugin wocomerce -> sẽ có 1 số tính năng bổ sung cho nó
 define('WGR_FOR_WOOCOMERCE', class_exists('WooCommerce') ? true : false);
-// echo WGR_FOR_WOOCOMERCE . '<br>' . PHP_EOL;
+// echo WGR_FOR_WOOCOMERCE . '<br>' . "\n";
 
 // thời gian lưu cache
 defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', mt_rand(600, 900));
@@ -16,7 +16,7 @@ if (is_user_logged_in()) {
 } else {
     define('USER_ID', 0);
 }
-// echo USER_ID . '<br>' . PHP_EOL;
+// echo USER_ID . '<br>' . "\n";
 
 /**
  * URL động cho website để có thể chạy trên nhiều tên miền khác nhau mà không cần config lại

@@ -8,11 +8,11 @@
 
 //
 $root_htaccess = ABSPATH . '.htaccess';
-//echo $root_htaccess . '<br>' . PHP_EOL;
+//echo $root_htaccess . '<br>' . "\n";
 
 // nếu chưa có file htaccess -> khi nào cần reset lại file htaccess thì xóa file htaccess đi là được
 if (!is_file($root_htaccess)) {
-    echo $root_htaccess . '<br>' . PHP_EOL;
+    echo $root_htaccess . '<br>' . "\n";
 
     //
     // $WGR_get_contents = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/htaccess.txt');
@@ -28,7 +28,7 @@ if (!is_file($root_htaccess)) {
     // nội dung file mới phải đảm bảo được lấy thành công
     if (strpos($content_htaccess, 'RewriteCond %{HTTPS} off') !== false) {
         $home_url = get_home_url();
-        echo $home_url . '<br>' . PHP_EOL;
+        echo $home_url . '<br>' . "\n";
 
         // xem code này có nằm trong thư mục con ko
         $sub_dir = explode('//', $home_url);
@@ -61,7 +61,7 @@ if (!is_file($root_htaccess)) {
     }
     /*
 } else {
-    echo $root_htaccess . '<br>' . PHP_EOL;
-    echo file_get_contents($root_htaccess, 1) . '<br>' . PHP_EOL;
+    echo $root_htaccess . '<br>' . "\n";
+    echo file_get_contents($root_htaccess, 1) . '<br>' . "\n";
     */
 }

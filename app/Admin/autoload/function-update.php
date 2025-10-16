@@ -6,14 +6,14 @@
 
 function WGR_flatsome_function_update($f)
 {
-    // echo $f . PHP_EOL;
+    // echo $f . "\n";
     // nếu còn tồn tại chuỗi _site_transient_update_themes -> vẫn còn đang dùng code của flatsome
     if (
         is_file($f)
         && strpos(file_get_contents($f), 'webgiare_v3_update_themes') === false
     ) {
         // die(__FILE__ . ':' . __LINE__);
-        echo $f . PHP_EOL;
+        echo $f . "\n";
 
         // copy 1 bản backup
         copy($f, str_replace('/function-update.php', '/function-update-flatsome-' . date('Ymd-His') . '.php', $f));

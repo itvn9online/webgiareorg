@@ -4,7 +4,7 @@
  * Chuẩn bị cho cache thông qua bảng memory trong db
  */
 
-// echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+// echo EB_MY_CACHE_CONFIG . '<br>' . "\n";
 
 // nếu chưa có file này
 if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
@@ -47,7 +47,7 @@ if (defined('EB_MY_CACHE_CONFIG') && !is_file(EB_MY_CACHE_CONFIG)) {
     $dir_config = dirname(EB_MY_CACHE_CONFIG);
     for ($i = 2; $i < 10; $i++) {
         $file_config = $dir_config . '/my-config-' . date('Ymd', time() - 86400 * $i) . '.php';
-        // echo $file_config . '<br>' . PHP_EOL;
+        // echo $file_config . '<br>' . "\n";
         if (is_file($file_config)) {
             unlink($file_config);
         }

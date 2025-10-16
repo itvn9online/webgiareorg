@@ -20,11 +20,11 @@ function webgiare_v3_update_themes($transient)
     $theme = wp_get_theme(get_template());
     $template = $theme->get_template();
     $version = $theme->get('Version');
-    // echo $version . PHP_EOL;
+    // echo $version . "\n";
 
     //
     // var_dump(get_transient('webgiare-theme-update' . $version));
-    // echo HOUR_IN_SECONDS . PHP_EOL;
+    // echo HOUR_IN_SECONDS . "\n";
     // die(__FILE__ . ':' . __LINE__);
     // tránh việc request liên tục gây chậm web thì dùng hàm này
     $remote = get_transient('webgiare-theme-update' . $version);
@@ -65,13 +65,13 @@ function webgiare_v3_update_themes($transient)
         //
         set_transient('webgiare-theme-update' . $version, $remote, HOUR_IN_SECONDS);
     }
-    // echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
-    // echo $remote->version . PHP_EOL;
+    // echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+    // echo $remote->version . "\n";
     // print_r($remote);
 
     // nếu có lỗi thì trả về luôn
     if (isset($remote->ERROR)) {
-        echo __FUNCTION__ . ':' . __LINE__ . ':' . $remote->ERROR . '<br>' . PHP_EOL;
+        echo __FUNCTION__ . ':' . __LINE__ . ':' . $remote->ERROR . '<br>' . "\n";
         return false;
     }
 

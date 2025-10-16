@@ -8,7 +8,7 @@ function autoUxBuilderBackup($space_backup = 3600)
 {
     //
     $ux_builder_dir = ABSPATH . 'wgr-backup-builder';
-    //echo $ux_builder_dir . '<br>' . PHP_EOL;
+    //echo $ux_builder_dir . '<br>' . "\n";
     if (!is_dir($ux_builder_dir)) {
         WGR_create_dir($ux_builder_dir);
     }
@@ -20,7 +20,7 @@ function autoUxBuilderBackup($space_backup = 3600)
 
     // file lưu tiến trình backup lần trước
     $last_backup_ux_builder = ABSPATH . 'wgr-last-backup-ux-builder.txt';
-    //echo $last_backup_ux_builder . '<br>' . PHP_EOL;
+    //echo $last_backup_ux_builder . '<br>' . "\n";
     // giãn cách backup -> trong thời gian cho phép thì hủy bỏ việc backup luôn
     if (WGR_cache_expire($last_backup_ux_builder, $space_backup)) {
         //echo date( 'r', filemtime( $last_backup_ux_builder ) );
@@ -59,7 +59,7 @@ function autoUxBuilderBackup($space_backup = 3600)
 
         //
         $file_backup = $ux_builder_dir . '/' . $v->taxonomy . '-' . $v->term_id . '-' . $v->slug . $backup_ext;
-        //echo $file_backup . '<br>' . PHP_EOL;
+        //echo $file_backup . '<br>' . "\n";
 
         // nếu chưa có backup hoặc backup đủ lâu thì backup tiếp
         if (!WGR_cache_expire($file_backup, $mot_tuan)) {
@@ -70,7 +70,7 @@ function autoUxBuilderBackup($space_backup = 3600)
                 //'menu_class' => 'eb-set-menu-selected eb-menu cf',
 
             ]);
-            //echo $html . PHP_EOL;
+            //echo $html . "\n";
 
             //
             WGR_create_file($file_backup, $html);
@@ -91,21 +91,21 @@ function autoUxBuilderBackup($space_backup = 3600)
 
     //
     foreach ($data as $v) {
-        //echo $v->post_date . '<br>' . PHP_EOL;
-        //echo $v->post_date_gmt . '<br>' . PHP_EOL;
-        //echo $v->post_modified . '<br>' . PHP_EOL;
-        //echo $v->post_modified_gmt . '<br>' . PHP_EOL;
-        //echo $v->post_type . '<br>' . PHP_EOL;
+        //echo $v->post_date . '<br>' . "\n";
+        //echo $v->post_date_gmt . '<br>' . "\n";
+        //echo $v->post_modified . '<br>' . "\n";
+        //echo $v->post_modified_gmt . '<br>' . "\n";
+        //echo $v->post_type . '<br>' . "\n";
         //print_r( $v );
         //continue;
 
         // lấy ngày thay đổi cuối để tạo backup -> nếu không có thay đổi thì không tạo backup
         if (!isset($v->post_modified_gmt) || empty($v->post_modified_gmt)) {
-            echo 'post_modified_gmt not found!: ' . $v->post_type . '#' . $v->ID . '<br>' . PHP_EOL;
+            echo 'post_modified_gmt not found!: ' . $v->post_type . '#' . $v->ID . '<br>' . "\n";
             continue;
         }
         $post_modified_gmt = date('Ymd-H', strtotime($v->post_modified_gmt));
-        //echo 'post_modified_gmt: ' . $post_modified_gmt . '<br>' . PHP_EOL;
+        //echo 'post_modified_gmt: ' . $post_modified_gmt . '<br>' . "\n";
 
         //
         if (trim($v->post_content) == '') {
@@ -115,13 +115,13 @@ function autoUxBuilderBackup($space_backup = 3600)
         // file tồn tại rồi thì thôi, backup tầm 1 tiếng 1 lần
         $file_backup = $ux_builder_dir . '/' . $v->post_type . '-' . $v->ID . '-' . $v->post_name . '-' . $post_modified_gmt . $backup_ext;
         if (is_file($file_backup)) {
-            //echo 'Backup exist: <em>' . basename( $file_backup ) . '</em><br>' . PHP_EOL;
+            //echo 'Backup exist: <em>' . basename( $file_backup ) . '</em><br>' . "\n";
             continue;
         }
 
         //
         WGR_create_file($file_backup, $v->post_content);
-        //echo 'Create new: <strong>' . basename( $file_backup ) . '</strong><br>' . PHP_EOL;
+        //echo 'Create new: <strong>' . basename( $file_backup ) . '</strong><br>' . "\n";
     }
 
     //

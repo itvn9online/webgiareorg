@@ -36,8 +36,8 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
             unlink($dest);
         }
         if (copy($githubs_plugin[$plugin_name] . '/archive/refs/heads/main.zip', $dest)) {
-            echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . PHP_EOL;
-            echo 'File has been save to: <strong>' . $dest . '</strong><br>' . PHP_EOL;
+            echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . "\n";
+            echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
 
             // giải nén file zip
             if (class_exists('ZipArchive')) {
@@ -53,23 +53,23 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
                         rename($myoldfolder, $mynewfolder);
                     }
 
-                    echo 'Unzip to: <strong>' . $myoldfolder . '</strong><br>' . PHP_EOL;
+                    echo 'Unzip to: <strong>' . $myoldfolder . '</strong><br>' . "\n";
 
                     // xóa file zip sau khi giải nén
                     unlink($dest);
-                    echo 'Unzip file success!<br>' . PHP_EOL;
-                    echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . PHP_EOL;
+                    echo 'Unzip file success!<br>' . "\n";
+                    echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . "\n";
                 } else {
-                    echo 'Unzip file faild!<br>' . PHP_EOL;
+                    echo 'Unzip file faild!<br>' . "\n";
                 }
             } else {
-                echo 'ZipArchive class not found!<br>' . PHP_EOL;
+                echo 'ZipArchive class not found!<br>' . "\n";
             }
         } else {
-            echo 'Download plugin: <strong>' . $plugin_name . '</strong> faild!<br>' . PHP_EOL;
+            echo 'Download plugin: <strong>' . $plugin_name . '</strong> faild!<br>' . "\n";
         }
     } else {
-        echo 'Plugin: <strong>' . $plugin_name . '</strong> not found!<br>' . PHP_EOL;
+        echo 'Plugin: <strong>' . $plugin_name . '</strong> not found!<br>' . "\n";
     }
 }
 
@@ -108,18 +108,18 @@ if (is_file($path_htaccess) && strpos(explode('//', get_home_url())[1], '/') ===
 
                 // cập nhật content
                 file_put_contents($path_htaccess, $content_htaccess, LOCK_EX);
-                echo 'update {my_domain.com} for ' . $path_htaccess . '<br>' . PHP_EOL;
+                echo 'update {my_domain.com} for ' . $path_htaccess . '<br>' . "\n";
             } else {
-                echo 'WGR_DISABLE_AUTO_HTACCESS is defined' . '<br>' . PHP_EOL;
+                echo 'WGR_DISABLE_AUTO_HTACCESS is defined' . '<br>' . "\n";
             }
         } else {
-            echo 'content_htaccess has {my_domain.com}' . '<br>' . PHP_EOL;
+            echo 'content_htaccess has {my_domain.com}' . '<br>' . "\n";
         }
     }
 }
 
 // tạo file htaccess chặn truy cập vào file php trong thư mục uploads
-// echo ABSPATH . '<br>' . PHP_EOL;
+// echo ABSPATH . '<br>' . "\n";
 if (is_dir(ABSPATH . 'wp-content') && is_dir(ABSPATH . 'wp-content/uploads')) {
     $path_htaccess = ABSPATH . 'wp-content/uploads/.htaccess';
     if (!is_file($path_htaccess)) {
@@ -133,7 +133,7 @@ deny from all
 '), LOCK_EX);
 
         // 
-        echo 'update uploads/*.php for ' . $path_htaccess . '<br>' . PHP_EOL;
+        echo 'update uploads/*.php for ' . $path_htaccess . '<br>' . "\n";
     }
 }
 
@@ -148,15 +148,15 @@ function check_and_update_webgiareorg()
         // $remote_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
     }
     // $remote_version = '24.08.20';
-    // echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
-    // echo EB_THEME_CACHE . '<br>' . PHP_EOL;
+    // echo EB_MY_CACHE_CONFIG . '<br>' . "\n";
+    // echo EB_THEME_CACHE . '<br>' . "\n";
 
     //
     if (isset($_GET['update_wgr_code']) || version_compare($version, $remote_version, '<')) {
-        // echo $version . PHP_EOL;
-        // echo $remote_version . PHP_EOL;
+        // echo $version . "\n";
+        // echo $remote_version . "\n";
         $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
-        echo 'File zip has been save to: ' . $dest . '<br>' . PHP_EOL;
+        echo 'File zip has been save to: ' . $dest . '<br>' . "\n";
         if (is_file($dest)) {
             unlink($dest);
         }
@@ -166,24 +166,24 @@ function check_and_update_webgiareorg()
 
         //
         if (!copy($download_url, $dest)) {
-            echo 'ERROR copy file from link: ' . $download_url . '<br>' . PHP_EOL;
+            echo 'ERROR copy file from link: ' . $download_url . '<br>' . "\n";
 
             // 
             if (!file_put_contents($dest, file_get_contents($download_url))) {
-                echo 'ERROR file_get_contents file from link: ' . $download_url . '<br>' . PHP_EOL;
+                echo 'ERROR file_get_contents file from link: ' . $download_url . '<br>' . "\n";
 
                 // 
                 if (!file_put_contents($dest, fopen($download_url, 'r'))) {
-                    echo 'ERROR fopen file from link: ' . $download_url . '<br>' . PHP_EOL;
+                    echo 'ERROR fopen file from link: ' . $download_url . '<br>' . "\n";
                     return false;
                 } else {
-                    echo 'FOPEN file from link: ' . $download_url . '<br>' . PHP_EOL;
+                    echo 'FOPEN file from link: ' . $download_url . '<br>' . "\n";
                 }
             } else {
-                echo 'GET_CONTENT file from link: ' . $download_url . '<br>' . PHP_EOL;
+                echo 'GET_CONTENT file from link: ' . $download_url . '<br>' . "\n";
             }
         } else {
-            echo 'COPY file from link: ' . $download_url . '<br>' . PHP_EOL;
+            echo 'COPY file from link: ' . $download_url . '<br>' . "\n";
         }
         chmod($dest, 0777);
 
@@ -223,13 +223,13 @@ function check_and_update_webgiareorg()
                 } else {
                     // thực hiện đổi tên thư mục
                     $myoldfolder = $dir_unzip_update_to . 'webgiareorg';
-                    echo $myoldfolder . '<br>' . PHP_EOL;
+                    echo $myoldfolder . '<br>' . "\n";
 
                     // đổi tên thư mục code cũ
                     $mynewfolder = '';
                     if (is_dir($myoldfolder)) {
                         $mynewfolder = $myoldfolder . '-' . date('Ymd-His');
-                        echo $mynewfolder . '<br>' . PHP_EOL;
+                        echo $mynewfolder . '<br>' . "\n";
 
                         // ưu tiên sử dụng PHP thuần cho nó nhanh
                         if (rename($myoldfolder, $mynewfolder)) {
@@ -410,7 +410,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
     <ol id="wgr-recommends-following-plugins">
         <?php
         // lấy thư mục plugin
-        // echo WP_PLUGIN_DIR . '<br>' . PHP_EOL;
+        // echo WP_PLUGIN_DIR . '<br>' . "\n";
 
         // 
         foreach (

@@ -13,20 +13,20 @@ $main_content = str_replace('="./"', '="' . DYNAMIC_BASE_URL . '"', $main_conten
 echo $main_content;
 
 //
-//echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+//echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
 
 // nếu không có ghi chú về việc tắt cache
 if (WHY_EBCACHE_DISABLE == '') {
     if (ENABLE_EBCACHE != '') {
-        //echo 'EB_THEME_CACHE: ' . EB_THEME_CACHE . '<br>' . PHP_EOL;
+        //echo 'EB_THEME_CACHE: ' . EB_THEME_CACHE . '<br>' . "\n";
         if (defined('EB_THEME_CACHE')) {
             if (function_exists('WGR_get_cache_file')) {
                 $filename = WGR_get_cache_file();
-                //echo $filename . '<br>' . PHP_EOL;
+                //echo $filename . '<br>' . "\n";
 
                 //
                 if (defined('EB_FALSE_CACHE') || WGR_my_cache($filename) === false) {
-                    //echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+                    //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
                     WGR_my_cache($filename, WGR_remove_html_empty_line($main_content) . WGR_builder_eb_cache_note(ENABLE_EBCACHE), EB_TIME_CACHE);
                 }
             } else {

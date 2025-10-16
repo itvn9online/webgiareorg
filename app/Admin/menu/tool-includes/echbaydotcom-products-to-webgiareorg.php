@@ -15,7 +15,7 @@ $query = "UPDATE
     WHERE
         `post_status` = 'publish'
         AND `post_type` = 'product'";
-echo $query . '<br>' . PHP_EOL;
+echo $query . '<br>' . "\n";
 
 // lấy sản phẩm có ID thấp nhất
 $query = "SELECT ID, post_type, post_status
@@ -28,7 +28,7 @@ $query = "SELECT ID, post_type, post_status
         ID ASC
     LIMIT 0, 50";
 // AND post_status = 'publish'
-echo $query . '<br>' . PHP_EOL;
+echo $query . '<br>' . "\n";
 
 $data = $wpdb->get_results($query, OBJECT);
 // print_r($data);
@@ -37,7 +37,7 @@ $data = $wpdb->get_results($query, OBJECT);
 $has_product = false;
 foreach ($data as $v) {
     print_r($v);
-    echo '<br>' . PHP_EOL;
+    echo '<br>' . "\n";
 
     // 
     $has_product = true;
@@ -50,7 +50,7 @@ foreach ($data as $v) {
     WHERE
         post_id = '" . $min_id . "'";
     // AND meta_key LIKE '_eb_%'";
-    echo $query . '<br>' . PHP_EOL;
+    echo $query . '<br>' . "\n";
 
     $metas = $wpdb->get_results($query, OBJECT);
     // print_r($metas);
@@ -162,13 +162,13 @@ foreach ($data as $v) {
 
         // 
         if ($has_thumbnail === false && !empty($product_avatar)) {
-            echo 'product_avatar: ' . $product_avatar . '<br>' . PHP_EOL;
+            echo 'product_avatar: ' . $product_avatar . '<br>' . "\n";
             die(__FILE__ . ':' . __LINE__);
         }
 
         // 
         if ($has_stock === false && $product_quantity > 0) {
-            echo 'product_quantity: ' . $product_quantity . '<br>' . PHP_EOL;
+            echo 'product_quantity: ' . $product_quantity . '<br>' . "\n";
             $product->set_manage_stock(true);
             $product->set_stock_quantity($product_quantity);
             // $product->set_stock_status('outofstock');
@@ -178,7 +178,7 @@ foreach ($data as $v) {
 
         // 
         if ($has_sku === false && !empty($product_sku)) {
-            echo 'product_sku: ' . $product_sku . '<br>' . PHP_EOL;
+            echo 'product_sku: ' . $product_sku . '<br>' . "\n";
             // SKU ko được trùng lặp nên hơi khó update
             // $product->set_sku($product_sku);
             // $run_update = true;
@@ -186,20 +186,20 @@ foreach ($data as $v) {
 
         // 
         if ($has_gallery === false && !empty($product_gallery)) {
-            echo 'product_gallery: ' . '<br>' . PHP_EOL;
+            echo 'product_gallery: ' . '<br>' . "\n";
             print_r($product_gallery);
-            echo '<br>' . PHP_EOL;
+            echo '<br>' . "\n";
             $product->set_gallery_image_ids($product_gallery);
             $run_update = true;
         }
 
         // 
         if ($regular_price > 0) {
-            echo 'regular_price: ' . $regular_price . '<br>' . PHP_EOL;
+            echo 'regular_price: ' . $regular_price . '<br>' . "\n";
 
             // Set product sale price
             if ($sale_price > 0) {
-                echo 'sale_price: ' . $sale_price . '<br>' . PHP_EOL;
+                echo 'sale_price: ' . $sale_price . '<br>' . "\n";
 
                 // 
                 if ($sale_has_price === false) {
@@ -224,7 +224,7 @@ foreach ($data as $v) {
 
         // 
         var_dump($run_update);
-        echo '<br>' . PHP_EOL;
+        echo '<br>' . "\n";
         if ($run_update === true) {
             // Sync data, refresh caches and saved data to the database
             $product->save();

@@ -23,7 +23,7 @@ function wgr_action_same_cat($custom_attrs = [])
         return null;
     }
     // var_dump($pid);
-    // echo $pid . '<br>' . PHP_EOL;
+    // echo $pid . '<br>' . "\n";
 
     // Lấy danh sách category của bài viết hiện tại
     $cat_ids = [];
@@ -53,7 +53,7 @@ function wgr_action_same_cat($custom_attrs = [])
         $limit = $custom_attrs['posts'] * 1;
         unset($custom_attrs['posts']);
     }
-    // echo $limit . '<br>' . PHP_EOL;
+    // echo $limit . '<br>' . "\n";
 
     // Query tối ưu: lấy tất cả bài viết cùng danh mục, loại trừ bài hiện tại
     $sql = "SELECT DISTINCT p.ID FROM {$wpdb->posts} p
@@ -68,7 +68,7 @@ function wgr_action_same_cat($custom_attrs = [])
     // Chuẩn bị parameters: cat_ids + current post id
     $query_params = array_merge($cat_ids, [$pid]);
     $query = $wpdb->prepare($sql, ...$query_params);
-    // echo $query . '<br>' . PHP_EOL;
+    // echo $query . '<br>' . "\n";
     $ids = $wpdb->get_col($query);
     if (empty($ids)) {
         // return 'empty ids';

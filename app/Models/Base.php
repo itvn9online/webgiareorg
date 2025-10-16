@@ -4,15 +4,15 @@
 function WGR_get_add_css($f, $ops = [], $attr = [])
 {
     //print_r( $ops );
-    //echo $f . '<br>' . PHP_EOL;
+    //echo $f . '<br>' . "\n";
     $f = str_replace(ABSPATH, '', $f);
     $f = ltrim($f, '/');
-    //echo $f . '<br>' . PHP_EOL;
+    //echo $f . '<br>' . "\n";
 
     if (!is_file(ABSPATH . $f)) {
         return '<!-- ' . $f . ' not exist! -->';
     }
-    //echo filesize( $f ) . '<br>' . PHP_EOL;
+    //echo filesize( $f ) . '<br>' . "\n";
     /*
     if ( filesize( $f ) == 0 ) {
         unlink( $f );
@@ -22,14 +22,14 @@ function WGR_get_add_css($f, $ops = [], $attr = [])
 
     //
     if (isset($ops['get_content'])) {
-        return '<style>' . file_get_contents($f, 1) . '</style>' . PHP_EOL;
+        return '<style>' . file_get_contents($f, 1) . '</style>' . "\n";
     }
 
     // xem có chạy qua CDN không -> có thì nó sẽ giảm tải cho server
     if (!isset($ops['cdn']) || $ops['cdn'] == '') {
         $ops['cdn'] = DYNAMIC_BASE_URL;
     }
-    //echo $ops['cdn'] . '<br>' . PHP_EOL;
+    //echo $ops['cdn'] . '<br>' . "\n";
 
     //
     if (isset($ops['preload'])) {
@@ -43,14 +43,14 @@ function WGR_get_add_css($f, $ops = [], $attr = [])
 // chế độ nạp css thông thường
 function WGR_add_css($f, $ops = [], $attr = [])
 {
-    echo WGR_get_add_css($f, $ops, $attr) . PHP_EOL;
+    echo WGR_get_add_css($f, $ops, $attr) . "\n";
 }
 
 // thêm nhiều file cùng 1 thuộc tính
 function WGR_adds_css($fs, $ops = [], $attr = [])
 {
     foreach ($fs as $f) {
-        echo WGR_get_add_css($f, $ops, $attr) . PHP_EOL;
+        echo WGR_get_add_css($f, $ops, $attr) . "\n";
     }
 }
 
@@ -60,7 +60,7 @@ function WGR_preload_css($f, $ops = [])
     $ops['preload'] = 1;
 
     //
-    echo WGR_get_add_css($f, $ops) . PHP_EOL;
+    echo WGR_get_add_css($f, $ops) . "\n";
 }
 
 function WGR_preloads_css($fs, $ops = [])
@@ -69,7 +69,7 @@ function WGR_preloads_css($fs, $ops = [])
 
     //
     foreach ($fs as $f) {
-        echo WGR_get_add_css($f, $ops) . PHP_EOL;
+        echo WGR_get_add_css($f, $ops) . "\n";
     }
 }
 
@@ -81,11 +81,11 @@ function WGR_get_add_js($f, $ops = [], $attr = [])
     //print_r( $ops );
     $f = str_replace(ABSPATH, '', $f);
     $f = ltrim($f, '/');
-    //echo $f . '<br>' . PHP_EOL;
+    //echo $f . '<br>' . "\n";
     if (!is_file(ABSPATH . $f)) {
         return '<!-- ' . $f . ' not exist! -->';
     }
-    //echo filesize( $f ) . '<br>' . PHP_EOL;
+    //echo filesize( $f ) . '<br>' . "\n";
     /*
     if ( filesize( $f ) == 0 ) {
         unlink( $f );
@@ -114,13 +114,13 @@ function WGR_get_add_js($f, $ops = [], $attr = [])
 // thêm 1 file
 function WGR_add_js($f, $ops = [], $attr = [])
 {
-    echo WGR_get_add_js($f, $ops, $attr) . PHP_EOL;
+    echo WGR_get_add_js($f, $ops, $attr) . "\n";
 }
 // thêm nhiều file cùng 1 thuộc tính
 function WGR_adds_js($fs, $ops = [], $attr = [])
 {
     foreach ($fs as $f) {
-        echo WGR_get_add_js($f, $ops, $attr) . PHP_EOL;
+        echo WGR_get_add_js($f, $ops, $attr) . "\n";
     }
 }
 // chế độ nạp trước css
@@ -129,7 +129,7 @@ function WGR_preload_js($f, $ops = [])
     $ops['preload'] = 1;
 
     //
-    echo WGR_get_add_js($f, $ops) . PHP_EOL;
+    echo WGR_get_add_js($f, $ops) . "\n";
 }
 
 function WGR_preloads_js($fs, $ops = [])
@@ -138,7 +138,7 @@ function WGR_preloads_js($fs, $ops = [])
 
     //
     foreach ($fs as $f) {
-        echo WGR_get_add_js($f, $ops) . PHP_EOL;
+        echo WGR_get_add_js($f, $ops) . "\n";
     }
 }
 

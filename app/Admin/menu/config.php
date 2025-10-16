@@ -24,7 +24,7 @@ if (defined('EB_MY_CACHE_CONFIG')) {
 } else {
     $my_config_php = $root_dir_cache . '/my-config.php';
 }
-// echo $my_config_php . '<br>' . PHP_EOL;
+// echo $my_config_php . '<br>' . "\n";
 $my_config_content = '';
 if (is_file($my_config_php)) {
     $my_config_content = 'Nội dung này chỉ coder mới có thể xem!';
@@ -67,7 +67,7 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
                     ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
                 }
                 $cache_prefix .= '*';
-                echo 'Cache prefix: ' . $cache_prefix . '<br>' . PHP_EOL;
+                echo 'Cache prefix: ' . $cache_prefix . '<br>' . "\n";
 
                 // 
                 $keys = $rd->keys($cache_prefix);
@@ -79,14 +79,14 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
                 echo $e->getMessage();
             }
         } else {
-            echo 'no redis' . '<br>' . PHP_EOL;
+            echo 'no redis' . '<br>' . "\n";
         }
     } else {
-        echo 'No config file: ' . $my_config_php . '<br>' . PHP_EOL;
+        echo 'No config file: ' . $my_config_php . '<br>' . "\n";
     }
 
     // xong mới xóa cache trong file
-    echo 'Xóa cache trong thư mục: ' . $root_dir_cache . '<br>' . PHP_EOL;
+    echo 'Xóa cache trong thư mục: ' . $root_dir_cache . '<br>' . "\n";
     WGR_deleteDirectory($root_dir_cache);
 }
 
@@ -117,7 +117,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 
     $success_count = 0;
     $wgr_config_path = WGR_CHILD_PATH . 'custom_config.php';
-    file_put_contents($wgr_config_path, implode(PHP_EOL, [
+    file_put_contents($wgr_config_path, implode("\n", [
         '<?php',
         '',
         '/**',
@@ -132,7 +132,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         ' *',
         ' */',
         '',
-    ]) . PHP_EOL, LOCK_EX);
+    ]) . "\n", LOCK_EX);
     foreach ($options_to_save as $option_name => $option_value) {
         if (update_option($option_name, $option_value)) {
             $success_count++;
@@ -156,7 +156,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 !empty(WGR_CACHE_PREFIX)
             ) {
                 // tạo file để include file object-cache thay vì copy -> tận dụng được code khi update
-                file_put_contents(ABSPATH . 'wp-content/object-cache.php', implode(PHP_EOL, [
+                file_put_contents(ABSPATH . 'wp-content/object-cache.php', implode("\n", [
                     '<?php',
                     '',
                     '/**',
@@ -199,7 +199,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         }
 
         // Ghi vào file config
-        file_put_contents($wgr_config_path, 'define(\'' . strtoupper($option_name) . '\', \'' . $option_value . '\');' . PHP_EOL, FILE_APPEND);
+        file_put_contents($wgr_config_path, 'define(\'' . strtoupper($option_name) . '\', \'' . $option_value . '\');' . "\n", FILE_APPEND);
     }
 
     if ($success_count > 0) {
@@ -468,11 +468,86 @@ if (defined('SAVEQUERIES') && SAVEQUERIES && !empty($wpdb->queries)) {
         <li>Reload trang nhiều lần để thấy cache hits tăng lên</li>
     </ul>
 </div>
+<?php
+// Xử lý bật/tắt SAVEQUERIES
+if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_savequeries'], 'toggle_savequeries_action')) {
+    $wp_config_path = ABSPATH . 'wp-config.php';
+
+    if (is_file($wp_config_path) && is_writable($wp_config_path)) {
+        $wp_config_content = file_get_contents($wp_config_path);
+        $savequeries_line = "define('SAVEQUERIES', true);";
+
+        // Tìm dòng chứa SAVEQUERIES (bất kể dạng nào: 'SAVEQUERIES' hoặc "SAVEQUERIES")
+        // Bao gồm cả dòng bị comment: // define('SAVEQUERIES', ...)
+        $pattern = '/.*[\'"]SAVEQUERIES[\'"].*\n?/i';
+        $has_savequeries = false;
+        // Nếu đã có SAVEQUERIES thì tìm và xóa dòng đó trước
+        if (strpos($wp_config_content, "'SAVEQUERIES'") !== false || strpos($wp_config_content, '"SAVEQUERIES"') !== false) {
+            $has_savequeries = true;
+
+            // Xóa dòng SAVEQUERIES
+            $wp_config_content = preg_replace($pattern, '', $wp_config_content);
+            // Xóa các dòng trống thừa nếu có
+            $wp_config_content = preg_replace('/\n{2,}/', "\n", $wp_config_content);
+        }
+
+        // Yêu cầu BẬT SAVEQUERIES
+        if ($_POST['toggle_savequeries'] == 'enable') {
+            // CHÈN MỚI vào đầu file ngay sau thẻ mở <?php
+            $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $savequeries_line . "\n", $wp_config_content);
+
+            if ($new_content !== false) {
+                if (file_put_contents($wp_config_path, $new_content)) {
+                    echo '<div class="notice notice-success"><p>✓ Đã chèn SAVEQUERIES vào wp-config.php</p></div>';
+                    echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                } else {
+                    echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                }
+            } else {
+                echo '<div class="notice notice-error"><p>✗ Không tìm thấy vị trí phù hợp trong wp-config.php</p></div>';
+            }
+        } elseif ($_POST['toggle_savequeries'] == 'disable') {
+            // Yêu cầu TẮT SAVEQUERIES
+            if ($has_savequeries) {
+                if (file_put_contents($wp_config_path, $wp_config_content)) {
+                    echo '<div class="notice notice-success"><p>✓ Đã xóa SAVEQUERIES khỏi wp-config.php</p></div>';
+                    echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                } else {
+                    echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                }
+            } else {
+                // Chưa có SAVEQUERIES -> BÁO ĐÃ TẮT
+                echo '<div class="notice notice-info"><p>SAVEQUERIES chưa được khai báo trong wp-config.php (đã ở trạng thái tắt).</p></div>';
+            }
+        }
+    } else {
+        echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
+    }
+}
+?>
+
 <?php if (!defined('SAVEQUERIES') || !SAVEQUERIES): ?>
-    <div class="notice notice-warning">
+    <div class="notice notice-info">
         <p><strong>⚠ Để xem chi tiết query time:</strong></p>
         <p>Thêm dòng sau vào <code>wp-config.php</code>:</p>
         <pre>define('SAVEQUERIES', true);</pre>
+        <form action="" method="post" style="margin-top: 10px;">
+            <?php wp_nonce_field('toggle_savequeries_action', '_wpnonce_savequeries'); ?>
+            <input type="hidden" name="toggle_savequeries" value="enable">
+            <button type="submit" class="button button-secondary">🔧 Chèn SAVEQUERIES vào wp-config.php</button>
+        </form>
+        <br>
+    </div>
+<?php else: ?>
+    <div class="notice notice-warning">
+        <p><strong>✓ SAVEQUERIES đang được bật</strong></p>
+        <p>Bạn có thể thấy thời gian query chi tiết ở bảng trên.</p>
+        <form action="" method="post" style="margin-top: 10px;">
+            <?php wp_nonce_field('toggle_savequeries_action', '_wpnonce_savequeries'); ?>
+            <input type="hidden" name="toggle_savequeries" value="disable">
+            <button type="submit" class="button button-secondary">🔧 Xóa SAVEQUERIES khỏi wp-config.php (cải thiện performance)</button>
+        </form>
+        <br>
     </div>
 <?php endif; ?>
 

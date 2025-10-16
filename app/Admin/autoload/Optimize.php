@@ -6,7 +6,7 @@
 
 function WGR_update_core_remove_html_comment($a)
 {
-    $a = explode(PHP_EOL, $a);
+    $a = explode("\n", $a);
 
     $str = '';
     foreach ($a as $v) {
@@ -16,15 +16,15 @@ function WGR_update_core_remove_html_comment($a)
             continue;
         }
         // loại bỏ các comment html đơn giản
-        //echo substr( $v, 0, 4 ) . '<br>' . PHP_EOL;
-        //echo substr( $v, -3 ) . '<br>' . PHP_EOL;
+        //echo substr( $v, 0, 4 ) . '<br>' . "\n";
+        //echo substr( $v, -3 ) . '<br>' . "\n";
         if (substr($v, 0, 4) == '<!--' && substr($v, -3) == '-->') {
             continue;
         }
 
         $str .= $v;
         if (strpos($v, '//') !== false) {
-            $str .= PHP_EOL;
+            $str .= "\n";
         } else {
             $str .= ' ';
         }
@@ -37,7 +37,7 @@ function WGR_update_core_remove_html_comment($a)
 
 function WGR_update_core_remove_php_comment($a)
 {
-    $a = explode(PHP_EOL, $a);
+    $a = explode("\n", $a);
 
     $str = '';
     foreach ($a as $v) {
@@ -57,7 +57,7 @@ function WGR_update_core_remove_php_comment($a)
         }
 
         //
-        $str .= $v . PHP_EOL;
+        $str .= $v . "\n";
     }
 
     //	return trim( WGR_remove_js_multi_comment( $str ) );
@@ -100,7 +100,7 @@ function WGR_update_core_remove_php_multi_comment($fileStr)
 function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
 {
     $path = $path . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path)) {
         return false;
     }
@@ -109,16 +109,16 @@ function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
             return false;
         }
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     // optimize file php
     foreach (glob($path . '/*.php') as $filename) {
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = WGR_update_core_remove_php_multi_comment(WGR_update_core_remove_php_comment(file_get_contents($filename, 1)));
         if ($c != '') {
-            $c .= PHP_EOL;
+            $c .= "\n";
             //$c .= ' ';
         }
         WGR_create_file($filename, $c);
@@ -126,7 +126,7 @@ function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
 
     // optimize file html
     foreach (glob($path . '/*.html') as $filename) {
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = WGR_update_core_remove_html_comment(file_get_contents($filename, 1));
@@ -308,7 +308,7 @@ function WGR_str_text_fix_js_content($str)
 
 function WGR_remove_js_comment($a, $chim = false)
 {
-    $a = explode(PHP_EOL, $a);
+    $a = explode("\n", $a);
     if (count($a) < 10) {
         return false;
     }
@@ -321,7 +321,7 @@ function WGR_remove_js_comment($a, $chim = false)
         } else {
             // thêm dấu xuống dòng với 1 số trường hợp
             if ($chim == true || strpos($v, '//') !== false || substr($v, -1) == '\\') {
-                $v .= PHP_EOL;
+                $v .= "\n";
             }
             $str .= $v;
         }
@@ -375,11 +375,11 @@ function WGR_update_core_remove_js_comment($a)
 function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
 {
     $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path) || WGR_check_active_optimize($path . '/') !== true) {
         return false;
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
@@ -391,10 +391,10 @@ function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
         }
         $c = WGR_update_core_remove_js_comment($c);
         if ($c === false) {
-            echo 'continue (' . basename($filename) . ') <br>' . PHP_EOL;
+            echo 'continue (' . basename($filename) . ') <br>' . "\n";
             continue;
         }
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         if (!empty($c)) {
@@ -417,11 +417,11 @@ function WGR_remove_css_multi_comment($a)
     }
 
     //
-    $a = explode(PHP_EOL, $str);
+    $a = explode("\n", $str);
     if (count($a) < 10) {
         return false;
     }
-    //echo 'count a: ' . count( $a ) . '<br>' . PHP_EOL;
+    //echo 'count a: ' . count( $a ) . '<br>' . "\n";
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
@@ -441,12 +441,12 @@ function WGR_remove_css_multi_comment($a)
     $str = str_replace('} .', '}.', $str);
     $str = str_replace('{ }', '{}', $str);
     // $str = str_replace('{ }', '{}', $str);
-    $str = str_replace('}.', '}' . PHP_EOL . '.', $str);
-    $str = str_replace('}#', '}' . PHP_EOL . '#', $str);
-    $str = str_replace('}@', '}' . PHP_EOL . '@', $str);
+    $str = str_replace('}.', '}' . "\n" . '.', $str);
+    $str = str_replace('}#', '}' . "\n" . '#', $str);
+    $str = str_replace('}@', '}' . "\n" . '@', $str);
 
     // 
-    $a = explode(PHP_EOL, $str);
+    $a = explode("\n", $str);
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
@@ -458,7 +458,7 @@ function WGR_remove_css_multi_comment($a)
                 }
             }
             $str .= $v;
-            // $str .= PHP_EOL;
+            // $str .= "\n";
         }
     }
 
@@ -522,9 +522,9 @@ function WGR_remove_css_not_using($str)
 // kiểm tra xem có sự tồn tại của file kích hoạt chế độ optimize không
 function WGR_check_active_optimize($path)
 {
-    //echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    //echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
     $full_path = $path . 'active-optimize.txt';
-    //echo $full_path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    //echo $full_path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (is_file($full_path)) {
         // thử xóa file optimize -> XÓA được thì mới trả về true -> đảm bảo có quyền chỉnh sửa các file trong này
         if (unlink($full_path)) {
@@ -537,11 +537,11 @@ function WGR_check_active_optimize($path)
 function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
 {
     $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path) || WGR_check_active_optimize($path . '/') !== true) {
         return false;
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
@@ -554,10 +554,10 @@ function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
         $c = WGR_remove_css_multi_comment($c);
         //var_dump( $c );
         if ($c === false) {
-            echo 'continue (' . basename($filename) . ') <br>' . PHP_EOL;
+            echo 'continue (' . basename($filename) . ') <br>' . "\n";
             continue;
         }
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . PHP_EOL;
+        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = trim($c);
@@ -577,10 +577,10 @@ function WGR_optimize_css_js()
         return false;
     }
     $last_optimize_code = WGR_BASE_PATH . 'last-optimize-code.txt';
-    //echo $last_optimize_code . '<br>' . PHP_EOL;
+    //echo $last_optimize_code . '<br>' . "\n";
     // giãn cách optmize -> trong thời gian cho phép thì hủy bỏ việc optmize luôn
     if (WGR_cache_expire($last_optimize_code)) {
-        //echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
         return false;
     }
 

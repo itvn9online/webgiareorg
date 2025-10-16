@@ -91,7 +91,7 @@ function WGR_remove_html_empty_line(string $str): string
         }
 
         //
-        $result .= $v . PHP_EOL;
+        $result .= $v . "\n";
         /*
         if (strpos($v, '//') !== false) {
             $result .= "\n";
@@ -201,7 +201,7 @@ function WGR_deleteDirectory($dirPath)
     $files = scandir($dirPath);
     // print_r($files);
     foreach ($files as $file) {
-        // echo $file . '<br>' . PHP_EOL;
+        // echo $file . '<br>' . "\n";
         if ($file == '.' || $file == '..') {
             continue;
         }
@@ -211,7 +211,7 @@ function WGR_deleteDirectory($dirPath)
         if (is_dir($filePath)) {
             WGR_deleteDirectory($filePath);
         } else if (is_file($filePath)) {
-            echo $filePath . '<br>' . PHP_EOL;
+            echo $filePath . '<br>' . "\n";
             unlink($filePath);
         }
     }

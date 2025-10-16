@@ -64,7 +64,7 @@ function action_echbay_call_function($atts)
     if ($call_function == '') {
         return __FUNCTION__ . ' call_function is empty!';
     }
-    //echo $call_function . ' bbbbbbbbbbbbbb <br>' . PHP_EOL;
+    //echo $call_function . ' bbbbbbbbbbbbbb <br>' . "\n";
 
     //
     if (!function_exists($call_function)) {

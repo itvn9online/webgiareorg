@@ -1,7 +1,7 @@
 <?php
 
 // TEST
-//echo __FILE__ . ':' . __LINE__ . '<br>' . PHP_EOL;
+//echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
 //echo session_id();
 
 // thời gian lưu cache
@@ -68,7 +68,7 @@ foreach ($sub_dir_cache as $v) {
     if (!is_dir($root_dir_cache)) {
         mkdir($root_dir_cache, 0777);
         chmod($root_dir_cache, 0777) or die('ERROR chmod cache dir');
-        // echo $root_dir_cache . '<br>' . PHP_EOL;
+        // echo $root_dir_cache . '<br>' . "\n";
     }
 }
 
@@ -77,12 +77,12 @@ foreach ($sub_dir_cache as $v) {
 
 // thư mục lưu ebcache
 define('EB_THEME_CACHE', $root_dir_cache . '/');
-//echo EB_THEME_CACHE . '<br>' . PHP_EOL;
+//echo EB_THEME_CACHE . '<br>' . "\n";
 //die( __FILE__ . ':' . __LINE__ );
 
 // file nạp config kết nối database
 define('EB_MY_CACHE_CONFIG', dirname(EB_THEME_CACHE) . '/my-config-' . date('Ymd') . '.php');
-// echo EB_MY_CACHE_CONFIG . '<br>' . PHP_EOL;
+// echo EB_MY_CACHE_CONFIG . '<br>' . "\n";
 
 // nạp function tạo cache
 include_once __DIR__ . '/app/Cache/Global.php';
@@ -102,8 +102,8 @@ define('EB_PREFIX_CACHE', EB_CACHE_PREFIX . $cache_prefix);
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của cookie còn không
     $last_update_logeg_cache = isset($_COOKIE['wgr_ebsuppercache_timeout']) ? $_COOKIE['wgr_ebsuppercache_timeout'] : 0;
-    //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . PHP_EOL;
-    //echo $last_update_logeg_cache . '<br>' . PHP_EOL;
+    //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . "\n";
+    //echo $last_update_logeg_cache . '<br>' . "\n";
 
     // nếu còn hạn thì bỏ qua
     if ($last_update_logeg_cache > time()) {
