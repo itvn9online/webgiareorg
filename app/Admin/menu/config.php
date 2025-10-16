@@ -301,6 +301,171 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
 </form>
 <!-- END WGR Options Form -->
 
+<!-- Object Cache Statistics -->
+<?php
+global $wp_object_cache, $wpdb;
+
+// Get cache stats
+$redis_connected = false;
+$cache_hits = 0;
+$cache_misses = 0;
+$hit_ratio = 0;
+
+if (is_object($wp_object_cache)) {
+    $redis_connected = isset($wp_object_cache->redis_connected) ? $wp_object_cache->redis_connected : false;
+
+    // Use reflection to get private properties
+    $reflection = new ReflectionClass($wp_object_cache);
+
+    if ($reflection->hasProperty('cache_hits')) {
+        $hits_prop = $reflection->getProperty('cache_hits');
+        $hits_prop->setAccessible(true);
+        $cache_hits = $hits_prop->getValue($wp_object_cache);
+    }
+
+    if ($reflection->hasProperty('cache_misses')) {
+        $misses_prop = $reflection->getProperty('cache_misses');
+        $misses_prop->setAccessible(true);
+        $cache_misses = $misses_prop->getValue($wp_object_cache);
+    }
+
+    $total_requests = $cache_hits + $cache_misses;
+    if ($total_requests > 0) {
+        $hit_ratio = ($cache_hits / $total_requests) * 100;
+    }
+}
+
+// Get database query count
+$db_queries = $wpdb->num_queries;
+$db_query_time = 0;
+if (defined('SAVEQUERIES') && SAVEQUERIES && !empty($wpdb->queries)) {
+    foreach ($wpdb->queries as $query) {
+        $db_query_time += $query[1];
+    }
+}
+?>
+<br>
+<h2>Object Cache & Database Statistics</h2>
+<table class="widefat striped">
+    <thead>
+        <tr>
+            <th colspan="2">Cache Performance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Redis Status:</strong></td>
+            <td>
+                <?php if ($redis_connected): ?>
+                    <span style="color: green;">✓ Connected</span>
+                    <?php if (defined('WGR_CACHE_PREFIX')): ?>
+                        (Prefix: <code><?php echo WGR_CACHE_PREFIX; ?></code>)
+                    <?php endif; ?>
+                <?php else: ?>
+                    <span style="color: red;">✗ Not Connected</span>
+                    <?php if (!defined('WGR_REDIS_CACHE') || WGR_REDIS_CACHE !== true): ?>
+                        - <em>WGR_REDIS_CACHE is not enabled</em>
+                    <?php elseif (!defined('WGR_CACHE_PREFIX') || empty(WGR_CACHE_PREFIX)): ?>
+                        - <em>WGR_CACHE_PREFIX is not set</em>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Cache Hits:</strong></td>
+            <td><?php echo number_format($cache_hits); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Cache Misses:</strong></td>
+            <td><?php echo number_format($cache_misses); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Hit Ratio:</strong></td>
+            <td>
+                <strong style="color: <?php echo $hit_ratio >= 80 ? 'green' : ($hit_ratio >= 50 ? 'orange' : 'red'); ?>;">
+                    <?php echo number_format($hit_ratio, 2); ?>%
+                </strong>
+                <?php if ($hit_ratio >= 80): ?>
+                    <span style="color: green;">✓ Excellent</span>
+                <?php elseif ($hit_ratio >= 50): ?>
+                    <span style="color: orange;">⚠ Good</span>
+                <?php else: ?>
+                    <span style="color: red;">✗ Poor</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Total Cache Requests:</strong></td>
+            <td><?php echo number_format($cache_hits + $cache_misses); ?></td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+
+<table class="widefat striped">
+    <thead>
+        <tr>
+            <th colspan="2">Database Performance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Total Queries:</strong></td>
+            <td>
+                <strong style="color: <?php echo $db_queries <= 50 ? 'green' : ($db_queries <= 100 ? 'orange' : 'red'); ?>;">
+                    <?php echo number_format($db_queries); ?>
+                </strong>
+                <?php if ($db_queries <= 50): ?>
+                    <span style="color: green;">✓ Excellent</span>
+                <?php elseif ($db_queries <= 100): ?>
+                    <span style="color: orange;">⚠ Acceptable</span>
+                <?php else: ?>
+                    <span style="color: red;">✗ Too many queries!</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php if ($db_query_time > 0): ?>
+            <tr>
+                <td><strong>Query Time:</strong></td>
+                <td><?php echo number_format($db_query_time, 4); ?> seconds</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+<br>
+
+<div class="notice notice-info">
+    <p><strong>💡 Tips để tối ưu cache:</strong></p>
+    <ul>
+        <li><strong>Hit Ratio &gt; 80%</strong> là rất tốt - nghĩa là cache đang hoạt động hiệu quả</li>
+        <li><strong>Database Queries &lt; 50</strong> là lý tưởng cho một page</li>
+        <li>Để xem chi tiết queries, thêm <code>define('SAVEQUERIES', true);</code> vào wp-config.php</li>
+        <li>Reload trang nhiều lần để thấy cache hits tăng lên</li>
+    </ul>
+</div>
+
+<?php if (!defined('SAVEQUERIES') || !SAVEQUERIES): ?>
+    <div class="notice notice-warning">
+        <p><strong>⚠ Để xem chi tiết query time:</strong></p>
+        <p>Thêm dòng sau vào <code>wp-config.php</code>:</p>
+        <pre>define('SAVEQUERIES', true);</pre>
+    </div>
+<?php endif; ?>
+
+<?php if (!$redis_connected && (!defined('WGR_REDIS_CACHE') || WGR_REDIS_CACHE !== true)): ?>
+    <div class="notice notice-error">
+        <p><strong>⚠ Object Cache chưa được kích hoạt!</strong></p>
+        <p>Để kích hoạt Redis Object Cache, thêm vào <code>wp-config.php</code>:</p>
+        <pre>define('WGR_REDIS_CACHE', true);
+define('WGR_CACHE_PREFIX', 'mysite_');
+define('WGR_REDIS_HOST', '127.0.0.1');
+define('WGR_REDIS_PORT', 6379);</pre>
+    </div>
+<?php endif; ?>
+<!-- END Object Cache Statistics -->
+
 <!-- Edit robots.txt -->
 <?php
 // Logic lấy nội dung robots.txt
