@@ -13,12 +13,10 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
     include WGR_CHILD_PATH . 'custom_config.php';
 }
 // khai báo các hằng số để phòng custom config không có
-defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
-defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
-
-// chuyển giá 0 đồng thành liên hệ
+defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
 defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
+defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 
 // khai báo qua tham số này để khi cần có thể chuyển url cho partner
 defined('WGR_PARTNER_NAME') || define('WGR_PARTNER_NAME', 'WebGiaRe');

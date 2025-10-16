@@ -108,6 +108,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
         'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
+        // 
         'cdn_base_url' => esc_url_raw($_POST['cdn_base_url'] ?? ''),
         'eb_cdn_uploads_url' => esc_url_raw($_POST['eb_cdn_uploads_url'] ?? ''),
     ];
@@ -124,7 +125,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         ' * @package WebGiaRe',
         ' * @link https://webgiare.org',
         ' * @license GNU General Public License v2 or later (GPLv2+)',
-        ' * Generated on ' . date('Y-m-d H:i:s'),
+        ' * Generated on ' . date_i18n('Y-m-d H:i:s'),
         ' * From ' . $_SERVER['REQUEST_URI'],
         ' *',
         ' */',
@@ -162,7 +163,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                     ' * @package WebGiaRe',
                     ' * @link https://webgiare.org',
                     ' * @license GNU General Public License v2 or later (GPLv2+)',
-                    ' * Generated on ' . date('Y-m-d H:i:s'),
+                    ' * Generated on ' . date_i18n('Y-m-d H:i:s'),
                     ' * From ' . $_SERVER['REQUEST_URI'],
                     ' *',
                     ' */',
