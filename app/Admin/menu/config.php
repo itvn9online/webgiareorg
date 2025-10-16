@@ -138,8 +138,12 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         // Xóa các file liên quan khi thay đổi cấu hình cache
         if ($option_name == 'wgr_advanced_cache') {
             if (empty($option_value)) {
-                // xóa file object-cache.php trong wp-content
-                if (is_file(ABSPATH . 'wp-content/object-cache.php')) {
+                // xóa file object-cache.php trong wp-content nếu có
+                if (
+                    is_file(ABSPATH . 'wp-content/object-cache.php') &&
+                    // đảm bảo file này được tạo ra bởi plugin webgiareorg
+                    strpos(file_get_contents(ABSPATH . 'wp-content/object-cache.php'), '/webgiareorg/') !== false
+                ) {
                     unlink(ABSPATH . 'wp-content/object-cache.php');
                 }
             } else {
