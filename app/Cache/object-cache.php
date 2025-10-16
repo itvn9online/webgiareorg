@@ -23,8 +23,8 @@ class WGR_Object_Cache
     private $cache_hits = 0;
     private $cache_misses = 0;
     private $redis_connected = false;
-    // một số cache wordpress để vĩnh viễn, mình sẽ cố định lại chứ để lâu sẽ khá tốn ram
-    private $default_expire = 3600;
+    // một số cache wordpress để vĩnh viễn, mình sẽ giới hạn nó lại cho đỡ tốn RAM, mặc định sẽ là 6 giờ
+    private $default_expire = 21600;
 
     /**
      * Constructor
