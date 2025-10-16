@@ -15,6 +15,7 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
 // khai báo các hằng số để phòng custom config không có
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
 defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
+defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
 
 // chuyển giá 0 đồng thành liên hệ
 defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
@@ -29,7 +30,6 @@ defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
 //
 defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
 defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
-
 
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
 // defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
