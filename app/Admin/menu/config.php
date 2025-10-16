@@ -146,8 +146,13 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 ) {
                     unlink(ABSPATH . 'wp-content/object-cache.php');
                 }
-            } else {
-                // tạo file để include file object-cache thay vì copy -> tận dùng được code khi update
+            } else if (
+                defined('WGR_REDIS_CACHE') &&
+                WGR_REDIS_CACHE === true &&
+                defined('WGR_CACHE_PREFIX') &&
+                !empty(WGR_CACHE_PREFIX)
+            ) {
+                // tạo file để include file object-cache thay vì copy -> tận dụng được code khi update
                 file_put_contents(ABSPATH . 'wp-content/object-cache.php', implode(PHP_EOL, [
                     '<?php',
                     '',
