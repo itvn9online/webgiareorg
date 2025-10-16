@@ -374,8 +374,26 @@ if (defined('SAVEQUERIES') && SAVEQUERIES && !empty($wpdb->queries)) {
                         - <em>WGR_REDIS_CACHE is not enabled</em>
                     <?php elseif (!defined('WGR_CACHE_PREFIX') || empty(WGR_CACHE_PREFIX)): ?>
                         - <em>WGR_CACHE_PREFIX is not set</em>
+                    <?php elseif (!defined('WGR_REDIS_HOST') || !defined('WGR_REDIS_PORT')): ?>
+                        - <em>WGR_REDIS_HOST or WGR_REDIS_PORT is not set</em>
+                    <?php elseif (!defined('WGR_ADVANCED_CACHE') || WGR_ADVANCED_CACHE != '1'): ?>
+                        - <em>WGR_ADVANCED_CACHE is not enabled</em>
                     <?php elseif (!class_exists('Redis')): ?>
                         - <em>Redis class is not available</em>
+                    <?php else: ?>
+                        <?php
+                        $test_redis = new Redis();
+                        try {
+                            $test_redis->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
+                            if ($test_redis->ping()) {
+                                echo '<span style="color: orange;">⚠ Unable to connect to Redis server at ' . WGR_REDIS_HOST . ':' . WGR_REDIS_PORT . '</span>';
+                            } else {
+                                echo '<span style="color: red;">✗ Ping to Redis server failed</span>';
+                            }
+                        } catch (Exception $e) {
+                            echo '<span style="color: red;">✗ ' . esc_html($e->getMessage()) . '</span>';
+                        }
+                        ?>
                     <?php endif; ?>
                 <?php endif; ?>
             </td>
