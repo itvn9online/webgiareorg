@@ -53,6 +53,11 @@ class WGR_Advanced_Cache
      */
     private function should_cache()
     {
+        // Don't cache POST requests
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            return false;
+        }
+
         // Don't cache if constants not defined
         if (!defined('WGR_REDIS_CACHE') || WGR_REDIS_CACHE !== true) {
             return false;
@@ -82,23 +87,20 @@ class WGR_Advanced_Cache
             return false;
         }
 
-        // Don't cache POST requests
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            return false;
-        }
-
         // Don't cache if user is logged in
         if ($this->is_user_logged_in()) {
             return false;
         }
 
-        // Don't cache URLs with query strings (except common tracking params)
+        // Don't cache URLs with meaningful query strings
+        // Tracking params (utm_*, fbclid, gclid) will be ignored in cache key
         if (!empty($_GET)) {
-            $allowed_params = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid'];
+            $ignored_params = $this->get_ignored_query_params();
             $query_params = array_keys($_GET);
-            $filtered_params = array_diff($query_params, $allowed_params);
+            $meaningful_params = array_diff($query_params, $ignored_params);
 
-            if (!empty($filtered_params)) {
+            // Nếu có params có ý nghĩa (không phải tracking) → Không cache
+            if (!empty($meaningful_params)) {
                 return false;
             }
         }
@@ -115,6 +117,49 @@ class WGR_Advanced_Cache
         }
 
         return true;
+    }
+
+    /**
+     * Get list of query params to ignore (tracking params)
+     * These params will be removed from cache key
+     */
+    private function get_ignored_query_params()
+    {
+        return [
+            // Google Analytics UTM parameters
+            'utm_source',
+            'utm_medium',
+            'utm_campaign',
+            'utm_term',
+            'utm_content',
+            'utm_id',
+            // Facebook Click ID
+            'fbclid',
+            // Google Click ID
+            'gclid',
+            'gclsrc',
+            // Microsoft/Bing
+            'msclkid',
+            // Twitter
+            'twclid',
+            // LinkedIn
+            'li_fat_id',
+            // TikTok
+            'ttclid',
+            // Pinterest
+            'epik',
+            // Other common tracking
+            'mc_cid',      // MailChimp
+            'mc_eid',      // MailChimp
+            '_ga',         // Google Analytics
+            '_gl',         // Google Linker
+            'ref',         // Generic referrer
+            'source',      // Generic source
+            'fb_comment_id',
+            'add_to_wishlist',
+            '_wpnonce',
+            'v',
+        ];
     }
 
     /**
@@ -174,13 +219,374 @@ class WGR_Advanced_Cache
         $prefix = WGR_CACHE_PREFIX;
         $uri = $_SERVER['REQUEST_URI'];
 
+        // Remove tracking query params from URI before generating cache key
+        $uri = $this->remove_tracking_params($uri);
+
+        // Sanitize URI để làm cache key (thay vì md5)
+        $sanitized_uri = $this->sanitize_uri_for_cache_key($uri);
+
         // Include mobile detection in cache key
-        $device = $this->is_mobile() ? 'mobile' : 'desktop';
+        $device = $this->is_mobile() ? 'm' : 'd';
 
-        // Include SSL in cache key
-        $protocol = $this->is_ssl() ? 'https' : 'http';
+        return $prefix . 'page:' . $device . ':' . $sanitized_uri;
+    }
 
-        return $prefix . 'page:' . $protocol . ':' . $device . ':' . md5($uri);
+    /**
+     * Sanitize URI to create cache key
+     * Chỉ giữ lại: chữ thường không dấu, số, gạch ngang
+     */
+    private function sanitize_uri_for_cache_key($uri)
+    {
+        // Xử lý HTML entities và URL encoding bị lỗi
+        // &amp; → &
+        // &amp%3B → &
+        $uri = str_replace(['&amp;', '&amp%3B'], '&', $uri);
+
+        // URL decode để xử lý các ký tự encoded
+        // $uri = urldecode($uri);
+
+        // Loại bỏ dấu tiếng Việt
+        $uri = $this->remove_vietnamese_accents($uri);
+
+        // Chuyển về lowercase
+        $uri = strtolower($uri);
+
+        // Chỉ giữ lại: a-z, 0-9, -
+        $uri = preg_replace('/[^a-z0-9\-]/', '-', $uri);
+
+        // Loại bỏ nhiều dấu - liên tiếp
+        $uri = preg_replace('/-+/', '-', $uri);
+
+        // Loại bỏ dấu - ở đầu/cuối
+        $uri = trim($uri, '-');
+
+        // Xử lý đặc biệt cho trang chủ
+        if (empty($uri)) {
+            return '-';
+        }
+        // Giới hạn độ dài (Redis key nên < 256 chars)
+        else if (strlen($uri) > 200) {
+            // Nếu quá dài: lấy 180 ký tự đầu + md5(phần còn lại)
+            $uri = substr($uri, 0, 180) . '-' . md5(substr($uri, 180));
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Remove Vietnamese accents
+     */
+    private function remove_vietnamese_accents($str)
+    {
+        $accents = [
+            'à',
+            'á',
+            'ạ',
+            'ả',
+            'ã',
+            'â',
+            'ầ',
+            'ấ',
+            'ậ',
+            'ẩ',
+            'ẫ',
+            'ă',
+            'ằ',
+            'ắ',
+            'ặ',
+            'ẳ',
+            'ẵ',
+            'è',
+            'é',
+            'ẹ',
+            'ẻ',
+            'ẽ',
+            'ê',
+            'ề',
+            'ế',
+            'ệ',
+            'ể',
+            'ễ',
+            'ì',
+            'í',
+            'ị',
+            'ỉ',
+            'ĩ',
+            'ò',
+            'ó',
+            'ọ',
+            'ỏ',
+            'õ',
+            'ô',
+            'ồ',
+            'ố',
+            'ộ',
+            'ổ',
+            'ỗ',
+            'ơ',
+            'ờ',
+            'ớ',
+            'ợ',
+            'ở',
+            'ỡ',
+            'ù',
+            'ú',
+            'ụ',
+            'ủ',
+            'ũ',
+            'ư',
+            'ừ',
+            'ứ',
+            'ự',
+            'ử',
+            'ữ',
+            'ỳ',
+            'ý',
+            'ỵ',
+            'ỷ',
+            'ỹ',
+            'đ',
+            'À',
+            'Á',
+            'Ạ',
+            'Ả',
+            'Ã',
+            'Â',
+            'Ầ',
+            'Ấ',
+            'Ậ',
+            'Ẩ',
+            'Ẫ',
+            'Ă',
+            'Ằ',
+            'Ắ',
+            'Ặ',
+            'Ẳ',
+            'Ẵ',
+            'È',
+            'É',
+            'Ẹ',
+            'Ẻ',
+            'Ẽ',
+            'Ê',
+            'Ề',
+            'Ế',
+            'Ệ',
+            'Ể',
+            'Ễ',
+            'Ì',
+            'Í',
+            'Ị',
+            'Ỉ',
+            'Ĩ',
+            'Ò',
+            'Ó',
+            'Ọ',
+            'Ỏ',
+            'Õ',
+            'Ô',
+            'Ồ',
+            'Ố',
+            'Ộ',
+            'Ổ',
+            'Ỗ',
+            'Ơ',
+            'Ờ',
+            'Ớ',
+            'Ợ',
+            'Ở',
+            'Ỡ',
+            'Ù',
+            'Ú',
+            'Ụ',
+            'Ủ',
+            'Ũ',
+            'Ư',
+            'Ừ',
+            'Ứ',
+            'Ự',
+            'Ử',
+            'Ữ',
+            'Ỳ',
+            'Ý',
+            'Ỵ',
+            'Ỷ',
+            'Ỹ',
+            'Đ'
+        ];
+
+        $no_accents = [
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'i',
+            'i',
+            'i',
+            'i',
+            'i',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'y',
+            'y',
+            'y',
+            'y',
+            'y',
+            'd',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'a',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'e',
+            'i',
+            'i',
+            'i',
+            'i',
+            'i',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'o',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'u',
+            'y',
+            'y',
+            'y',
+            'y',
+            'y',
+            'd'
+        ];
+
+        return str_replace($accents, $no_accents, $str);
+    }
+
+    /**
+     * Remove tracking params from URI
+     */
+    private function remove_tracking_params($uri)
+    {
+        // Parse URI
+        $parts = parse_url($uri);
+
+        // Nếu không có query string → return ngay
+        if (empty($parts['query'])) {
+            return $uri;
+        }
+
+        // Parse query string
+        parse_str($parts['query'], $params);
+
+        // Lấy danh sách tracking params cần ignore
+        $ignored_params = $this->get_ignored_query_params();
+
+        // Loại bỏ tracking params
+        $clean_params = array_diff_key($params, array_flip($ignored_params));
+
+        // Nếu không còn params nào → trả về URI không có query string
+        if (empty($clean_params)) {
+            return $parts['path'];
+        }
+
+        // Build lại query string từ params đã clean
+        $clean_query = http_build_query($clean_params);
+
+        // Return URI đã clean
+        return $parts['path'] . '?' . $clean_query;
     }
 
     /**
@@ -320,12 +726,13 @@ class WGR_Advanced_Cache
                 return false;
             }
 
+            // Sanitize URI giống như khi tạo cache key
+            $sanitized_uri = $this->sanitize_uri_for_cache_key($uri);
+
             // Purge both mobile and desktop versions
-            foreach (['mobile', 'desktop'] as $device) {
-                foreach (['http', 'https'] as $protocol) {
-                    $key = WGR_CACHE_PREFIX . 'page:' . $protocol . ':' . $device . ':' . md5($uri);
-                    $this->redis->del($key);
-                }
+            foreach (['m', 'd'] as $device) {
+                $key = WGR_CACHE_PREFIX . 'page:' . $device . ':' . $sanitized_uri;
+                $this->redis->del($key);
             }
 
             return true;

@@ -169,75 +169,61 @@ function WGR_display($f)
 function WGR_get_cache_file($cache_dir = '')
 {
     if (isset($GLOBALS['wgr_cache_key']) && $GLOBALS['wgr_cache_key'] != '') {
-        $url = $GLOBALS['wgr_cache_key'];
+        $uri = $GLOBALS['wgr_cache_key'];
     } else {
         if (isset($_SERVER['REQUEST_URI'])) {
-            $url = $_SERVER['REQUEST_URI'];
-            // echo $url . '<br>' . "\n";
+            $uri = $_SERVER['REQUEST_URI'];
+            // echo $uri . '<br>' . "\n";
         } else {
-            $url = $_SERVER['SCRIPT_NAME'];
-            $url .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
-            // echo $url . '<br>' . "\n";
+            $uri = $_SERVER['SCRIPT_NAME'];
+            $uri .= (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
+            // echo $uri . '<br>' . "\n";
         }
 
         // Nếu là trang chủ thì đổi tên file cache
-        if ($url == '/' || $url == '') {
-            $url = '-';
+        if ($uri == '/' || $uri == '') {
+            $uri = '-';
             // } else if (1 > 2 && defined('WGR_IS_HOME')) {
-            // $url = WGR_IS_HOME;
+            // $uri = WGR_IS_HOME;
         } else {
-            // echo $url . '<br>' . "\n";
+            // echo $uri . '<br>' . "\n";
             // loại bỏ các tham số không cần thiết như fbclid, gclid, fb_comment_id, utm_source, utm_medium, utm_campaign...
-            $url = preg_replace('/([&?]fbclid|gclid|fb_comment_id|add_to_wishlist|_wpnonce|v|utm_source|utm_medium|utm_campaign)=[^&]+(&|$)/', '', $url);
-            $url = rtrim($url, '&?');
-            if (1 > 2) {
-                $arr_cat_social_parameter = array(
-                    'fbclid=',
-                    'gclid=',
-                    'fb_comment_id=',
-                    'add_to_wishlist=',
-                    '_wpnonce=',
-                    'utm_',
-                    'v',
-                );
-                // loại bỏ các tham số không cần thiết
-                foreach ($arr_cat_social_parameter as $v) {
-                    $url = explode('?' . $v, $url)[0];
-                    $url = explode('&' . $v, $url)[0];
-                }
-            }
+            $uri = preg_replace('/([&?]fbclid|gclid|fb_comment_id|add_to_wishlist|_wpnonce|v|utm_source|utm_medium|utm_campaign)=[^&]+(&|$)/', '', $uri);
+            // $uri = rtrim($uri, '&?');
+            // echo $uri . '<br>' . "\n";
 
-            // Kiểm tra độ dài URL
-            if (strlen($url) > 200) {
-                // $url = md5($url);
-                $url = substr($url, 0, 200);
-            }
-            // echo $url . '<br>' . "\n";
-            // $url = preg_replace("/\/|\?|\&|\,|\=/", '-', $url);
-            $url = str_replace([
-                '&amp%3B',
-                '&amp;',
-                '/',
-                '?',
-                '&',
-                ',',
-                '=',
-            ], '-', $url);
-            // echo $url . '<br>' . "\n";
+            // Xử lý HTML entities và URL encoding bị lỗi
+            // &amp; → &
+            // &amp%3B → &
+            $uri = str_replace(['&amp;', '&amp%3B'], '&', $uri);
 
-            // thay thế 2- thành 1-
-            $url = preg_replace('!\-+!', '-', $url);
-            // echo $url . '<br>' . "\n";
+            // URL decode để xử lý các ký tự encoded
+            // $uri = urldecode($uri);
+            // echo $uri . '<br>' . "\n";
 
-            // cắt bỏ ký tự - ở đầu và cuối chuỗi
-            $url = rtrim(ltrim($url, '-'), '-');
-            $url = rtrim(ltrim($url, '.'), '.');
-            $url = trim($url);
-            // echo $url . '<br>' . "\n";
-            if ($url == '') {
-                $url = '-';
-                // echo $url . '<br>' . "\n";
+            // Chuyển về lowercase
+            $uri = strtolower($uri);
+
+            // Chỉ giữ lại: a-z, 0-9, -
+            $uri = preg_replace('/[^a-z0-9\-]/', '-', $uri);
+
+            // Loại bỏ nhiều dấu - liên tiếp
+            $uri = preg_replace('/-+/', '-', $uri);
+
+            // Loại bỏ dấu - ở đầu/cuối
+            $uri = trim($uri, '-');
+            // echo $uri . '<br>' . "\n";
+
+            // Xử lý đặc biệt cho trang chủ
+            if ($uri == '') {
+                $uri = '-';
             }
+            // Giới hạn độ dài (Redis key nên < 256 chars)
+            else if (strlen($uri) > 200) {
+                // Nếu quá dài: lấy 180 ký tự đầu + md5(phần còn lại)
+                $uri = substr($uri, 0, 180) . '-' . md5(substr($uri, 180));
+            }
+            // echo $uri . '<br>' . "\n";
         }
     }
 
@@ -245,12 +231,12 @@ function WGR_get_cache_file($cache_dir = '')
     if ($cache_dir != '') {
         $cache_dir .= '/';
     }
-    // $url = EB_THEME_CACHE . $cache_dir . $url;
-    $url = EB_THEME_CACHE . $cache_dir . $url . '.txt';
-    // echo $url . '<br>' . "\n";
+    // $uri = EB_THEME_CACHE . $cache_dir . $uri;
+    $uri = EB_THEME_CACHE . $cache_dir . $uri . '.txt';
+    // echo $uri . '<br>' . "\n";
 
     //
-    return $url;
+    return $uri;
 }
 
 // thêm câu báo rằng đang lấy nội dung trong cache

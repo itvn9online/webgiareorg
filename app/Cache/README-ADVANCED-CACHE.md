@@ -51,9 +51,53 @@ File `wp-content/advanced-cache.php` sẽ được tạo tự động.
 
 - ✅ Trang công khai (không đăng nhập)
 - ✅ GET requests
-- ✅ URLs không có query strings (trừ utm\_, fbclid, gclid)
+- ✅ URLs có tracking params (utm\_\*, fbclid, gclid...) - **Tracking params sẽ bị loại bỏ khỏi cache key**
 - ✅ Phân biệt Mobile/Desktop
 - ✅ Phân biệt HTTP/HTTPS
+
+### 🎯 Smart Tracking Params Handling
+
+Các tracking params sau sẽ **bị loại bỏ** khỏi cache key (không ảnh hưởng cache):
+
+**Google Analytics:**
+
+- `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`, `utm_id`
+- `gclid`, `gclsrc` (Google Ads)
+- `_ga`, `_gl` (Google Analytics)
+
+**Social Media:**
+
+- `fbclid` (Facebook)
+- `msclkid` (Microsoft/Bing)
+- `twclid` (Twitter)
+- `li_fat_id` (LinkedIn)
+- `ttclid` (TikTok)
+- `epik` (Pinterest)
+
+**Email Marketing:**
+
+- `mc_cid`, `mc_eid` (MailChimp)
+
+**Other:**
+
+- `ref`, `source` (Generic tracking)
+
+**Ví dụ:**
+
+```
+URL 1: https://example.com/page?utm_source=facebook&utm_campaign=summer
+URL 2: https://example.com/page?utm_source=google&utm_campaign=winter
+URL 3: https://example.com/page
+
+→ Cả 3 URLs đều dùng CÙNG cache (cache key: https://example.com/page)
+```
+
+Điều này giúp:
+
+- ✅ Tăng cache hit ratio
+- ✅ Giảm cache entries
+- ✅ Tiết kiệm Redis memory
+- ✅ Campaign tracking vẫn hoạt động (JavaScript ghi nhận params)
 
 ## ❌ Trang KHÔNG được Cache
 
@@ -63,7 +107,23 @@ File `wp-content/advanced-cache.php` sẽ được tạo tự động.
 - ❌ POST/PUT/DELETE requests
 - ❌ User đã đăng nhập
 - ❌ URLs có WordPress cookies
-- ❌ URLs có query strings (ngoại trừ tracking params)
+- ❌ URLs có **meaningful** query strings (không phải tracking params)
+
+**Ví dụ URLs KHÔNG cache:**
+
+```
+❌ https://example.com/search?q=keyword          (search query)
+❌ https://example.com/products?sort=price       (filter/sort)
+❌ https://example.com/page?id=123               (dynamic param)
+```
+
+**Ví dụ URLs VẪN cache:**
+
+```
+✅ https://example.com/page?utm_source=google    (tracking only)
+✅ https://example.com/page?fbclid=xxx           (tracking only)
+✅ https://example.com/page                      (no params)
+```
 
 ## 🔄 Auto Purge Cache
 
