@@ -244,12 +244,12 @@ function WGR_create_advanced_cache_file()
         defined('WGR_CACHE_PREFIX') &&
         !empty(WGR_CACHE_PREFIX)
     ) {
-        // tạo file để include file advanced-cache thay vì copy -> tận dụng được code khi update
+        // Tạo file advanced-cache.php drop-in
         file_put_contents(ABSPATH . 'wp-content/advanced-cache.php', implode("\n", [
             '<?php',
             '',
             '/**',
-            ' * Simple Redis Object Cache',
+            ' * Advanced Page Cache with Redis',
             ' *',
             ' * @package WebGiaRe',
             ' * @link https://webgiare.org',
@@ -268,11 +268,9 @@ function WGR_create_advanced_cache_file()
             '',
         ]), LOCK_EX);
 
-        // 
         return true;
     }
 
-    // 
     return false;
 }
 

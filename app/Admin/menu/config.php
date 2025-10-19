@@ -154,6 +154,29 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 WGR_create_object_cache_file();
             }
         } else if ($option_name == 'wgr_advanced_cache') {
+            $wp_config_path = ABSPATH . 'wp-config.php';
+
+            if (is_file($wp_config_path) && is_writable($wp_config_path)) {
+                $wp_config_content = file_get_contents($wp_config_path);
+                $wp_cache_line = "define('WP_CACHE', true); // Added by WebGiaRe Advanced Cache";
+
+                // Tìm dòng chứa WP_CACHE (bất kể dạng nào: 'WP_CACHE' hoặc "WP_CACHE")
+                // Bao gồm cả dòng bị comment: // define('WP_CACHE', ...)
+                $pattern = '/.*[\'"]WP_CACHE[\'"].*\n?/i';
+                $has_wp_cache = false;
+                // Nếu đã có WP_CACHE thì tìm và xóa dòng đó trước
+                if (strpos($wp_config_content, "'WP_CACHE'") !== false || strpos($wp_config_content, '"WP_CACHE"') !== false) {
+                    $has_wp_cache = true;
+
+                    // Xóa dòng WP_CACHE
+                    $wp_config_content = preg_replace($pattern, '', $wp_config_content);
+                    // Xóa các dòng trống thừa nếu có
+                    $wp_config_content = preg_replace('/\n{2,}/', "\n", $wp_config_content);
+                }
+            } else {
+                echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
+            }
+
             if (empty($option_value)) {
                 // xóa file advanced-cache.php trong wp-content nếu có
                 if (
@@ -164,6 +187,21 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                     unlink(ABSPATH . 'wp-content/advanced-cache.php');
                 }
             } else {
+                // CHÈN MỚI vào đầu file ngay sau thẻ mở <?php
+                $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $wp_cache_line . "\n", $wp_config_content);
+
+                if ($new_content !== false) {
+                    if (file_put_contents($wp_config_path, $new_content)) {
+                        echo '<div class="notice notice-success"><p>✓ Đã chèn WP_CACHE vào wp-config.php</p></div>';
+                        echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                    } else {
+                        echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                    }
+                } else {
+                    echo '<div class="notice notice-error"><p>✗ Không tìm thấy vị trí phù hợp trong wp-config.php</p></div>';
+                }
+
+                // Tạo file advanced-cache.php
                 WGR_create_advanced_cache_file();
             }
         }
@@ -475,7 +513,7 @@ if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_save
 
     if (is_file($wp_config_path) && is_writable($wp_config_path)) {
         $wp_config_content = file_get_contents($wp_config_path);
-        $savequeries_line = "define('SAVEQUERIES', true);";
+        $savequeries_line = "define('SAVEQUERIES', true); // Added by WebGiaRe Object Cache";
 
         // Tìm dòng chứa SAVEQUERIES (bất kể dạng nào: 'SAVEQUERIES' hoặc "SAVEQUERIES")
         // Bao gồm cả dòng bị comment: // define('SAVEQUERIES', ...)
