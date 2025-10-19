@@ -233,3 +233,88 @@ function WGR_htaccess_deny_all($f)
     }
     return WGR_create_file($f, $c);
 }
+
+// tạo file advanced-cache.php để dùng redis cache
+function WGR_create_advanced_cache_file()
+{
+    // các tham số này được khai báo trong file wp-config.php
+    if (
+        defined('WGR_REDIS_CACHE') &&
+        WGR_REDIS_CACHE === true &&
+        defined('WGR_CACHE_PREFIX') &&
+        !empty(WGR_CACHE_PREFIX)
+    ) {
+        // tạo file để include file advanced-cache thay vì copy -> tận dụng được code khi update
+        file_put_contents(ABSPATH . 'wp-content/advanced-cache.php', implode("\n", [
+            '<?php',
+            '',
+            '/**',
+            ' * Simple Redis Object Cache',
+            ' *',
+            ' * @package WebGiaRe',
+            ' * @link https://webgiare.org',
+            ' * @license GNU General Public License v2 or later (GPLv2+)',
+            ' * Generated on ' . date_i18n('Y-m-d H:i:s'),
+            ' * From ' . $_SERVER['REQUEST_URI'],
+            ' *',
+            ' */',
+            '',
+            '// Prevent direct access',
+            'if (!defined(\'ABSPATH\')) {',
+            '    exit;',
+            '}',
+            '',
+            'include_once __DIR__ . \'/webgiareorg/app/Cache/advanced-cache.php\';',
+            '',
+        ]), LOCK_EX);
+
+        // 
+        return true;
+    }
+
+    // 
+    return false;
+}
+
+
+// tạo file object-cache.php để dùng redis cache
+function WGR_create_object_cache_file()
+{
+    // các tham số này được khai báo trong file wp-config.php
+    if (
+        defined('WGR_REDIS_CACHE') &&
+        WGR_REDIS_CACHE === true &&
+        defined('WGR_CACHE_PREFIX') &&
+        !empty(WGR_CACHE_PREFIX)
+    ) {
+        // tạo file để include file object-cache thay vì copy -> tận dụng được code khi update
+        file_put_contents(ABSPATH . 'wp-content/object-cache.php', implode("\n", [
+            '<?php',
+            '',
+            '/**',
+            ' * Simple Redis Object Cache',
+            ' *',
+            ' * @package WebGiaRe',
+            ' * @link https://webgiare.org',
+            ' * @license GNU General Public License v2 or later (GPLv2+)',
+            ' * Generated on ' . date_i18n('Y-m-d H:i:s'),
+            ' * From ' . $_SERVER['REQUEST_URI'],
+            ' *',
+            ' */',
+            '',
+            '// Prevent direct access',
+            'if (!defined(\'ABSPATH\')) {',
+            '    exit;',
+            '}',
+            '',
+            'include_once __DIR__ . \'/webgiareorg/app/Cache/object-cache.php\';',
+            '',
+        ]), LOCK_EX);
+
+        // 
+        return true;
+    }
+
+    // 
+    return false;
+}

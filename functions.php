@@ -14,6 +14,7 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
 }
 // khai báo các hằng số để phòng custom config không có
 defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
+defined('WGR_OBJECT_CACHE') || define('WGR_OBJECT_CACHE', '1');
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
 defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
 defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
@@ -62,6 +63,16 @@ foreach (glob(WGR_BASE_PATH . 'app/Shortcode/*.php') as $filename) {
 foreach (glob(WGR_BASE_PATH . 'ux-builder-setup/*.php') as $filename) {
     // echo $filename . '<br>' . "\n";
     include $filename;
+}
+
+// Tạo file advanced-cache.php nếu chưa có
+if (WGR_ADVANCED_CACHE == '1' && !is_file(ABSPATH . 'wp-content/advanced-cache.php')) {
+    WGR_create_advanced_cache_file();
+}
+
+// Tạo file object-cache.php nếu chưa có
+if (WGR_OBJECT_CACHE == '1' && !is_file(ABSPATH . 'wp-content/object-cache.php')) {
+    WGR_create_object_cache_file();
 }
 
 // nạp thêm code cho admin

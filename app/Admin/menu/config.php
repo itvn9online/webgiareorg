@@ -107,6 +107,7 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
 if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_options'], 'save_wgr_options_action')) {
     $options_to_save = [
         'wgr_advanced_cache' => isset($_POST['wgr_advanced_cache']) ? '1' : '0',
+        'wgr_object_cache' => isset($_POST['wgr_object_cache']) ? '1' : '0',
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
         'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
@@ -139,7 +140,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         }
 
         // Xóa các file liên quan khi thay đổi cấu hình cache
-        if ($option_name == 'wgr_advanced_cache') {
+        if ($option_name == 'wgr_object_cache') {
             if (empty($option_value)) {
                 // xóa file object-cache.php trong wp-content nếu có
                 if (
@@ -149,40 +150,25 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 ) {
                     unlink(ABSPATH . 'wp-content/object-cache.php');
                 }
-            } else if (
-                defined('WGR_REDIS_CACHE') &&
-                WGR_REDIS_CACHE === true &&
-                defined('WGR_CACHE_PREFIX') &&
-                !empty(WGR_CACHE_PREFIX)
-            ) {
-                // tạo file để include file object-cache thay vì copy -> tận dụng được code khi update
-                file_put_contents(ABSPATH . 'wp-content/object-cache.php', implode("\n", [
-                    '<?php',
-                    '',
-                    '/**',
-                    ' * Simple Redis Object Cache',
-                    ' *',
-                    ' * @package WebGiaRe',
-                    ' * @link https://webgiare.org',
-                    ' * @license GNU General Public License v2 or later (GPLv2+)',
-                    ' * Generated on ' . date_i18n('Y-m-d H:i:s'),
-                    ' * From ' . $_SERVER['REQUEST_URI'],
-                    ' *',
-                    ' */',
-                    '',
-                    '// Prevent direct access',
-                    'if (!defined(\'ABSPATH\')) {',
-                    '    exit;',
-                    '}',
-                    '',
-                    'include_once __DIR__ . \'/webgiareorg/app/Cache/object-cache.php\';',
-                    '',
-                ]), LOCK_EX);
+            } else {
+                WGR_create_object_cache_file();
+            }
+        } else if ($option_name == 'wgr_advanced_cache') {
+            if (empty($option_value)) {
+                // xóa file advanced-cache.php trong wp-content nếu có
+                if (
+                    is_file(ABSPATH . 'wp-content/advanced-cache.php') &&
+                    // đảm bảo file này được tạo ra bởi plugin webgiareorg
+                    strpos(file_get_contents(ABSPATH . 'wp-content/advanced-cache.php'), '/webgiareorg/') !== false
+                ) {
+                    unlink(ABSPATH . 'wp-content/advanced-cache.php');
+                }
+            } else {
+                WGR_create_advanced_cache_file();
             }
         }
-
-        // các trường chỉ ghi khi có giá trị
-        if (empty($option_value)) {
+        // các trường con lại chỉ ghi vào file custom_config.php khi có giá trị
+        else if (empty($option_value)) {
             continue;
         } else if ($option_name == 'cdn_base_url') {
             // Nếu không phải là URL hợp lệ hoặc trùng với giá trị mặc định thì bỏ qua
@@ -211,6 +197,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 
 // Lấy giá trị hiện tại của options
 $wgr_advanced_cache = get_option('wgr_advanced_cache', '0');
+$wgr_object_cache = get_option('wgr_object_cache', '1');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
 $wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
@@ -230,6 +217,19 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                         <label>
                             <input type="checkbox" name="wgr_advanced_cache" value="1" <?php checked($wgr_advanced_cache, '1'); ?>>
                             Sử dụng WGR Advanced Cache (khuyên dùng)
+                        </label>
+                        <p class="description">Được tối ưu riêng cho code của WebGiaRe.</p>
+                    </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">WGR Object Cache</th>
+                <td>
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" name="wgr_object_cache" value="1" <?php checked($wgr_object_cache, '1'); ?>>
+                            Sử dụng WGR Object Cache (khuyên dùng)
                         </label>
                         <p class="description">Được tối ưu riêng cho code của WebGiaRe.</p>
                     </fieldset>
@@ -376,8 +376,8 @@ if (defined('SAVEQUERIES') && SAVEQUERIES && !empty($wpdb->queries)) {
                         - <em>WGR_CACHE_PREFIX is not set</em>
                     <?php elseif (!defined('WGR_REDIS_HOST') || !defined('WGR_REDIS_PORT')): ?>
                         - <em>WGR_REDIS_HOST or WGR_REDIS_PORT is not set</em>
-                    <?php elseif (!defined('WGR_ADVANCED_CACHE') || WGR_ADVANCED_CACHE != '1'): ?>
-                        - <em>WGR_ADVANCED_CACHE is not enabled</em>
+                    <?php elseif (!defined('WGR_OBJECT_CACHE') || WGR_OBJECT_CACHE != '1'): ?>
+                        - <em>WGR_OBJECT_CACHE is not enabled</em>
                     <?php elseif (!class_exists('Redis')): ?>
                         - <em>Redis class is not available</em>
                     <?php else: ?>
