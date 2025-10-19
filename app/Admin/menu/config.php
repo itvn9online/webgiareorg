@@ -254,7 +254,7 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                     <fieldset>
                         <label>
                             <input type="checkbox" name="wgr_advanced_cache" value="1" <?php checked($wgr_advanced_cache, '1'); ?>>
-                            Sử dụng WGR Advanced Cache (khuyên dùng)
+                            Sử dụng WGR Advanced Cache
                         </label>
                         <p class="description">Được tối ưu riêng cho code của WebGiaRe.</p>
                     </fieldset>
