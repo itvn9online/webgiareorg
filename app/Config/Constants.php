@@ -10,9 +10,6 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', mt_rand(600, 900));
 //
 if (is_user_logged_in()) {
     define('USER_ID', get_current_user_id());
-
-    // duy trì cookie báo rằng đang đăng nhập -> duy trì 1 ngày để đảm bảo không bị chênh lệch múi giờ
-    setcookie('wgr_ebsuppercache_timeout', time() + EB_TIME_CACHE, time() + 86400, '/');
 } else {
     define('USER_ID', 0);
 }

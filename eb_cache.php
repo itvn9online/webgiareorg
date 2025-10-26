@@ -98,29 +98,6 @@ defined('EB_CACHE_PREFIX') || define('EB_CACHE_PREFIX', strtolower(str_replace([
 // 
 define('EB_PREFIX_CACHE', EB_CACHE_PREFIX . $cache_prefix);
 
-// chỉ cache với phương thức GET
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // nếu tồn tại cookie wgr_ebsuppercache_timeout -> xem thời hạn của cookie còn không
-    $last_update_logeg_cache = isset($_COOKIE['wgr_ebsuppercache_timeout']) ? $_COOKIE['wgr_ebsuppercache_timeout'] : 0;
-    //echo date( 'Y-m-d H:i:s', $last_update_logeg_cache ) . '<br>' . "\n";
-    //echo $last_update_logeg_cache . '<br>' . "\n";
-
-    // nếu còn hạn thì bỏ qua
-    if ($last_update_logeg_cache > time()) {
-        // đăng nhập rồi thì bỏ qua -> không nạp cache
-        //echo 'wgr_ebsuppercache_timeout';
-    }
-    // nếu cache còn hiệu lức -> in ra luôn và thoát
-    else {
-        WGR_display(WGR_get_cache_file());
-
-        /*
-        $cache_content = WGR_my_cache(WGR_get_cache_file());
-        if ($cache_content !== false) {
-        echo $cache_content;
-        exit();
-        }
-        */
-        define('EB_FALSE_CACHE', 1);
-    }
-}
+// hiển thị cache nếu có
+WGR_display(WGR_get_cache_file());
+define('EB_FALSE_CACHE', 1);

@@ -18,7 +18,7 @@ if (USER_ID > 0) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but not caching requests by known users';
 }
 // chỉ cache với phương thức POST
-else if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+else if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) running in GET method only';
 }
 // nếu đang dùng cache của đơn vị khác -> cũng hủy cache luôn

@@ -115,6 +115,19 @@ function WGR_check_cache_content($content)
 
 function WGR_display($f)
 {
+    // Don't cache POST requests
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        return false;
+    }
+
+    // Check for WordPress auth cookies
+    foreach ($_COOKIE as $cookie_name => $cookie_value) {
+        // Nếu có cookie đăng nhập thì không sử dụng cache
+        if (strpos($cookie_name, 'wordpress_logged_in_') === 0) {
+            return false;
+        }
+    }
+
     // cache qua redis (nếu có)
     if (EB_REDIS_CACHE == true) {
         $rd = new Redis();
