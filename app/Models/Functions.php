@@ -33,7 +33,7 @@ function WGR_get_myaccount_page()
 
     //
     $arr = [];
-    if (USER_ID > 0) {
+    if (WGR_USER_ID > 0) {
         $arr = [
             '' => 'Trang tài khoản',
             get_option('woocommerce_myaccount_orders_endpoint') => 'Đơn hàng',

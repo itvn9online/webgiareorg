@@ -87,7 +87,7 @@ if (is_admin()) {
 // các chức năng chỉ chạy ngoài trang khách
 else {
     // thay đổi header trang login
-    if (USER_ID === 0) {
+    if (WGR_USER_ID < 1) {
         include WGR_BASE_PATH . 'app/Helpers/LoginMod.php';
     }
 

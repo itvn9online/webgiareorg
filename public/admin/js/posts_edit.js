@@ -3,7 +3,7 @@ function WGR_find_taxonomy_for_edit(tax_id) {
 	let tax = tax_id + "div";
 	// lượng dữ liệu nhiều chút thì mới hỗ trợ tìm kiếm
 	if (
-		jQuery("#" + tax).length === 0 ||
+		jQuery("#" + tax).length < 1 ||
 		jQuery("#" + tax_id + "checklist li").length < 20
 	) {
 		return false;
@@ -168,7 +168,7 @@ if (top == self) {
 		//
 		jQuery(".click-set-nhanban").click(function () {
 			// sử dụng plugin Post duplicator
-			if (jQuery("#duplicator").length === 0) {
+			if (jQuery("#duplicator").length < 1) {
 				jQuery(".show-if-duplicator-null").fadeIn();
 
 				setTimeout(function () {

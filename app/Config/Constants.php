@@ -9,11 +9,11 @@ defined('EB_TIME_CACHE') || define('EB_TIME_CACHE', mt_rand(600, 900));
 
 //
 if (is_user_logged_in()) {
-    define('USER_ID', get_current_user_id());
+    define('WGR_USER_ID', get_current_user_id());
 } else {
-    define('USER_ID', 0);
+    define('WGR_USER_ID', 0);
 }
-// echo USER_ID . '<br>' . "\n";
+// echo WGR_USER_ID . '<br>' . "\n";
 
 /**
  * URL động cho website để có thể chạy trên nhiều tên miền khác nhau mà không cần config lại

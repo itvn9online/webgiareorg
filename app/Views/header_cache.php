@@ -13,8 +13,8 @@ $why_ebcache_not_active = '';
 $active_using_ebcache = '';
 
 // không cache khi user đang đăng nhập
-//echo USER_ID . '<br>' . "\n";
-if (USER_ID > 0) {
+// echo WGR_USER_ID . '<br>' . "\n";
+if (WGR_USER_ID > 0) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but not caching requests by known users';
 }
 // chỉ cache với phương thức POST
