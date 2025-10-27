@@ -256,7 +256,7 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                             <input type="checkbox" name="wgr_advanced_cache" value="1" <?php checked($wgr_advanced_cache, '1'); ?>>
                             Sử dụng WGR Advanced Cache
                         </label>
-                        <p class="description">Được tối ưu riêng cho code của WebGiaRe.</p>
+                        <p class="description">Được tối ưu riêng cho code của WebGiaRe. Không thể sử dụng chung với các plugin cache khác.</p>
                     </fieldset>
                 </td>
             </tr>
@@ -269,7 +269,7 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                             <input type="checkbox" name="wgr_object_cache" value="1" <?php checked($wgr_object_cache, '1'); ?>>
                             Sử dụng WGR Object Cache (khuyên dùng)
                         </label>
-                        <p class="description">Được tối ưu riêng cho code của WebGiaRe.</p>
+                        <p class="description">Được tối ưu riêng cho code của WebGiaRe. Không thể sử dụng chung với các plugin cache khác.</p>
                     </fieldset>
                 </td>
             </tr>
