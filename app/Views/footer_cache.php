@@ -27,7 +27,7 @@ if (WHY_EBCACHE_DISABLE == '') {
                 //
                 if (defined('EB_FALSE_CACHE') || WGR_my_cache($filename) === false) {
                     //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
-                    WGR_my_cache($filename, WGR_remove_html_empty_line($main_content) . WGR_builder_eb_cache_note(ENABLE_EBCACHE), EB_TIME_CACHE);
+                    WGR_my_cache($filename, WGR_remove_html_empty_line($main_content) . WGR_builder_eb_cache_note(ENABLE_EBCACHE . ':' . basename($filename, '.txt')), EB_TIME_CACHE);
                 }
             } else {
                 echo '<!-- WGR_get_cache_file not exists -->';
