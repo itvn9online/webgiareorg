@@ -22,6 +22,31 @@ else if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) running in GET method only';
 }
 // nếu đang dùng cache của đơn vị khác -> cũng hủy cache luôn
+else if (defined('WGR_DEBUG')) {
+    // nếu cần chính xác cả múi giờ thì dùng current_time('timestamp'), nhưng sẽ cần cập nhật cả ở đầu vào lúc tạo file
+    if (WGR_DEBUG > time()) {
+        $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but WGR_DEBUG is enable (auto ending after ' . number_format(WGR_DEBUG - time()) . ' s). If you want to using EchBay Cache, please disable WGR_DEBUG in Admin - WebGiaRe - Cấu hình website - WGR Debug';
+    } else {
+        $wgr_config_path = WGR_CHILD_PATH . 'custom_config.php';
+        // xoá dòng WGR_DEBUG trong file custom_config.php
+        if (is_file($wgr_config_path)) {
+            $file_content = file($wgr_config_path);
+            $new_content = '';
+            $has_wgr_cache = false;
+            foreach ($file_content as $line) {
+                if (strpos($line, 'WGR_DEBUG') === false) {
+                    $new_content .= $line;
+                } else {
+                    $has_wgr_cache = true;
+                }
+            }
+            if ($has_wgr_cache) {
+                file_put_contents($wgr_config_path, $new_content, LOCK_EX);
+            }
+        }
+    }
+}
+// nếu đang dùng cache của đơn vị khác -> cũng hủy cache luôn
 else if (defined('WP_CACHE') && WP_CACHE !== false) {
     $why_ebcache_not_active = 'EchBay Cache (ebcache) is enable, but an another plugin cache is enable too. If you want to using EchBay Cache, please set WP_CACHE = false or comment WP_CACHE in file wp-config.php';
 }

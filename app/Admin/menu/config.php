@@ -106,6 +106,7 @@ if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_c
 // Xử lý lưu options
 if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_options'], 'save_wgr_options_action')) {
     $options_to_save = [
+        'wgr_debug' => isset($_POST['wgr_debug']) ? '1' : '0',
         'wgr_advanced_cache' => isset($_POST['wgr_advanced_cache']) ? '1' : '0',
         'wgr_object_cache' => isset($_POST['wgr_object_cache']) ? '1' : '0',
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
@@ -134,7 +135,23 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         ' */',
         '',
     ]) . "\n", LOCK_EX);
+
+    // 
     foreach ($options_to_save as $option_name => $option_value) {
+        // với option này thì không cần lưu vào database
+        if ($option_name == 'wgr_debug') {
+            if (!empty($option_value)) {
+                // Ghi vào file config thời hạn kích hoạt debug (4 giờ từ lúc hiện tại)
+                // $bon_gio_sau = current_time('timestamp') + (4 * HOUR_IN_SECONDS);
+                $bon_gio_sau = strtotime('+4 hours');
+                file_put_contents($wgr_config_path, 'define(\'' . strtoupper($option_name) . '\', ' . $bon_gio_sau . '); // ' . date('Y-m-d H:i:s', $bon_gio_sau) . "\n", FILE_APPEND);
+
+                $success_count++;
+            }
+            continue;
+        }
+
+        // 
         if (update_option($option_name, $option_value)) {
             $success_count++;
         }
@@ -157,52 +174,57 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
             $wp_config_path = ABSPATH . 'wp-config.php';
 
             if (is_file($wp_config_path) && is_writable($wp_config_path)) {
-                $wp_config_content = file_get_contents($wp_config_path);
-                $wp_cache_line = "define('WP_CACHE', true); // Added by WebGiaRe Advanced Cache";
-
-                // Tìm dòng chứa WP_CACHE (bất kể dạng nào: 'WP_CACHE' hoặc "WP_CACHE")
-                // Bao gồm cả dòng bị comment: // define('WP_CACHE', ...)
-                $pattern = '/.*[\'"]WP_CACHE[\'"].*\n?/i';
+                $file_content = file($wp_config_path);
+                $wp_config_content = '';
                 $has_wp_cache = false;
-                // Nếu đã có WP_CACHE thì tìm và xóa dòng đó trước
-                if (strpos($wp_config_content, "'WP_CACHE'") !== false || strpos($wp_config_content, '"WP_CACHE"') !== false) {
-                    $has_wp_cache = true;
+                foreach ($file_content as $line) {
+                    if (strpos($line, 'WP_CACHE') === false) {
+                        $wp_config_content .= $line;
+                    } else {
+                        $has_wp_cache = true;
+                    }
+                }
 
-                    // Xóa dòng WP_CACHE
-                    $wp_config_content = preg_replace($pattern, '', $wp_config_content);
-                    // Xóa các dòng trống thừa nếu có
-                    $wp_config_content = preg_replace('/\n{2,}/', "\n", $wp_config_content);
+                if (empty($option_value)) {
+                    // xóa file advanced-cache.php trong wp-content nếu có
+                    if (
+                        is_file(ABSPATH . 'wp-content/advanced-cache.php') &&
+                        // đảm bảo file này được tạo ra bởi plugin webgiareorg
+                        strpos(file_get_contents(ABSPATH . 'wp-content/advanced-cache.php'), '/webgiareorg/') !== false
+                    ) {
+                        unlink(ABSPATH . 'wp-content/advanced-cache.php');
+                    }
+
+                    // Nếu đã có WP_CACHE thì ghi lại nội dung đã chỉnh sửa
+                    if ($has_wp_cache) {
+                        if (file_put_contents($wp_config_path, $wp_config_content)) {
+                            echo '<div class="notice notice-success"><p>✓ Đã xóa WP_CACHE khỏi wp-config.php</p></div>';
+                            // echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                        } else {
+                            echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                        }
+                    }
+                } else {
+                    // CHÈN MỚI vào đầu file ngay sau thẻ mở <?php
+                    $wp_cache_line = "define('WP_CACHE', true); // Added by WebGiaRe Advanced Cache";
+                    $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $wp_cache_line . "\n", $wp_config_content);
+
+                    if ($new_content !== false) {
+                        if (file_put_contents($wp_config_path, $new_content)) {
+                            echo '<div class="notice notice-success"><p>✓ Đã chèn WP_CACHE vào wp-config.php</p></div>';
+                            // echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                        } else {
+                            echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                        }
+                    } else {
+                        echo '<div class="notice notice-error"><p>✗ Không tìm thấy vị trí phù hợp trong wp-config.php</p></div>';
+                    }
+
+                    // Tạo file advanced-cache.php
+                    WGR_create_advanced_cache_file();
                 }
             } else {
                 echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
-            }
-
-            if (empty($option_value)) {
-                // xóa file advanced-cache.php trong wp-content nếu có
-                if (
-                    is_file(ABSPATH . 'wp-content/advanced-cache.php') &&
-                    // đảm bảo file này được tạo ra bởi plugin webgiareorg
-                    strpos(file_get_contents(ABSPATH . 'wp-content/advanced-cache.php'), '/webgiareorg/') !== false
-                ) {
-                    unlink(ABSPATH . 'wp-content/advanced-cache.php');
-                }
-            } else {
-                // CHÈN MỚI vào đầu file ngay sau thẻ mở <?php
-                $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $wp_cache_line . "\n", $wp_config_content);
-
-                if ($new_content !== false) {
-                    if (file_put_contents($wp_config_path, $new_content)) {
-                        echo '<div class="notice notice-success"><p>✓ Đã chèn WP_CACHE vào wp-config.php</p></div>';
-                        echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
-                    } else {
-                        echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
-                    }
-                } else {
-                    echo '<div class="notice notice-error"><p>✗ Không tìm thấy vị trí phù hợp trong wp-config.php</p></div>';
-                }
-
-                // Tạo file advanced-cache.php
-                WGR_create_advanced_cache_file();
             }
         }
         // các trường con lại chỉ ghi vào file custom_config.php khi có giá trị
@@ -234,6 +256,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 }
 
 // Lấy giá trị hiện tại của options
+$wgr_debug = get_option('wgr_debug', '0');
 $wgr_advanced_cache = get_option('wgr_advanced_cache', '0');
 $wgr_object_cache = get_option('wgr_object_cache', '1');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
@@ -248,6 +271,19 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
 
     <table class="form-table" role="presentation">
         <tbody>
+            <tr>
+                <th scope="row">WGR Debug</th>
+                <td>
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" name="wgr_debug" value="1">
+                            Kích hoạt chế độ WGR Debug
+                        </label>
+                        <p class="description">Khi kích hoạt chế độ này, cache sẽ được bỏ qua trong vòng 4 giờ kể từ lúc kích hoạt.</p>
+                    </fieldset>
+                </td>
+            </tr>
+
             <tr>
                 <th scope="row">WGR Advanced Cache</th>
                 <td>
@@ -512,26 +548,21 @@ if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_save
     $wp_config_path = ABSPATH . 'wp-config.php';
 
     if (is_file($wp_config_path) && is_writable($wp_config_path)) {
-        $wp_config_content = file_get_contents($wp_config_path);
-        $savequeries_line = "define('SAVEQUERIES', true); // Added by WebGiaRe Object Cache";
-
-        // Tìm dòng chứa SAVEQUERIES (bất kể dạng nào: 'SAVEQUERIES' hoặc "SAVEQUERIES")
-        // Bao gồm cả dòng bị comment: // define('SAVEQUERIES', ...)
-        $pattern = '/.*[\'"]SAVEQUERIES[\'"].*\n?/i';
+        $file_content = file($wp_config_path);
+        $wp_config_content = '';
         $has_savequeries = false;
-        // Nếu đã có SAVEQUERIES thì tìm và xóa dòng đó trước
-        if (strpos($wp_config_content, "'SAVEQUERIES'") !== false || strpos($wp_config_content, '"SAVEQUERIES"') !== false) {
-            $has_savequeries = true;
-
-            // Xóa dòng SAVEQUERIES
-            $wp_config_content = preg_replace($pattern, '', $wp_config_content);
-            // Xóa các dòng trống thừa nếu có
-            $wp_config_content = preg_replace('/\n{2,}/', "\n", $wp_config_content);
+        foreach ($file_content as $line) {
+            if (strpos($line, 'SAVEQUERIES') === false) {
+                $wp_config_content .= $line;
+            } else {
+                $has_savequeries = true;
+            }
         }
 
         // Yêu cầu BẬT SAVEQUERIES
         if ($_POST['toggle_savequeries'] == 'enable') {
             // CHÈN MỚI vào đầu file ngay sau thẻ mở <?php
+            $savequeries_line = "define('SAVEQUERIES', true); // Added by WebGiaRe Object Cache";
             $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $savequeries_line . "\n", $wp_config_content);
 
             if ($new_content !== false) {

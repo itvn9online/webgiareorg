@@ -13,6 +13,7 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
     include WGR_CHILD_PATH . 'custom_config.php';
 }
 // khai báo các hằng số để phòng custom config không có
+// defined('WGR_DEBUG') || define('WGR_DEBUG', 0);
 defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
 defined('WGR_OBJECT_CACHE') || define('WGR_OBJECT_CACHE', '1');
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
