@@ -316,3 +316,22 @@ function WGR_create_object_cache_file()
     // 
     return false;
 }
+
+// tìm dòng define('CONSTANT_NAME', ...) trong 1 chuỗi
+function WGR_find_define_constant($str, $constant_name)
+{
+    if (
+        // chuỗi bắt đầu bằng define
+        strpos(trim($str), 'define') === 0 &&
+        // có chứa tên constant
+        strpos($str, $constant_name) !== false &&
+        // và các ký tự bắt buộc khác
+        strpos($str, '(') !== false &&
+        strpos($str, ',') !== false &&
+        strpos($str, ')') !== false &&
+        strpos($str, ';') !== false
+    ) {
+        return true;
+    }
+    return false;
+}

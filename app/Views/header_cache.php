@@ -29,12 +29,13 @@ else if (defined('WGR_DEBUG')) {
     } else {
         $wgr_config_path = WGR_CHILD_PATH . 'custom_config.php';
         // xoá dòng WGR_DEBUG trong file custom_config.php
-        if (is_file($wgr_config_path)) {
+        if (is_file($wgr_config_path) && is_writable($wgr_config_path)) {
             $file_content = file($wgr_config_path);
             $new_content = '';
             $has_wgr_cache = false;
             foreach ($file_content as $line) {
-                if (strpos($line, 'WGR_DEBUG') === false) {
+                // nếu chuỗi có chứa WGR_DEBUG và các ký tự cơ bản khác
+                if (WGR_find_define_constant($line, 'WGR_DEBUG') === false) {
                     $new_content .= $line;
                 } else {
                     $has_wgr_cache = true;

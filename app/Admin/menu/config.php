@@ -178,7 +178,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 $wp_config_content = '';
                 $has_wp_cache = false;
                 foreach ($file_content as $line) {
-                    if (strpos($line, 'WP_CACHE') === false) {
+                    if (WGR_find_define_constant($line, 'WP_CACHE') === false) {
                         $wp_config_content .= $line;
                     } else {
                         $has_wp_cache = true;
@@ -552,7 +552,7 @@ if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_save
         $wp_config_content = '';
         $has_savequeries = false;
         foreach ($file_content as $line) {
-            if (strpos($line, 'SAVEQUERIES') === false) {
+            if (WGR_find_define_constant($line, 'SAVEQUERIES') === false) {
                 $wp_config_content .= $line;
             } else {
                 $has_savequeries = true;
