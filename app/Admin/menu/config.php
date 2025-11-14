@@ -39,67 +39,6 @@ if (is_file($my_config_php)) {
     <textarea rows="<?php echo count(explode("\n", $my_config_content)); ?>" class="large-text code" placeholder="My config content" readonly disabled><?php echo esc_html($my_config_content); ?></textarea>
 </div>
 <br>
-<!-- Cleanup site cache -->
-<?php
-
-// xóa cache khi chạy qua phương thức POST (chỉ khi không phải save robots)
-if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_cache'], 'cleanup_cache_action')) {
-    // xóa cache theo redis nếu có
-    if (is_file($my_config_php)) {
-        include $my_config_php;
-
-        // 
-        if (defined('EB_REDIS_CACHE') && EB_REDIS_CACHE == true && !empty(phpversion('redis'))) {
-            // print_r(EB_REDIS_CACHE);
-
-            // 
-            try {
-                $rd = new Redis();
-                $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
-
-                // chỉ lấy cache theo prefix của từng tên miền
-                if (defined('WGR_CACHE_PREFIX')) {
-                    $cache_prefix = WGR_CACHE_PREFIX;
-                } else {
-                    $cache_prefix = strtolower(str_replace([
-                        'www.',
-                        '.'
-                    ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
-                }
-                $cache_prefix .= '*';
-                echo 'Cache prefix: ' . $cache_prefix . '<br>' . "\n";
-
-                // 
-                $keys = $rd->keys($cache_prefix);
-                // print_r($keys);
-                if ($keys) {
-                    $rd->del($keys);
-                }
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-        } else {
-            echo 'no redis' . '<br>' . "\n";
-        }
-    } else {
-        echo 'No config file: ' . $my_config_php . '<br>' . "\n";
-    }
-
-    // xong mới xóa cache trong file
-    echo 'Xóa cache trong thư mục: ' . $root_dir_cache . '<br>' . "\n";
-    WGR_deleteDirectory($root_dir_cache);
-}
-
-?>
-<h2>Cleanup site cache</h2>
-<form action="" method="post" onsubmit="return confirm('Cleanup all site cache?');">
-    <?php wp_nonce_field('cleanup_cache_action', '_wpnonce_cleanup_cache'); ?>
-    <button type="submit" name="cleanup_cache" class="button button-primary button-large">Dọn dẹp WGR Cache</button>
-</form>
-<br>
-<!-- END Cleanup site cache -->
-
-<hr>
 
 <!-- WGR Options Form -->
 <?php
@@ -710,4 +649,67 @@ if (isset($_POST['save_robots']) && wp_verify_nonce($_POST['_wpnonce_robots'], '
         </ol>
     </div>
 </form>
+<br>
 <!-- END Edit robots.txt -->
+
+<!-- Cleanup site cache -->
+<?php
+
+// xóa cache khi chạy qua phương thức POST (chỉ khi không phải save robots)
+if (isset($_POST['cleanup_cache']) && wp_verify_nonce($_POST['_wpnonce_cleanup_cache'], 'cleanup_cache_action')) {
+    // xóa cache theo redis nếu có
+    if (is_file($my_config_php)) {
+        include $my_config_php;
+
+        // 
+        if (defined('EB_REDIS_CACHE') && EB_REDIS_CACHE == true && !empty(phpversion('redis'))) {
+            // print_r(EB_REDIS_CACHE);
+
+            // 
+            try {
+                $rd = new Redis();
+                $rd->connect(WGR_REDIS_HOST, WGR_REDIS_PORT);
+
+                // chỉ lấy cache theo prefix của từng tên miền
+                if (defined('WGR_CACHE_PREFIX')) {
+                    $cache_prefix = WGR_CACHE_PREFIX;
+                } else {
+                    $cache_prefix = strtolower(str_replace([
+                        'www.',
+                        '.'
+                    ], '', str_replace('-', '_', explode(':', $_SERVER['HTTP_HOST'])[0])));
+                }
+                $cache_prefix .= '*';
+                echo 'Cache prefix: ' . $cache_prefix . '<br>' . "\n";
+
+                // 
+                $keys = $rd->keys($cache_prefix);
+                // print_r($keys);
+                if ($keys) {
+                    $rd->del($keys);
+                }
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        } else {
+            echo 'no redis' . '<br>' . "\n";
+        }
+    } else {
+        echo 'No config file: ' . $my_config_php . '<br>' . "\n";
+    }
+
+    // xong mới xóa cache trong file
+    echo 'Xóa cache trong thư mục: ' . $root_dir_cache . '<br>' . "\n";
+    WGR_deleteDirectory($root_dir_cache);
+}
+
+?>
+<h2>Cleanup site cache</h2>
+<form action="" method="post" onsubmit="return confirm('Cleanup all site cache?');">
+    <?php wp_nonce_field('cleanup_cache_action', '_wpnonce_cleanup_cache'); ?>
+    <button type="submit" name="cleanup_cache" class="button button-primary button-large">Dọn dẹp WGR Cache</button>
+</form>
+<br>
+<!-- END Cleanup site cache -->
+
+<hr>
