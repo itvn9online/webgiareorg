@@ -15,17 +15,22 @@ global $wpdb;
 // print_r(explode('//', get_home_url()));
 // var_dump(strpos(explode('//', get_home_url())[1], '/'));
 
-// 
+// danh sách plugin trên github
 $githubs_plugin = [
-    'devvn-quick-buy' => 'https://github.com/itvn9online/devvn-quick-buy',
-    'devvn-woocommerce-reviews' => 'https://github.com/itvn9online/devvn-woocommerce-reviews',
+    'echbay-ai-optimize-seo' => '',
+    'echbay-viettelpost-woocommerce' => '',
+    'smtp-config-manager' => '',
+    'mail-marketing-importer' => '',
+    'echbay-email-queue' => '',
+    'devvn-quick-buy' => '',
+    'devvn-woocommerce-reviews' => '',
 ];
 
 /**
  * Nếu tồn tại tham số download_github_plugin thì sẽ tải plugin từ github về
  * Ví dụ:
- * wp-admin/admin.php?page=eb-about&download_github_plugin=devvn-quick-buy
- * Sẽ tải plugin devvn-quick-buy từ github về thư mục wp-content/plugins/devvn-quick-buy-main
+ * wp-admin/admin.php?page=eb-about&download_github_plugin=plugin-in-github
+ * Sẽ tải plugin plugin-in-github từ github về thư mục wp-content/plugins/plugin-in-github-main
  * https://github.com/itvn9online/$_GET['download_github_plugin']/archive/refs/heads/main.zip
  */
 if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plugin'])) {
@@ -35,6 +40,11 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
         if (is_file($dest)) {
             unlink($dest);
         }
+
+        if ($githubs_plugin[$plugin_name] == '') {
+            $githubs_plugin[$plugin_name] = 'https://github.com/itvn9online/' . $plugin_name;
+        }
+
         if (copy($githubs_plugin[$plugin_name] . '/archive/refs/heads/main.zip', $dest)) {
             echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . "\n";
             echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
@@ -443,19 +453,32 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 'wp-mail-smtp' => 'WP Mail SMTP',
                 'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
                 // plugin in github
-                'devvn-quick-buy' => 'devvn-quick-buy',
-                'devvn-woocommerce-reviews' => 'devvn-woocommerce-reviews',
+                'echbay-ai-optimize-seo' => '',
+                'echbay-viettelpost-woocommerce' => '',
+                'smtp-config-manager' => '',
+                'mail-marketing-importer' => '',
+                'echbay-email-queue' => '',
+                'devvn-quick-buy' => '',
+                'devvn-woocommerce-reviews' => '',
             ] as $k => $v
         ) {
+            if ($v == '') {
+                $v = str_replace('-', ' ', ucfirst($k));
+            }
+
             // nếu thư mục code có rồi thì bỏ qua
             if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
         ?>
                 <li><?php echo $v; ?></li>
                 <?php
             } else if (isset($githubs_plugin[$k])) {
+                if ($githubs_plugin[$k] == '') {
+                    $githubs_plugin[$k] = 'https://github.com/itvn9online/' . $k;
+                }
+
                 if (is_dir(WP_PLUGIN_DIR . '/' . $k . '-main')) {
                 ?>
-                    <li><?php echo $v; ?></li>
+                    <li><a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
                 <?php
                 } else {
                 ?>
