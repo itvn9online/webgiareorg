@@ -384,11 +384,16 @@ function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
         $c = file_get_contents($filename, 1);
-        // nếu file không có nội dung gì thì xóa luôn file đí -> tối ưu cho frontend đỡ phải nạp
+        // nếu file không có nội dung gì thì xóa luôn file đi -> tối ưu cho frontend đỡ phải nạp
         if (trim($c) == false) {
             unlink($filename);
             continue;
         }
+
+        // backup lại file js gốc trước khi optimize
+        WGR_create_file($filename . '.bak', $c, ['ftp' => 1]);
+
+        // optimize nội dung file js
         $c = WGR_update_core_remove_js_comment($c);
         if ($c === false) {
             echo 'continue (' . basename($filename) . ') <br>' . "\n";
@@ -546,11 +551,16 @@ function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
         $c = file_get_contents($filename, 1);
-        // nếu file không có nội dung gì thì xóa luôn file đí -> tối ưu cho frontend đỡ phải nạp
+        // nếu file không có nội dung gì thì xóa luôn file đi -> tối ưu cho frontend đỡ phải nạp
         if (trim($c) == false) {
             unlink($filename);
             continue;
         }
+
+        // backup lại file css gốc trước khi optimize
+        WGR_create_file($filename . '.bak', $c, ['ftp' => 1]);
+
+        // optimize nội dung file css
         $c = WGR_remove_css_multi_comment($c);
         //var_dump( $c );
         if ($c === false) {
@@ -570,6 +580,57 @@ function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
     return true;
 }
 
+/**
+ * Hiển thị danh sach các file css đã được backup
+ */
+function WGR_list_backup_css($path, $dir = 'css', $type = 'css.bak')
+{
+    $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
+    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    if (!is_dir($path)) {
+        return false;
+    }
+    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+
+    //
+    foreach (glob($path . '/*.' . $type) as $filename) {
+        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    }
+
+    //
+    return true;
+}
+
+/**
+ * Hiển thị danh sach các file js đã được backup
+ */
+function WGR_list_backup_js($path, $dir = 'javascript', $type = 'js.bak')
+{
+    return WGR_list_backup_css($path, $dir, $type);
+}
+
+/**
+ * Hiển thị danh sach các file css, js đã được backup
+ */
+function WGR_list_backup_css_js()
+{
+    // tính năng này không hoạt động trên localhost
+    if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        return false;
+    }
+
+    // 
+    WGR_list_backup_css(WGR_BASE_PATH . 'public', 'css', 'css.bak');
+    WGR_list_backup_js(WGR_BASE_PATH . 'public', 'javascript', 'js.bak');
+
+    // css, js của từng theme
+    WGR_list_backup_css(WGR_CHILD_PATH, 'css', 'css.bak');
+    WGR_list_backup_js(WGR_CHILD_PATH, 'javascript', 'js.bak');
+}
+
+/**
+ * Optimize css, js file
+ */
 function WGR_optimize_css_js()
 {
     // tính năng này không hoạt động trên localhost
@@ -577,10 +638,10 @@ function WGR_optimize_css_js()
         return false;
     }
     $last_optimize_code = WGR_BASE_PATH . 'last-optimize-code.txt';
-    //echo $last_optimize_code . '<br>' . "\n";
+    // echo $last_optimize_code . '<br>' . "\n";
     // giãn cách optmize -> trong thời gian cho phép thì hủy bỏ việc optmize luôn
     if (WGR_cache_expire($last_optimize_code)) {
-        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+        // echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
         return false;
     }
 

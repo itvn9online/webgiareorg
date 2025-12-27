@@ -415,6 +415,10 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
 </div>
 <br />
 <!-- -->
+<?php
+WGR_list_backup_css_js();
+?>
+<!-- -->
 <div>
     <h3>This theme recommends the following plugins</h3>
     <ol id="wgr-recommends-following-plugins">
