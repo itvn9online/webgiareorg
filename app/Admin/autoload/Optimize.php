@@ -627,9 +627,9 @@ function WGR_list_backup_css_js()
 
     // css, js của từng theme
     WGR_list_backup_css(WGR_CHILD_PATH);
-    WGR_list_backup_css(WGR_CHILD_PATH, 'ui');
+    // WGR_list_backup_css(WGR_CHILD_PATH, 'ui');
     WGR_list_backup_js(WGR_CHILD_PATH);
-    WGR_list_backup_js(WGR_CHILD_PATH, 'ui');
+    // WGR_list_backup_js(WGR_CHILD_PATH, 'ui');
 }
 
 /**
@@ -663,9 +663,9 @@ function WGR_optimize_css_js()
 
     // css, js của từng theme
     WGR_optimize_action_css(WGR_CHILD_PATH);
-    WGR_optimize_action_css(WGR_CHILD_PATH, 'ui');
+    // WGR_optimize_action_css(WGR_CHILD_PATH, 'ui');
     WGR_optimize_action_js(WGR_CHILD_PATH);
-    WGR_optimize_action_js(WGR_CHILD_PATH, 'ui');
+    // WGR_optimize_action_js(WGR_CHILD_PATH, 'ui');
 
     // optimize phần view -> optimize HTML
     if (WGR_optimize_action_views(WGR_BASE_PATH . 'app') === true) {
