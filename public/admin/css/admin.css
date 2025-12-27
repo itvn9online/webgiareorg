@@ -47,3 +47,10 @@
 .redcolor a {
     color: #f00 !important
 }
+
+#target_eb_iframe {
+    position: absolute;
+    top: -800px;
+    left: -999px;
+    width: 99%;
+}

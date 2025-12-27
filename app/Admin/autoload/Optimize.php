@@ -100,7 +100,7 @@ function WGR_update_core_remove_php_multi_comment($fileStr)
 function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
 {
     $path = $path . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    // echo $path . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path)) {
         return false;
     }
@@ -109,11 +109,11 @@ function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
             return false;
         }
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    echo '<strong>' . $path . '</strong>:<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     // optimize file php
     foreach (glob($path . '/*.php') as $filename) {
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+        echo $filename . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = WGR_update_core_remove_php_multi_comment(WGR_update_core_remove_php_comment(file_get_contents($filename, 1)));
@@ -126,7 +126,7 @@ function WGR_optimize_action_views($path, $dir = 'Views', $check_active = true)
 
     // optimize file html
     foreach (glob($path . '/*.html') as $filename) {
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+        echo $filename . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = WGR_update_core_remove_html_comment(file_get_contents($filename, 1));
@@ -375,11 +375,11 @@ function WGR_update_core_remove_js_comment($a)
 function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
 {
     $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    //echo $path . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path) || WGR_check_active_optimize($path . '/') !== true) {
         return false;
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    echo '<strong>' . $path . '</strong>:<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
@@ -399,7 +399,7 @@ function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
             echo 'continue (' . basename($filename) . ') <br>' . "\n";
             continue;
         }
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+        echo $filename . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         if (!empty($c)) {
@@ -518,7 +518,7 @@ function WGR_remove_css_not_using($str)
         $str[$k] = $v;
     }
     $str = implode('', $str);
-    //die(__CLASS__ . ':' . __LINE__);
+    //die(__FUNCTION__ . ':' . __LINE__);
 
     //
     return $str;
@@ -527,9 +527,9 @@ function WGR_remove_css_not_using($str)
 // kiểm tra xem có sự tồn tại của file kích hoạt chế độ optimize không
 function WGR_check_active_optimize($path)
 {
-    //echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    //echo '<strong>' . $path . '</strong>:<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     $full_path = $path . 'active-optimize.txt';
-    //echo $full_path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    // echo $full_path . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (is_file($full_path)) {
         // thử xóa file optimize -> XÓA được thì mới trả về true -> đảm bảo có quyền chỉnh sửa các file trong này
         if (unlink($full_path)) {
@@ -542,11 +542,11 @@ function WGR_check_active_optimize($path)
 function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
 {
     $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    // echo $path . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path) || WGR_check_active_optimize($path . '/') !== true) {
         return false;
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    echo '<strong>' . $path . '</strong>:<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     //
     foreach (glob($path . '/*.' . $type) as $filename) {
@@ -567,7 +567,7 @@ function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
             echo 'continue (' . basename($filename) . ') <br>' . "\n";
             continue;
         }
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+        echo $filename . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
         //
         $c = trim($c);
@@ -586,15 +586,17 @@ function WGR_optimize_action_css($path, $dir = 'css', $type = 'css')
 function WGR_list_backup_css($path, $dir = 'css', $type = 'css.bak')
 {
     $path = rtrim($path, '/') . '/' . rtrim($dir, '/');
-    //echo $path . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    // echo $path . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
     if (!is_dir($path)) {
         return false;
     }
-    echo '<strong>' . $path . '</strong>:<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    echo '<strong>' . $path . '</strong>:<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
 
     //
+    $admin_url = admin_url() . 'admin.php?page=eb-about&file_closure=';
     foreach (glob($path . '/*.' . $type) as $filename) {
-        echo $filename . ':<em>' . __CLASS__ . '</em>:' . __LINE__ . '<br>' . "\n";
+        // echo $filename . '<br>' . "\n";
+        echo '<a href="' . $admin_url . urlencode($filename) . '" target="target_eb_iframe" class="closure-compiler-echbay">' . basename($filename) . '</a> <br>' . "\n";
     }
 
     //

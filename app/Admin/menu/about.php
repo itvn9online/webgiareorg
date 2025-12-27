@@ -3,6 +3,155 @@
 /**
  * 
  */
+if (isset($_GET['file_closure'])) {
+    // xóa toàn bộ html trước đó
+    ob_clean();
+
+    /**
+     * Minify CSS/JS from file using external API
+     **/
+    function WGR_minifyFile($code, $type = 'js', $filePath = null)
+    {
+        // Đọc nội dung file
+        if ($filePath !== null) {
+            $code = file_get_contents($filePath);
+
+            if ($code === false) {
+                throw new Exception("Cannot read file: $filePath");
+            }
+        }
+
+        // Gọi API minify
+        $url = 'https://closure-compiler.echbay.com/api/minify';
+
+        // Cấu hình options theo loại file
+        $options = [];
+        if ($type === 'js') {
+            $options = [
+                // Nén code, xóa dead code
+                'compress' => true,
+                // Rút ngắn tên biến (a, b, c...)
+                'mangle' => true,
+                'format' => [
+                    // Xóa comments
+                    'comments' => false
+                ]
+            ];
+        } else if ($type === 'css') {
+            $options = [
+                // Mức độ tối ưu hóa cao nhất
+                'level' => 2
+            ];
+        }
+
+        $data = json_encode([
+            'code' => $code,
+            'type' => $type,
+            'options' => $options
+        ]);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if ($result['success']) {
+            return $result['data']['minified'];
+        }
+        // print_r($result);
+        if (isset($result['error'])) {
+            if (gettype($result['error']) == 'array') {
+                $result['error'] = implode('; ', $result['error']);
+            }
+            die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "' . $result['error'] . '");</script>');
+        }
+        // die(__FUNCTION__ . ':' . __LINE__);
+
+        return false;
+    }
+
+    // định dạng header
+    // header('Content-Type: text/plain; charset=utf-8');
+
+    // kiểm tra đầu vào
+    $file_closure = $_GET['file_closure'];
+    if (empty($file_closure)) {
+        die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "No file specified.");</script>');
+    }
+
+    if (!is_file($file_closure)) {
+        die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "File does not exist.");</script>');
+    }
+
+    // lấy nội dung file
+    $file_content = file_get_contents($file_closure);
+    if ($file_content === false) {
+        die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "Failed to read file.");</script>');
+    }
+    $file = str_replace([
+        '.js.bak',
+        '.css.bak'
+    ], [
+        '.js',
+        '.css'
+    ], $file_closure);
+
+    // xác định file type
+    $file_type = pathinfo($file, PATHINFO_EXTENSION);
+    // echo $file_type . ':<em>' . __FUNCTION__ . '</em>:' . __LINE__ . '<br>' . "\n";
+    if ($file_type == 'js') {
+        // định dạng header
+        // header('Content-Type: application/javascript; charset=utf-8');
+    } else if ($file_type == 'css') {
+        // định dạng header
+        // header('Content-Type: text/css; charset=utf-8');
+    } else {
+        die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "Unsupported file type.");</script>');
+    }
+    // die($file_type);
+
+    $url = str_replace(ABSPATH, DYNAMIC_BASE_URL, $file);
+    // die($url);
+
+    // 
+    $minify_comment = '/* Minified by https://closure-compiler.echbay.com/ Optimize Controller */';
+    $minify_short_comment = '/* Minified */';
+
+    // 
+    $min_len = strlen($minify_comment) * 10;
+    if ($min_len < 500) {
+        $min_len = 500;
+    }
+
+    // $minified = WGR_minifyFromURL($url, $file_type);
+    $minified = WGR_minifyFile($file_content, $file_type);
+    if ($minified !== false) {
+        // thêm 1 số chú thích vào file đã nén
+        if (strlen($minified) > $min_len) {
+            $minified = $minify_comment . "\n" . $minified;
+        } else {
+            $minified = $minify_short_comment . $minified;
+        }
+        // lưu file đã nén lại
+        if (file_put_contents($file, $minified) !== false) {
+            // die($minified);
+            die('<script type="text/javascript">top.after_closure_compiler_echbay("ok", "Minification successful.", "' . $url . '");</script>');
+        }
+    }
+    die('<script type="text/javascript">top.after_closure_compiler_echbay("error", "Minification failed.");</script>');
+}
+
+/**
+ * Các thông tin về tác giả, phiên bản code, các chức năng tối ưu...
+ */
 global $wpdb;
 
 /**
@@ -415,9 +564,15 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
 </div>
 <br />
 <!-- -->
-<?php
-WGR_list_backup_css_js();
-?>
+<h3>Danh sách backup CSS/ JS</h3>
+<p>
+    <button type="button" class="button button-primary start-compiler-closure" onclick="return start_closure_compiler_echbay();">Bắt đầu nén file</button>
+</p>
+<div id="wgr-list-backup-css-js">
+    <?php
+    WGR_list_backup_css_js();
+    ?>
+</div>
 <!-- -->
 <div>
     <h3>This theme recommends the following plugins</h3>
@@ -516,6 +671,7 @@ if (defined('WGR_CHECKED_UPDATE_THEME')) {
 check_and_update_webgiareorg();
 
 ?>
+<iframe id="target_eb_iframe" name="target_eb_iframe" title="EB iframe" src="about:blank" width="333" height="550"></iframe>
 <script>
     // nếu tồn tại tham số update_wgr_code trên URL thì xóa nó đi sau đó tải lại trang sau 1 giây
     (function() {
