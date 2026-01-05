@@ -21,6 +21,8 @@ function WGR_vendor_sync($check_thirdparty_exist = true)
     WGR_action_vendor_sync(WGR_BASE_PATH . 'vendor', $check_thirdparty_exist);
     // đồng bộ ThirdParty php (code php của bên thứ 3)
     WGR_action_vendor_sync(WGR_BASE_PATH . 'app/ThirdParty', $check_thirdparty_exist);
+    // tạo file header, footer nếu chưa có
+    WGR_create_header_footer_file();
 
     //
     WGR_create_file($last_sync_vendor, time());
@@ -102,18 +104,15 @@ function WGR_MY_unzip($file, $dir)
  */
 function WGR_create_header_footer_file()
 {
-    $header_file = WGR_CHILD_PATH . 'header.php';
-    if (!is_file($header_file)) {
-        copy(WGR_CHILD_PATH . 'themes-mau/header.php', $header_file);
+    if (!is_file(WGR_CHILD_PATH . 'header.php') && is_file(WGR_CHILD_PATH . 'themes-mau/header.php')) {
+        copy(WGR_CHILD_PATH . 'themes-mau/header.php', WGR_CHILD_PATH . 'header.php');
     }
 
     //
-    $footer_file = WGR_CHILD_PATH . 'footer.php';
-    if (!is_file($footer_file)) {
-        copy(WGR_CHILD_PATH . 'themes-mau/footer.php', $footer_file);
+    if (!is_file(WGR_CHILD_PATH . 'footer.php') && is_file(WGR_CHILD_PATH . 'themes-mau/footer.php')) {
+        copy(WGR_CHILD_PATH . 'themes-mau/footer.php', WGR_CHILD_PATH . 'footer.php');
     }
 }
 
 //
 WGR_vendor_sync();
-WGR_create_header_footer_file();
