@@ -14,8 +14,10 @@ defined('EB_REDIS_CACHE') || define('EB_REDIS_CACHE', false);
 // include __DIR__ . '/DbCache.php';
 // include __DIR__ . '/RedisCache.php';
 
-//
-function WGR_cache_expire($path, $t = 3600)
+/**
+ * Kiểm tra hạn cache, mặc định là 12 tiếng
+ */
+function WGR_cache_expire($path, $t = 43200)
 {
     if ($t > 0 && is_file($path) && time() - filemtime($path) < $t) {
         // cache còn hạn

@@ -8,10 +8,10 @@
 function WGR_vendor_sync($check_thirdparty_exist = true)
 {
     $last_sync_vendor = WGR_BASE_PATH . 'last-sync-vendor.txt';
-    //echo $last_sync_vendor . '<br>' . "\n";
+    // echo $last_sync_vendor . '<br>' . "\n";
     // giãn cách sync -> trong thời gian cho phép thì hủy bỏ việc sync luôn
     if (WGR_cache_expire($last_sync_vendor)) {
-        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+        // echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
         return false;
     }
 
@@ -96,5 +96,24 @@ function WGR_MY_unzip($file, $dir)
     return false;
 }
 
+/**
+ * Tạo file header, footer nếu chưa có
+ * Mục đích là để nạp cache và các file css, js trong child theme
+ */
+function WGR_create_header_footer_file()
+{
+    $header_file = WGR_CHILD_PATH . 'header.php';
+    if (!is_file($header_file)) {
+        copy(WGR_CHILD_PATH . 'themes-mau/header.php', $header_file);
+    }
+
+    //
+    $footer_file = WGR_CHILD_PATH . 'footer.php';
+    if (!is_file($footer_file)) {
+        copy(WGR_CHILD_PATH . 'themes-mau/footer.php', $footer_file);
+    }
+}
+
 //
 WGR_vendor_sync();
+WGR_create_header_footer_file();
