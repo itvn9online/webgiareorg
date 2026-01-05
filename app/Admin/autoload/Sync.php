@@ -104,13 +104,13 @@ function WGR_MY_unzip($file, $dir)
  */
 function WGR_create_header_footer_file()
 {
-    if (!is_file(WGR_CHILD_PATH . 'header.php') && is_file(WGR_CHILD_PATH . 'themes-mau/header.php')) {
-        copy(WGR_CHILD_PATH . 'themes-mau/header.php', WGR_CHILD_PATH . 'header.php');
+    if (!is_file(WGR_CHILD_PATH . 'header.php') && is_file(WGR_BASE_PATH . 'themes-mau/header.php')) {
+        copy(WGR_BASE_PATH . 'themes-mau/header.php', WGR_CHILD_PATH . 'header.php');
     }
 
     //
-    if (!is_file(WGR_CHILD_PATH . 'footer.php') && is_file(WGR_CHILD_PATH . 'themes-mau/footer.php')) {
-        copy(WGR_CHILD_PATH . 'themes-mau/footer.php', WGR_CHILD_PATH . 'footer.php');
+    if (!is_file(WGR_CHILD_PATH . 'footer.php') && is_file(WGR_BASE_PATH . 'themes-mau/footer.php')) {
+        copy(WGR_BASE_PATH . 'themes-mau/footer.php', WGR_CHILD_PATH . 'footer.php');
     }
 }
 

@@ -1,12 +1,8 @@
 <?php
 
-// đã gọi đến header ở đây thì kiểm tra xem có file footer chưa, chưa có thì tạo luôn
-if (!is_file(WGR_CHILD_PATH . 'footer.php')) {
-    copy(__DIR__ . '/footer-tmp.php', WGR_CHILD_PATH . 'footer.php') or die('ERROR! copy footer for child theme');
-}
-
-//
-//echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+/**
+ * Xác định có sử dụng EchBay Cache (ebcache) hay không
+ */
 
 //
 $why_ebcache_not_active = '';
