@@ -527,7 +527,7 @@ if (class_exists('Imagick')) {
             ?>
         </ul>
         <div>
-            <p>Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
+            <p class="bold">Để Bật/ Tắt chức năng cache qua redis thủ công, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
             <div>
                 <textarea rows="5" ondblclick="this.select();" readonly style="width: 90%;">
 // bật tắt chức năng cache qua redis: true|false
@@ -541,7 +541,18 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo strtolower
     ?>
 </div>
 <!-- END Redis -->
-<p>Thêm đoạn code này vào file wp-config.php nếu muốn cố định URL cho website:</p>
+<div>
+    <p class="bold">Để Bật/ Tắt chế độ tự động update, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
+    <div>
+        <textarea rows="5" ondblclick="this.select();" readonly style="width: 90%;">
+// Bật toàn bộ tự động update (core, plugin, theme) -> Core WordPress (minor + major) sẽ tự update
+// define('WP_AUTO_UPDATE_CORE', true);
+// Chỉ tự động update bản nhỏ (minor) - khuyến nghị -> Mặc định WordPress cũng đang dùng chế độ này
+define('WP_AUTO_UPDATE_CORE', 'minor');</textarea>
+    </div>
+</div>
+<!-- -->
+<p class="bold">Thêm đoạn code này vào file wp-config.php nếu muốn cố định URL cho website:</p>
 <div>
     <textarea rows="4" ondblclick="this.select();" readonly style="width: 90%;">
 // set static siteurl

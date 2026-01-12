@@ -24,8 +24,13 @@ defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 defined('WGR_PARTNER_NAME') || define('WGR_PARTNER_NAME', 'WebGiaRe');
 defined('WGR_PARTNER_WEBSITE') || define('WGR_PARTNER_WEBSITE', 'webgiare.org');
 
-// bật chế độ auto update nếu chưa có
-defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
+/**
+ * Bật chế độ auto update nếu chưa có
+ */
+// Bật toàn bộ tự động update (core, plugin, theme) -> Core WordPress (minor + major) sẽ tự update
+// defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', true);
+// Chỉ tự động update bản nhỏ (minor) - khuyến nghị -> Mặc định WordPress cũng đang dùng chế độ này
+defined('WP_AUTO_UPDATE_CORE') || define('WP_AUTO_UPDATE_CORE', 'minor');
 
 //
 defined('WGR_REDIS_HOST') || define('WGR_REDIS_HOST', '127.0.0.1');
