@@ -89,6 +89,13 @@ if (is_admin()) {
     //
     WGR_cleanup_vscode(__DIR__ . '/.vscode');
     WGR_cleanup_vscode(WGR_CHILD_PATH . '.vscode');
+
+    // thêm thickbox cho trang about
+    if (isset($_GET['page']) && $_GET['page'] == 'eb-about') {
+        add_action('admin_enqueue_scripts', function () {
+            add_thickbox();
+        });
+    }
 }
 // các chức năng chỉ chạy ngoài trang khách
 else {
