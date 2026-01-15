@@ -719,4 +719,9 @@ check_and_update_webgiareorg();
         url.searchParams.delete("download_github_plugin");
         window.history.replaceState({}, document.title, url);
     })();
+
+    // kiểm tra biến tb_show đã được khai báo chưa (dùng để mở mấy link tải plugin bằng thickbox)
+    jQuery(window).load(function() {
+        console.log(typeof tb_show);
+    });
 </script>
