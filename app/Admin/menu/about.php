@@ -176,6 +176,92 @@ $githubs_plugin = [
 ];
 
 /**
+ * Nếu tồn tại tham số download_wordpress_plugin thì sẽ tải plugin từ WordPress.org về
+ * Ví dụ:
+ * wp-admin/admin.php?page=eb-about&download_wordpress_plugin=contact-form-7
+ * Sẽ tải plugin contact-form-7 từ WordPress.org về thư mục wp-content/plugins/
+ */
+if (isset($_GET['download_wordpress_plugin']) && !empty($_GET['download_wordpress_plugin'])) {
+    $plugin_name = sanitize_text_field($_GET['download_wordpress_plugin']);
+
+    // Gọi API WordPress.org để lấy thông tin plugin
+    $api_url = 'https://api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]=' . $plugin_name;
+    $response = WGR_get_contents($api_url);
+
+    if ($response !== false) {
+        $plugin_info = json_decode($response, true);
+
+        if (isset($plugin_info['download_link'])) {
+            $download_url = $plugin_info['download_link'];
+            $plugin_version = isset($plugin_info['version']) ? $plugin_info['version'] : 'latest';
+
+            $dest = WP_PLUGIN_DIR . '/' . $plugin_name . '.zip';
+            if (is_file($dest)) {
+                unlink($dest);
+            }
+
+            echo 'Downloading plugin: <strong>' . $plugin_name . '</strong> (version: ' . $plugin_version . ')...<br>' . "\n";
+
+            // Thử copy trước
+            $downloaded = false;
+            if (copy($download_url, $dest)) {
+                $downloaded = true;
+                echo 'Download method: <strong>copy()</strong><br>' . "\n";
+            } else if (file_put_contents($dest, file_get_contents($download_url))) {
+                $downloaded = true;
+                echo 'Download method: <strong>file_get_contents()</strong><br>' . "\n";
+            } else if (file_put_contents($dest, fopen($download_url, 'r'))) {
+                $downloaded = true;
+                echo 'Download method: <strong>fopen()</strong><br>' . "\n";
+            }
+
+            if ($downloaded) {
+                echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . "\n";
+                echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
+
+                // Kiểm tra kích thước file
+                if (filesize($dest) > 1000) {
+                    // giải nén file zip
+                    $unzipfile = false;
+                    if (class_exists('ZipArchive')) {
+                        echo 'Using: <strong>ZipArchive</strong><br>' . "\n";
+                        $zip = new ZipArchive;
+                        if ($zip->open($dest) === TRUE) {
+                            $zip->extractTo(WP_PLUGIN_DIR);
+                            $zip->close();
+                            $unzipfile = true;
+                        }
+                    } else {
+                        echo 'Using: <strong>unzip_file (WordPress)</strong><br>' . "\n";
+                        $unzipfile = unzip_file($dest, WP_PLUGIN_DIR);
+                    }
+
+                    if ($unzipfile === true) {
+                        echo 'Unzip to: <strong>' . WP_PLUGIN_DIR . '/' . $plugin_name . '</strong><br>' . "\n";
+                        echo 'Unzip file success!<br>' . "\n";
+                        echo 'Plugin: <strong>' . $plugin_name . '</strong> (version: ' . $plugin_version . ') has been installed!<br>' . "\n";
+                    } else {
+                        echo '<span class="redcolor">Unzip file failed!</span><br>' . "\n";
+                    }
+                } else {
+                    echo '<span class="redcolor">Downloaded file size too small, may be corrupted!</span><br>' . "\n";
+                }
+
+                // Dọn dẹp file zip
+                unlink($dest);
+                echo 'File removed: <strong>' . $dest . '</strong><br>' . "\n";
+            } else {
+                echo '<span class="redcolor">Download plugin: <strong>' . $plugin_name . '</strong> failed!</span><br>' . "\n";
+            }
+        } else {
+            echo '<span class="redcolor">Cannot get download link for plugin: <strong>' . $plugin_name . '</strong></span><br>' . "\n";
+        }
+    } else {
+        echo '<span class="redcolor">Cannot connect to WordPress.org API or plugin not found: <strong>' . $plugin_name . '</strong></span><br>' . "\n";
+    }
+}
+
+/**
  * Nếu tồn tại tham số download_github_plugin thì sẽ tải plugin từ github về
  * Ví dụ:
  * wp-admin/admin.php?page=eb-about&download_github_plugin=plugin-in-github
@@ -205,25 +291,20 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
                     $zip->extractTo(WP_PLUGIN_DIR);
                     $zip->close();
 
-                    // đổi tên thư mục
-                    $myoldfolder = WP_PLUGIN_DIR . '/' . $plugin_name;
-                    $mynewfolder = WP_PLUGIN_DIR . '/' . $plugin_name . '-' . date('Ymd-His');
-                    if (is_dir($myoldfolder)) {
-                        rename($myoldfolder, $mynewfolder);
-                    }
-
-                    echo 'Unzip to: <strong>' . $myoldfolder . '</strong><br>' . "\n";
-
-                    // xóa file zip sau khi giải nén
-                    unlink($dest);
+                    echo 'Unzip to: <strong>' . WP_PLUGIN_DIR . '/' . $plugin_name . '</strong><br>' . "\n";
                     echo 'Unzip file success!<br>' . "\n";
                     echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . "\n";
                 } else {
-                    echo 'Unzip file faild!<br>' . "\n";
+                    echo 'Using: <strong>unzip_file (WordPress)</strong><br>' . "\n";
+                    $unzipfile = unzip_file($dest, WP_PLUGIN_DIR);
                 }
             } else {
                 echo 'ZipArchive class not found!<br>' . "\n";
             }
+
+            // Dọn dẹp file zip
+            unlink($dest);
+            echo 'File removed: <strong>' . $dest . '</strong><br>' . "\n";
         } else {
             echo 'Download plugin: <strong>' . $plugin_name . '</strong> faild!<br>' . "\n";
         }
@@ -408,8 +489,9 @@ function check_and_update_webgiareorg()
             echo '<div>File bị xóa vì không đủ dung lượng cần thiết!</div>';
         }
 
-        //
+        // Dọn dẹp file zip
         unlink($dest);
+        echo 'File removed: <strong>' . $dest . '</strong><br>' . "\n";
     }
 }
 
@@ -639,7 +721,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             // nếu thư mục code có rồi thì bỏ qua
             if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
         ?>
-                <li><?php echo $v; ?></li>
+                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
                 <?php
             } else if (isset($githubs_plugin[$k])) {
                 if ($githubs_plugin[$k] == '') {
@@ -652,12 +734,18 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 <?php
                 } else {
                 ?>
-                    <li><a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a> (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)</li>
+                    <li>
+                        <a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
+                        (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
+                    </li>
                 <?php
                 }
             } else {
                 ?>
-                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a></li>
+                <li>
+                    <a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a>
+                    (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_wordpress_plugin=<?php echo $k; ?>">Download now</a>)
+                </li>
         <?php
             }
         }
@@ -713,10 +801,11 @@ check_and_update_webgiareorg();
         });
     })();
 
-    // nếu tồn tại tham số download_github_plugin trên URL thì xóa nó đi
+    // nếu tồn tại tham số download_github_plugin hoặc download_wordpress_plugin trên URL thì xóa nó đi
     (function() {
         var url = new URL(window.location.href);
         url.searchParams.delete("download_github_plugin");
+        url.searchParams.delete("download_wordpress_plugin");
         window.history.replaceState({}, document.title, url);
     })();
 
