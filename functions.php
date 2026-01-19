@@ -90,11 +90,21 @@ if (is_admin()) {
     WGR_cleanup_vscode(__DIR__ . '/.vscode');
     WGR_cleanup_vscode(WGR_CHILD_PATH . '.vscode');
 
-    // thêm thickbox cho trang about
-    if (isset($_GET['page']) && $_GET['page'] == 'eb-about') {
-        add_action('admin_enqueue_scripts', function () {
-            add_thickbox();
-        });
+    if (isset($_GET['page'])) {
+        if ($_GET['page'] == 'eb-about') {
+            // thêm thickbox cho trang about
+            add_action('admin_enqueue_scripts', function () {
+                add_thickbox();
+            });
+        } else if ($_GET['page'] == 'optionsframework') {
+            add_action('admin_enqueue_scripts', function () {
+                // thêm css cho trang options framework
+                wp_enqueue_style('wgr-admin-options-framework', CDN_BASE_URL . WGR_BASE_URI . 'public/admin/css/options-framework.css', array(), filemtime(WGR_BASE_PATH . 'public/admin/css/options-framework.css'));
+
+                // thêm js cho trang options framework
+                wp_enqueue_script('wgr-admin-options-framework', CDN_BASE_URL . WGR_BASE_URI . 'public/admin/js/options-framework.js', array('jquery'), filemtime(WGR_BASE_PATH . 'public/admin/js/options-framework.js'), true);
+            });
+        }
     }
 }
 // các chức năng chỉ chạy ngoài trang khách

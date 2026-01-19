@@ -1,0 +1,4 @@
+#of_container #content .section.section-transfer,
+#of_container #content .section.section-textarea {
+    max-width: 999px;
+}
