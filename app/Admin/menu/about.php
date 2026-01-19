@@ -1,7 +1,10 @@
 <?php
 
+// tạo url admin page hiện tại
+$current_admin_page_url = admin_url('admin.php?page=' . $_GET['page']);
+
 /**
- * 
+ * Sử dụng Echbay Closure Compiler để nén file CSS/ JS
  */
 if (isset($_GET['file_closure'])) {
     // xóa toàn bộ html trước đó
@@ -179,17 +182,24 @@ $githubs_plugin = [
  * Nếu tồn tại tham số download_wordpress_plugin thì sẽ tải plugin từ WordPress.org về
  * Ví dụ:
  * wp-admin/admin.php?page=eb-about&download_wordpress_plugin=contact-form-7
- * Sẽ tải plugin contact-form-7 từ WordPress.org về thư mục wp-content/plugins/
+ * Sẽ tải plugin contact-form-7 từ https://downloads.wordpress.org/plugin/<<plugin_name>>.latest-stable.zip về thư mục wp-content/plugins/
  */
 if (isset($_GET['download_wordpress_plugin']) && !empty($_GET['download_wordpress_plugin'])) {
     $plugin_name = sanitize_text_field($_GET['download_wordpress_plugin']);
 
     // Gọi API WordPress.org để lấy thông tin plugin
-    $api_url = 'https://api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]=' . $plugin_name;
-    $response = WGR_get_contents($api_url);
+    // $api_url = 'https://api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]=' . $plugin_name;
+    // $response = WGR_get_contents($api_url);
+    // sử dụng url download thẳng bản latest-stable từ wordpress.org
+    $response = true;
 
     if ($response !== false) {
-        $plugin_info = json_decode($response, true);
+        // $plugin_info = json_decode($response, true);
+        // sử dụng link download thẳng
+        $plugin_info = [
+            'download_link' => 'https://downloads.wordpress.org/plugin/' . $plugin_name . '.latest-stable.zip',
+            'version' => 'latest-stable',
+        ];
 
         if (isset($plugin_info['download_link'])) {
             $download_url = $plugin_info['download_link'];
@@ -513,7 +523,7 @@ function WGR_getIPAddress()
 ?>
 <h1>Về tác giả</h1>
 <p>Phiên bản WebGiaRe code: <strong><?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></strong></p>
-<p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo admin_url(); ?>admin.php?page=eb-about&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
+<p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo $current_admin_page_url; ?>&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
 <p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
 <p>Server IP: <strong><?php echo $_SERVER['SERVER_ADDR']; ?></strong> | Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
 <p>Server date: <strong><?php echo date('r'); ?></strong> | date_i18n: <strong><?php echo date_i18n('r'); ?></strong> | date_i18n (date_format time_format): <strong><?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format')); ?></strong> | current_time (mysql): <strong><?php echo current_time('mysql'); ?></strong></p>
@@ -736,7 +746,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 ?>
                     <li>
                         <a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
-                        (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
+                        (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
                     </li>
                 <?php
                 }
@@ -744,7 +754,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 ?>
                 <li>
                     <a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a>
-                    (<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&download_wordpress_plugin=<?php echo $k; ?>">Download now</a>)
+                    (<a href="<?php echo $current_admin_page_url; ?>&download_wordpress_plugin=<?php echo $k; ?>">Download now</a>)
                 </li>
         <?php
             }
