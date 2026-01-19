@@ -7,14 +7,19 @@ function WGR_front_footer()
 
     //
     global $pagenow;
-    // die($pagenow);
+    // echo 'pagenow: ' . $pagenow . '<br>' . "\n";
 
 
     /**
      * nạp css, js theo từng admin page
      */
     $arr_css_admin = [];
-    $arr_js_admin = [];
+    $arr_js_admin = [
+        // file này cần nạp đầu tiên, chứa các function js dùng chung
+        WGR_BASE_PATH . 'public/admin/js/functions.js',
+        // thư viện highlight code
+        WGR_BASE_PATH . 'public/admin/js/prism.js',
+    ];
 
     // edit post
     if (strpos($_SERVER['REQUEST_URI'], '/post.php') !== false || $pagenow == 'post.php') {
@@ -25,6 +30,16 @@ function WGR_front_footer()
         // file css, js cho từng post type riêng
         $arr_css_admin[] = WGR_BASE_PATH . 'public/admin/css/' . get_post_type() . '_edit.css';
         $arr_js_admin[] = WGR_BASE_PATH . 'public/admin/js/' . get_post_type() . '_edit.js';
+    }
+
+    // xử lý add theo truy vấn page
+    if (isset($_GET['page'])) {
+        if ($_GET['page'] == 'optionsframework') {
+            // thêm css cho trang options framework
+            $arr_css_admin[] = WGR_BASE_PATH . 'public/admin/css/options-framework.css';
+            // thêm js cho trang options framework
+            $arr_js_admin[] = WGR_BASE_PATH . 'public/admin/js/options-framework.js';
+        }
     }
 
     // css

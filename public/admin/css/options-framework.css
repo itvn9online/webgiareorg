@@ -2,3 +2,21 @@
 #of_container #content .section.section-textarea {
     max-width: 999px;
 }
+
+#of_container #content .section.section-textarea textarea {
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+    border: 1px solid rgb(204, 204, 204);
+    font-family: sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    /* color: transparent; */
+    caret-color: rgb(0, 0, 0);
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    /* background: transparent !important; */
+    /* -webkit-text-fill-color: transparent; */
+}
