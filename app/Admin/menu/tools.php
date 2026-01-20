@@ -13,6 +13,8 @@
     $admin_tool_url = admin_url() . 'admin.php?page=eb-tools&tool_action=';
     foreach (
         [
+            'generate-demo-post' => 'Tạo liệu Bài viết/ Sản phẩm demo ngẫu nhiên',
+            // 'generate-demo-product' => 'Tạo Products demo ngẫu nhiên',
             'echbaydotcom-products-to-webgiareorg' => 'Chuyển dữ liệu Sản phẩm từ echbaydotcom sang webgiareorg',
             'echbaydotcom-blogs-to-webgiareorg' => 'Chuyển dữ liệu Bài viết từ echbaydotcom sang webgiareorg',
         ] as $k => $v

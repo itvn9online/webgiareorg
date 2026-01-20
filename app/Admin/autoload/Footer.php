@@ -21,8 +21,8 @@ function WGR_front_footer()
         WGR_BASE_PATH . 'public/admin/js/prism.js',
     ];
 
-    // edit post
-    if (strpos($_SERVER['REQUEST_URI'], '/post.php') !== false || $pagenow == 'post.php') {
+    // thêm công cụ hỗ trợ khi thêm post mới...
+    if ($pagenow == 'post.php' || $pagenow == 'post-new.php') {
         // file css, js chung cho mọi loại post
         $arr_css_admin[] = WGR_BASE_PATH . 'public/admin/css/posts_edit.css';
         $arr_js_admin[] = WGR_BASE_PATH . 'public/admin/js/posts_edit.js';
