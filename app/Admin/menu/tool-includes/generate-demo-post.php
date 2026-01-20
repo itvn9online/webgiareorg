@@ -291,6 +291,18 @@ $has_woocommerce = class_exists('WooCommerce');
                         $deleted_images++;
                     }
 
+                    // Xóa ảnh gallery
+                    $gallery_ids = get_post_meta($product_id, '_product_image_gallery', true);
+                    if (!empty($gallery_ids)) {
+                        $gallery_ids_array = explode(',', $gallery_ids);
+                        foreach ($gallery_ids_array as $gallery_id) {
+                            if ($gallery_id) {
+                                wp_delete_attachment($gallery_id, true);
+                                $deleted_images++;
+                            }
+                        }
+                    }
+
                     // Xóa product
                     wp_delete_post($product_id, true);
                     $deleted_products++;
