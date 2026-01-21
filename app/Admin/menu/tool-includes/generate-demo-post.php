@@ -3,17 +3,25 @@
 /**
  * Công cụ tạo dữ liệu demo
  * Mặc định là tạo post, nếu có thêm tham số GET for_type thì tạo theo for_type đó (chỉ chấp nhận post và product)
- * Yêu cầu:
+ * Quy trinh tạo dữ liệu demo:
  * Cần tạo mới 1 tài khoản với username là userdemo (không cần md5) và email là emaildemo@$_SERVER['HTTP_HOST'] với mật khẩu là md5 timestamp hiện tại để insert dữ liệu. Phân quyền:
  * - Nếu website có WooCommerce thì tạo phân quyền là: `shop_manager`
  * - Mặc định sẽ tạo phân quyền là: `editor`
- * Danh mục Bài viết/ Sản phẩm sẽ tạo 1 mảng dạng `'taxonomy' => ['category', 'Danh mục B', 'Danh mục C', ...]` và gán ngẫu nhiên, trong đó `taxonomy` là tên taxonomy (category, product_cat, ...) Mỗi lần sẽ tạo khoảng 3-5 danh mục con.
+ * 
+ * Ảnh Bài viết/ Sản phẩm sẽ chạy vòng lặp từ 1 đến 20 để tải từ `https://img1.webgiare.org/random/demo-${i}.jpg` trong đó `${i}` là số từ 1 đến 20 ( trong cùng 1 tháng, cần kiểm tra nếu ảnh đã tải về rồi thì không tải nữa, url ảnh thường có dạng `https://$_SERVER['HTTP_HOST']/wp-content/uploads/${year}/${month}/demo-${i}.jpg` )
+ * 
+ * Danh mục Bài viết/ Sản phẩm sẽ tạo 1 mảng dạng `'taxonomy' => ['category', 'Danh mục B', 'Danh mục C', ...]` và gán ngẫu nhiên, trong đó `taxonomy` là tên taxonomy (category, product_cat, ...) Mỗi lần chạy sẽ tạo khoảng 3-5 danh mục.
+ * - 50% danh mục vừa tạo sẽ tạo thêm 3-5 danh mục con trong nó và cũng gán ngẫu nhiên Bài viết/ Sản phẩm vào danh mục con này.
  * Tên Bài viết/ Sản phẩm sẽ là: `Demo Post #${i}` hoặc `Demo Product #${i}` trong đó `${i}` là số ngẫu nhiên từ 5-10 (đây cũng chính là số sản phẩm sẽ tạo trên mỗi danh mục)
- * Ảnh Bài viết/ Sản phẩm sẽ tải ngẫu nhiên từ `https://img1.webgiare.org/random/demo-${i}.jpg` trong đó `${i}` là số từ 1 đến 20 (cần kiểm tra nếu ảnh đã tải về rồi thì không tải nữa, Bài viết/ Sản phẩm sau sẽ dùng lại ảnh đã tải về)
- * Với sản phẩm sẽ thêm giá ngẫu nhiên từ 100.000đ đến 1.000.000đ (với bước nhảy là 1.000đ) và ngẫu nhiên đặt thêm giá khuyến mãi.
- * Với sản phẩm sẽ thêm gallery khoảng 3-5 ảnh.
+ * Nội dung Bài viết/ Sản phẩm sẽ là đoạn văn bản mẫu (Lorem ipsum...) kèm theo 1 đến 3 ảnh ngẫu nhiên trong khoảng 1 đến 20, ảnh ngẫu nhiên thường có dạng `<p><img class="alignnone wp-image-${attachment_id} size-full" src="https://$_SERVER['HTTP_HOST']/wp-content/uploads/${year}/${month}/demo-${i}.jpg" alt="" width="450" height="450" /></p>`.
+ * Ảnh Bài viết/ Sản phẩm sẽ tạo ngẫu nhiên 1 số từ 1 đến 20 rồi tạo url ảnh và lấy ID ảnh đã tải về gán làm ảnh đại diện.
+ * Với sản phẩm sẽ thêm giá ngẫu nhiên từ 100.000đ đến 1.000.000đ (với bước nhảy là 1.000đ) và Ngẫu nhiên 50% sản phẩm có giá khuyến mãi.
+ * - Với sản phẩm sẽ thêm gallery khoảng 3-5 ảnh.
+ * - Ngẫu nhiên 50% sản phẩm sẽ thiết lập `_bubble_new` là `Enabled` và đồng thời thiết lập `_bubble_text` ngẫu nhiên là `NEW` hoặc `HOT`.
  * Sau khi submit form, với mỗi post_type sẽ kiểm tra xem có sản phẩm demo chưa, nếu có rồi thì không tạo nữa (kiểm tra post_type tạo bởi demo user).
  * 
+ * Yêu cầu:
+ * Mỗi request chỉ tạo tối đa ${max_post_request} Bài viết/ Sản phẩm để tránh timeout, nếu chưa đủ ${max_post_demo} Bài viết/ Sản phẩm thì reload lại trang để tiếp tục tạo Bài viết/ Sản phẩm.
  * Có chức năng XÓA toàn bộ dữ liệu demo đã tạo (dữ liệu được tạo bởi user demo). Dữ liệu XÓA bao gồm cả user demo, hình ảnh demo, danh mục demo, Bài viết và Sản phẩm demo... Tất cả dữ liệu liên quan đến user demo trong module này.
  */
 
@@ -24,6 +32,9 @@ $post_type = isset($_GET['for_type']) && in_array($_GET['for_type'], ['post', 'p
 
 // Kiểm tra xem có WooCommerce không
 $has_woocommerce = class_exists('WooCommerce');
+// Giới hạn số lượng Bài viết/ Sản phẩm mỗi request và tổng số cần tạo
+$max_post_request = 30;
+$max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên gấp đôi
 
 ?>
 <div class="wrap">
@@ -31,6 +42,12 @@ $has_woocommerce = class_exists('WooCommerce');
 
     <?php
     if (isset($_GET['action']) && $_GET['action'] === 'generate') {
+        // tăng thời gian thực thi tối đa
+        set_time_limit(99);
+        // hiển thị lỗi để dễ debug
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+
         // Tạo tài khoản demo
         $demo_email = 'emaildemo@' . $_SERVER['HTTP_HOST'];
         $demo_password = md5(time());
@@ -55,17 +72,18 @@ $has_woocommerce = class_exists('WooCommerce');
             $user_id = get_user_by('login', $demo_username)->ID;
         }
 
-        // Kiểm tra xem đã có dữ liệu demo cho post_type này chưa
-        $existing_demo = get_posts([
-            'post_type'      => $post_type,
-            'author'         => $user_id,
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-        ]);
+        // Kiểm tra số lượng dữ liệu demo đã có cho post_type này (dùng SQL trực tiếp để nhanh hơn)
+        global $wpdb;
+        $existing_demo_count = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_author = %d AND post_status != 'trash'",
+            $post_type,
+            $user_id
+        ));
 
-        if (!empty($existing_demo)) {
+        // Nếu đã đủ 100 bài viết/sản phẩm thì dừng lại
+        if ($existing_demo_count > 100) {
             $post_type_name = $post_type === 'product' ? 'sản phẩm' : 'bài viết';
-            echo '<div class="notice notice-warning"><p><strong>Thông báo:</strong> Đã tồn tại dữ liệu demo ' . $post_type_name . ' được tạo bởi tài khoản <strong>' . $demo_username . '</strong>. Không tạo thêm dữ liệu mới.</p></div>';
+            echo '<div class="notice notice-success"><p><strong>✓ Hoàn tất!</strong> Đã có đủ ' . $existing_demo_count . ' ' . $post_type_name . ' demo được tạo bởi tài khoản <strong>' . $demo_username . '</strong>.</p></div>';
             echo '<p><a href="' . admin_url('edit.php' . ($post_type === 'product' ? '?post_type=product' : '')) . '" class="button button-primary">Xem danh sách ' . $post_type . '</a></p>';
     ?>
 </div>
@@ -73,6 +91,118 @@ $has_woocommerce = class_exists('WooCommerce');
             return;
         }
 
+        // Hiển thị số lượng hiện có
+        if ($existing_demo_count > 0) {
+            $post_type_name = $post_type === 'product' ? 'sản phẩm' : 'bài viết';
+            echo '<div class="notice notice-info"><p>Đã có <strong>' . $existing_demo_count . '</strong> ' . $post_type_name . ' demo. Tiếp tục tạo thêm...</p></div>';
+        }
+
+        // ===== BƯỚC 1: KIỂM TRA VÀ TẢI ẢNH =====
+        // Kiểm tra số lượng ảnh đã có
+        $existing_images = get_posts([
+            'post_type'      => 'attachment',
+            'author'         => $user_id,
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                [
+                    'key'     => '_wp_attached_file',
+                    'value'   => 'demo-',
+                    'compare' => 'LIKE'
+                ]
+            ]
+        ]);
+
+        $existing_count = count($existing_images);
+
+        // Nếu chưa đủ 20 ảnh, tải thêm
+        if ($existing_count < 20) {
+            // set_time_limit(30); // Giới hạn 30 giây
+
+            echo '<div class="notice notice-info"><p>Đang tải ảnh demo... (' . $existing_count . '/20)</p></div>';
+
+            // Tạo danh sách ảnh đã có
+            $existing_image_numbers = [];
+            foreach ($existing_images as $img_id) {
+                $file = get_attached_file($img_id);
+                if (preg_match('/demo-(\d+)\.jpg$/', $file, $matches)) {
+                    $existing_image_numbers[] = (int)$matches[1];
+                }
+            }
+
+            // Tải thêm ảnh chưa có
+            $downloaded = 0;
+            for ($img_i = 1; $img_i <= 20; $img_i++) {
+                if (in_array($img_i, $existing_image_numbers)) {
+                    continue; // Đã có ảnh này rồi
+                }
+
+                $image_url = 'https://img1.webgiare.org/random/demo-' . $img_i . '.jpg';
+                $image_filename = 'demo-' . $img_i . '.jpg';
+
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                $tmp = download_url($image_url);
+
+                if (!is_wp_error($tmp)) {
+                    $file_array = [
+                        'name'     => $image_filename,
+                        'tmp_name' => $tmp
+                    ];
+
+                    $attachment_id = media_handle_sideload($file_array, 0, null, ['post_author' => $user_id]);
+
+                    if (!is_wp_error($attachment_id)) {
+                        $downloaded++;
+                        echo '<div class="notice notice-success"><p>✓ Đã tải: demo-' . $img_i . '.jpg</p></div>';
+                    } else {
+                        @unlink($file_array['tmp_name']);
+                    }
+                }
+
+                // Kiểm tra thời gian, nếu gần hết thì dừng lại
+                if ($downloaded >= 5) {
+                    break; // Tải tối đa 5 ảnh mỗi lần để tránh timeout
+                }
+            }
+
+            // Kiểm tra lại số lượng sau khi tải
+            $new_count = $existing_count + $downloaded;
+
+            // if ($new_count < 20) {
+            // Chưa đủ, reload lại trang
+            echo '<div class="notice notice-warning"><p>Đã tải thêm ' . $downloaded . ' ảnh. Đang tiếp tục... (' . $new_count . '/20)</p></div>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 3000);</script>';
+            echo '<p><em>Trang sẽ tự động tải lại sau 3 giây...</em></p>';
+?>
+    </div>
+<?php
+            return;
+            // } else {
+            // echo '<div class="notice notice-success"><p>✓ Đã tải đủ 20 ảnh demo!</p></div>';
+            // }
+        } else {
+            echo '<div class="notice notice-success"><p>✓ Đã có sẵn ' . $existing_count . ' ảnh demo</p></div>';
+        }
+
+        // Lấy lại cache ảnh từ database (tái sử dụng $existing_images đã query ở trên)
+        $image_cache = [];
+
+        foreach ($existing_images as $img_id) {
+            $file = get_attached_file($img_id);
+            if (preg_match('/demo-(\d+)\.jpg$/', $file, $matches)) {
+                $image_cache[(int)$matches[1]] = $img_id;
+            }
+        }
+        // $view_image_cache = print_r($image_cache, true);
+        // echo '<pre>' . htmlspecialchars($view_image_cache) . '</pre>';
+        // die(__FILE__ . ':' . __LINE__);
+
+        // echo '<div class="notice notice-success"><p>✓ Đã tải sẵn ' . count($image_cache) . ' ảnh để sử dụng</p></div>';
+
+        // ===== BƯỚC 2: TẠO DANH MỤC VÀ BÀI VIẾT =====
         // Xác định taxonomy
         $taxonomy = $post_type === 'product' ? 'product_cat' : 'category';
         // tạo tên danh mục theo taxonomy + viết HOA chữ cái đầu
@@ -100,78 +230,87 @@ $has_woocommerce = class_exists('WooCommerce');
             }
         }
 
-        // Tạo bài viết/sản phẩm (5-10 items cho mỗi danh mục)
-        $total_created = 0;
+        // Tạo danh mục con (50% cơ hội cho mỗi danh mục cha)
+        $all_category_ids = $category_ids; // Lưu tất cả category IDs (bao gồm cả con)
 
-        // Cache ảnh đã tải để tái sử dụng
-        $image_cache = [];
+        foreach ($category_ids as $parent_id) {
+            // 50% cơ hội tạo danh mục con
+            if (rand(0, 1) === 1) {
+                $num_sub_categories = rand(3, 5);
+                $parent_term = get_term($parent_id, $taxonomy);
 
-        // Hàm helper để lấy hoặc tải ảnh
-        $get_or_download_image = function ($image_number, $post_id, $user_id) use (&$image_cache) {
-            $image_url = 'https://img1.webgiare.org/random/demo-' . $image_number . '.jpg';
-            $image_filename = 'demo-' . $image_number . '.jpg';
+                echo '<div class="notice notice-info"><p>Đang tạo ' . $num_sub_categories . ' danh mục con cho <strong>' . $parent_term->name . '</strong>...</p></div>';
 
-            // Kiểm tra trong cache
-            if (isset($image_cache[$image_filename])) {
-                return $image_cache[$image_filename];
-            }
+                for ($j = 1; $j <= $num_sub_categories; $j++) {
+                    $sub_cat_name = $parent_term->name . ' - Con ' . $j;
 
-            // Kiểm tra trong database
-            $existing_image = get_posts([
-                'post_type'      => 'attachment',
-                'author'         => $user_id,
-                'name'           => pathinfo($image_filename, PATHINFO_FILENAME),
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-            ]);
+                    // Kiểm tra danh mục con đã tồn tại chưa
+                    $sub_term = term_exists($sub_cat_name, $taxonomy);
 
-            if (!empty($existing_image)) {
-                $image_cache[$image_filename] = $existing_image[0];
-                return $existing_image[0];
-            }
+                    if (!$sub_term) {
+                        $sub_term = wp_insert_term($sub_cat_name, $taxonomy, [
+                            'parent' => $parent_id
+                        ]);
+                    }
 
-            // Tải ảnh mới
-            require_once(ABSPATH . 'wp-admin/includes/media.php');
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-            $tmp = download_url($image_url);
-
-            if (!is_wp_error($tmp)) {
-                $file_array = [
-                    'name'     => $image_filename,
-                    'tmp_name' => $tmp
-                ];
-
-                $attachment_id = media_handle_sideload($file_array, $post_id);
-
-                if (!is_wp_error($attachment_id)) {
-                    $image_cache[$image_filename] = $attachment_id;
-                    return $attachment_id;
-                } else {
-                    @unlink($file_array['tmp_name']);
+                    if (!is_wp_error($sub_term)) {
+                        $all_category_ids[] = $sub_term['term_id'];
+                        echo '<div class="notice notice-success"><p>✓ Đã tạo danh mục con: <strong>' . $sub_cat_name . '</strong></p></div>';
+                    }
                 }
             }
+        }
 
-            return null;
+        // Tạo bài viết/sản phẩm (5-10 items cho mỗi danh mục, bao gồm cả danh mục con)
+        $total_created = 0;
+        $max_per_request = rand($max_post_request - 10, $max_post_request); // Giới hạn tối đa ${max_post_request} bài/sản phẩm mỗi request
+
+        // Hàm helper để lấy thông tin ảnh để chèn vào content
+        $get_image_html = function ($attachment_id) {
+            $image_url = wp_get_attachment_url($attachment_id);
+            return '<p><img class="alignnone wp-image-' . $attachment_id . ' size-full" src="' . $image_url . '" alt="" width="450" height="450" /></p>';
         };
 
-        foreach ($category_ids as $cat_id) {
+        foreach ($all_category_ids as $cat_id) {
+            // Kiểm tra nếu đã tạo đủ ${max_post_request} bài trong request này thì dừng lại
+            if ($total_created >= $max_per_request) {
+                break;
+            }
+
             $num_posts = rand(5, 10);
 
             for ($i = 1; $i <= $num_posts; $i++) {
+                // Kiểm tra nếu đã tạo đủ ${max_post_request} bài trong request này thì dừng lại
+                if ($total_created >= $max_per_request) {
+                    break;
+                }
                 // Tên bài viết
                 $post_title = $post_type === 'product'
                     ? 'Demo Product #' . $i
                     : 'Demo Post #' . $i;
 
-                // Nội dung mẫu
+                // Nội dung mẫu với 1-3 ảnh ngẫu nhiên
+                $num_content_images = rand(1, 3);
                 $post_content = '<p>Đây là nội dung demo cho ' . $post_title . '</p>';
                 $post_content .= '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
 
+                // Thêm ảnh ngẫu nhiên vào nội dung
+                for ($ci = 0; $ci < $num_content_images; $ci++) {
+                    $random_img_num = rand(1, 20);
+                    if (isset($image_cache[$random_img_num])) {
+                        $post_content .= $get_image_html($image_cache[$random_img_num]);
+                        $post_content .= '<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>';
+                    }
+                }
+
+                // tạo title với độ dài ngẫu nhiên
+                $lorem_words = explode(' ', 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua');
+                $random_title_length = rand(5, 10);
+                $random_title = implode(' ', array_slice($lorem_words, 0, $random_title_length));
+
                 // Tạo post
                 $post_data = [
-                    'post_title'    => $post_title,
+                    'post_title'    => $post_title . ' - ' . $random_title,
                     'post_content'  => $post_content,
                     'post_status'   => 'publish',
                     'post_author'   => $user_id,
@@ -184,13 +323,10 @@ $has_woocommerce = class_exists('WooCommerce');
                     // Gán danh mục
                     wp_set_object_terms($post_id, (int) $cat_id, $taxonomy);
 
-                    // Tải và gán ảnh đại diện
-                    $image_number = rand(1, 20);
-                    $attachment_id = $get_or_download_image($image_number, $post_id, $user_id);
-
-                    // Gán ảnh đại diện cho post
-                    if ($attachment_id && !is_wp_error($attachment_id)) {
-                        set_post_thumbnail($post_id, $attachment_id);
+                    // Gán ảnh đại diện (chọn ngẫu nhiên từ 1-20)
+                    $featured_img_num = rand(1, 20);
+                    if (isset($image_cache[$featured_img_num])) {
+                        set_post_thumbnail($post_id, $image_cache[$featured_img_num]);
                     }
 
                     // Nếu là product, thêm gallery và giá
@@ -201,10 +337,8 @@ $has_woocommerce = class_exists('WooCommerce');
 
                         for ($g = 1; $g <= $num_gallery_images; $g++) {
                             $gallery_image_number = rand(1, 20);
-                            $gallery_attachment_id = $get_or_download_image($gallery_image_number, $post_id, $user_id);
-
-                            if ($gallery_attachment_id && !is_wp_error($gallery_attachment_id)) {
-                                $gallery_ids[] = $gallery_attachment_id;
+                            if (isset($image_cache[$gallery_image_number])) {
+                                $gallery_ids[] = $image_cache[$gallery_image_number];
                             }
                         }
 
@@ -230,6 +364,14 @@ $has_woocommerce = class_exists('WooCommerce');
                         } else {
                             update_post_meta($post_id, '_price', $regular_price);
                         }
+
+                        // Ngẫu nhiên 50% sản phẩm có bubble new/hot
+                        if (1 > 2 && rand(0, 1) === 1) {
+                            update_post_meta($post_id, '_bubble_new', 'Enabled');
+                            // Ngẫu nhiên chọn text là NEW hoặc HOT
+                            $bubble_text = rand(0, 1) === 1 ? 'NEW' : 'HOT';
+                            update_post_meta($post_id, '_bubble_text', $bubble_text);
+                        }
                     }
 
                     $total_created++;
@@ -237,7 +379,22 @@ $has_woocommerce = class_exists('WooCommerce');
             }
         }
 
-        echo '<div class="notice notice-success"><p><strong>✓ Hoàn tất!</strong> Đã tạo thành công ' . $total_created . ' ' . $post_type . '</p></div>';
+        // Tính tổng số bài viết/sản phẩm hiện có (bao gồm cả mới tạo)
+        $total_demo_count = $existing_demo_count + $total_created;
+
+        echo '<div class="notice notice-success"><p><strong>✓ Hoàn tất request này!</strong> Đã tạo thành công ' . $total_created . ' ' . $post_type . ' trong lần này. Tổng cộng: <strong>' . $total_demo_count . '/' . $max_post_demo . '</strong></p></div>';
+
+        // Nếu chưa đủ ${max_post_demo} bài viết/sản phẩm thì reload lại trang
+        if ($total_demo_count < $max_post_demo) {
+            echo '<div class="notice notice-info"><p>Đang tiếp tục tạo thêm dữ liệu... (' . $total_demo_count . '/' . $max_post_demo . ')</p></div>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 3000);</script>';
+            echo '<p><em>Trang sẽ tự động tải lại sau 3 giây để tiếp tục tạo dữ liệu...</em></p>';
+?>
+    </div>
+<?php
+            return;
+        }
+
         echo '<p><a href="' . admin_url('edit.php' . ($post_type === 'product' ? '?post_type=product' : '')) . '" class="button button-primary">Xem danh sách ' . $post_type . '</a></p>';
     } elseif (isset($_GET['action']) && $_GET['action'] === 'delete') {
         // Xóa toàn bộ dữ liệu demo
@@ -386,7 +543,7 @@ $has_woocommerce = class_exists('WooCommerce');
             <label>
                 <strong>Loại nội dung:</strong><br>
                 <select name="for_type" aria-required="true" required>
-                    <option value="">-- Chọn loại nội dung --</option>
+                    <!-- <option value="">-- Chọn loại nội dung --</option> -->
                     <option value="post">Bài viết (Post)</option>
                     <option value="product" <?php if (!$has_woocommerce) echo 'disabled'; ?>>Sản phẩm (Product) <?php if (!$has_woocommerce) echo '- Cần cài WooCommerce'; ?></option>
                 </select>
@@ -403,6 +560,7 @@ $has_woocommerce = class_exists('WooCommerce');
             <li>Gán ảnh đại diện ngẫu nhiên từ webgiare.org</li>
             <li>Gán giá ngẫu nhiên cho sản phẩm</li>
             <li>Ngẫu nhiên 50% sản phẩm có giá khuyến mãi</li>
+            <!-- <li>Ngẫu nhiên 50% sản phẩm Enabled _bubble_new</li> -->
         </ol>
 
         <p>
@@ -424,30 +582,25 @@ $has_woocommerce = class_exists('WooCommerce');
         if ($demo_user) {
             $user_id = $demo_user->ID;
 
-            // Đếm số lượng dữ liệu
-            $count_posts = count(get_posts([
-                'post_type'      => 'post',
-                'author'         => $user_id,
-                'posts_per_page' => -1,
-                'fields'         => 'ids',
-            ]));
+            // Đếm số lượng dữ liệu (dùng SQL trực tiếp)
+            global $wpdb;
+            $count_posts = (int) $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_author = %d AND post_status != 'trash'",
+                $user_id
+            ));
 
             $count_products = 0;
             if ($has_woocommerce) {
-                $count_products = count(get_posts([
-                    'post_type'      => 'product',
-                    'author'         => $user_id,
-                    'posts_per_page' => -1,
-                    'fields'         => 'ids',
-                ]));
+                $count_products = (int) $wpdb->get_var($wpdb->prepare(
+                    "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'product' AND post_author = %d AND post_status != 'trash'",
+                    $user_id
+                ));
             }
 
-            $count_attachments = count(get_posts([
-                'post_type'      => 'attachment',
-                'author'         => $user_id,
-                'posts_per_page' => -1,
-                'fields'         => 'ids',
-            ]));
+            $count_attachments = (int) $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_author = %d",
+                $user_id
+            ));
 
             if ($count_posts > 0 || $count_products > 0 || $count_attachments > 0) {
     ?>
