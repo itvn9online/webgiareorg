@@ -168,12 +168,14 @@ global $wpdb;
 // var_dump(strpos(explode('//', get_home_url())[1], '/'));
 
 // danh sách plugin trên github
-$githubs_plugin = [
+$github_plugins = [
     'echbay-ai-optimize-seo' => '',
     'echbay-viettelpost-woocommerce' => '',
     'smtp-config-manager' => '',
     'mail-marketing-importer' => '',
     'echbay-email-queue' => '',
+    'echbay-store-system' => '',
+    'echbay-wc-gsheet-sync' => '',
     'devvn-quick-buy' => '',
     'devvn-woocommerce-reviews' => '',
 ];
@@ -280,17 +282,17 @@ if (isset($_GET['download_wordpress_plugin']) && !empty($_GET['download_wordpres
  */
 if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plugin'])) {
     $plugin_name = sanitize_text_field($_GET['download_github_plugin']);
-    if (isset($githubs_plugin[$plugin_name])) {
+    if (isset($github_plugins[$plugin_name])) {
         $dest = WP_PLUGIN_DIR . '/' . $plugin_name . '-main.zip';
         if (is_file($dest)) {
             unlink($dest);
         }
 
-        if ($githubs_plugin[$plugin_name] == '') {
-            $githubs_plugin[$plugin_name] = 'https://github.com/itvn9online/' . $plugin_name;
+        if ($github_plugins[$plugin_name] == '') {
+            $github_plugins[$plugin_name] = 'https://github.com/itvn9online/' . $plugin_name;
         }
 
-        if (copy($githubs_plugin[$plugin_name] . '/archive/refs/heads/main.zip', $dest)) {
+        if (copy($github_plugins[$plugin_name] . '/archive/refs/heads/main.zip', $dest)) {
             echo 'Download plugin: <strong>' . $plugin_name . '</strong> success!<br>' . "\n";
             echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
 
@@ -684,46 +686,39 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
         // lấy thư mục plugin
         // echo WP_PLUGIN_DIR . '<br>' . "\n";
 
-        // 
-        foreach (
-            [
-                'advanced-custom-fields' => 'Advanced Custom Fields (ACF)',
-                'tinymce-advanced' => 'Advanced Editor Tools',
-                'amp' => 'AMP',
-                'classic-editor' => 'Classic Editor',
-                // 'classic-widgets' => 'Classic Widgets',
-                'contact-form-7' => 'Contact Form 7',
-                'echbay-admin-security' => 'EchBay Admin Security',
-                'echbay-phonering-alo' => 'EchBay Phonering Alo',
-                'echbay-search-everything' => 'EchBay Search Everything',
-                'easy-table-of-contents' => 'Easy Table of Contents',
-                'ajax-search-for-woocommerce' => 'FiboSearch - Ajax Search for WooCommerce',
-                'flamingo' => 'Flamingo',
-                'facebook-messenger-customer-chat' => 'Facebook Chat Plugin - Live Chat Plugin for WordPress',
-                'facebook-for-woocommerce' => 'Facebook for WooCommerce',
-                // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
-                'official-facebook-pixel' => 'Meta pixel for WordPress',
-                'google-site-kit' => 'Google Site Kit',
-                'polylang' => 'Polylang',
-                'post-duplicator' => 'Post Duplicator',
-                'seo-by-rank-math' => 'Rank Math SEO',
-                'wp-smushit' => 'Smush Image Optimization',
-                'speculation-rules' => 'Speculative Loading',
-                'tiny-compress-images' => 'TinyPNG',
-                'woocommerce' => 'WooCommerce',
-                'woo-vietnam-checkout' => 'Woocommerce Vietnam Checkout',
-                'wp-mail-smtp' => 'WP Mail SMTP',
-                'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
-                // plugin in github
-                'echbay-ai-optimize-seo' => '',
-                'echbay-viettelpost-woocommerce' => '',
-                'smtp-config-manager' => '',
-                'mail-marketing-importer' => '',
-                'echbay-email-queue' => '',
-                'devvn-quick-buy' => '',
-                'devvn-woocommerce-reviews' => '',
-            ] as $k => $v
-        ) {
+        // danh sách plugin trên wordpress.org
+        $wordpress_plugins = [
+            'advanced-custom-fields' => 'Advanced Custom Fields (ACF)',
+            'tinymce-advanced' => 'Advanced Editor Tools',
+            'amp' => 'AMP',
+            'classic-editor' => 'Classic Editor',
+            // 'classic-widgets' => 'Classic Widgets',
+            'contact-form-7' => 'Contact Form 7',
+            'echbay-admin-security' => 'EchBay Admin Security',
+            'echbay-phonering-alo' => 'EchBay Phonering Alo',
+            'echbay-search-everything' => 'EchBay Search Everything',
+            'easy-table-of-contents' => 'Easy Table of Contents',
+            'ajax-search-for-woocommerce' => 'FiboSearch - Ajax Search for WooCommerce',
+            'flamingo' => 'Flamingo',
+            'facebook-messenger-customer-chat' => 'Facebook Chat Plugin - Live Chat Plugin for WordPress',
+            'facebook-for-woocommerce' => 'Facebook for WooCommerce',
+            // 'nextend-facebook-connect' => 'Nextend Social Login and Register',
+            'official-facebook-pixel' => 'Meta pixel for WordPress',
+            'google-site-kit' => 'Google Site Kit',
+            'polylang' => 'Polylang',
+            'post-duplicator' => 'Post Duplicator',
+            'seo-by-rank-math' => 'Rank Math SEO',
+            'wp-smushit' => 'Smush Image Optimization',
+            'speculation-rules' => 'Speculative Loading',
+            'tiny-compress-images' => 'TinyPNG',
+            'woocommerce' => 'WooCommerce',
+            'woo-vietnam-checkout' => 'Woocommerce Vietnam Checkout',
+            'wp-mail-smtp' => 'WP Mail SMTP',
+            'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
+        ];
+
+        // gộp danh sách plugin và hiển thị
+        foreach (array_merge($wordpress_plugins, $github_plugins) as $k => $v) {
             if ($v == '') {
                 $v = str_replace('-', ' ', ucfirst($k));
             }
@@ -733,19 +728,19 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
         ?>
                 <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
                 <?php
-            } else if (isset($githubs_plugin[$k])) {
-                if ($githubs_plugin[$k] == '') {
-                    $githubs_plugin[$k] = 'https://github.com/itvn9online/' . $k;
+            } else if (isset($github_plugins[$k])) {
+                if ($github_plugins[$k] == '') {
+                    $github_plugins[$k] = 'https://github.com/itvn9online/' . $k;
                 }
 
                 if (is_dir(WP_PLUGIN_DIR . '/' . $k . '-main')) {
                 ?>
-                    <li><a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
+                    <li><a href="<?php echo $github_plugins[$k]; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
                 <?php
                 } else {
                 ?>
                     <li>
-                        <a href="<?php echo $githubs_plugin[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
+                        <a href="<?php echo $github_plugins[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
                         (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
                     </li>
                 <?php
