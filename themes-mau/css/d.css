@@ -21,10 +21,20 @@ strong {
 @media only screen and (min-width:748px) {}
 
 /* mobile, table only */
-@media only screen and (max-width:788px) {}
+@media only screen and (max-width:788px) {
+    #footer>.row>.col.small-6 {
+        flex-basis: 50%;
+        max-width: 50%;
+    }
+}
 
 /* medium size */
-@media only screen and (max-width:588px) {}
+@media only screen and (max-width:588px) {
+    #footer>.row>.col.small-6 {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
 
 /* mobile only */
 @media only screen and (max-width:395px) {}

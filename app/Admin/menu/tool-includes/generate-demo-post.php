@@ -75,7 +75,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
         // Kiểm tra số lượng dữ liệu demo đã có cho post_type này (dùng SQL trực tiếp để nhanh hơn)
         global $wpdb;
         $existing_demo_count = (int) $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_author = %d AND post_status != 'trash'",
+            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_author = %d",
             $post_type,
             $user_id
         ));
@@ -174,8 +174,8 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             // if ($new_count < 20) {
             // Chưa đủ, reload lại trang
             echo '<div class="notice notice-warning"><p>Đã tải thêm ' . $downloaded . ' ảnh. Đang tiếp tục... (' . $new_count . '/20)</p></div>';
-            echo '<script>setTimeout(function(){ window.location.reload(); }, 3000);</script>';
-            echo '<p><em>Trang sẽ tự động tải lại sau 3 giây...</em></p>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 5000);</script>';
+            echo '<p><em>Trang sẽ tự động tải lại sau 5 giây...</em></p>';
 ?>
     </div>
 <?php
@@ -387,8 +387,8 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
         // Nếu chưa đủ ${max_post_demo} bài viết/sản phẩm thì reload lại trang
         if ($total_demo_count < $max_post_demo) {
             echo '<div class="notice notice-info"><p>Đang tiếp tục tạo thêm dữ liệu... (' . $total_demo_count . '/' . $max_post_demo . ')</p></div>';
-            echo '<script>setTimeout(function(){ window.location.reload(); }, 3000);</script>';
-            echo '<p><em>Trang sẽ tự động tải lại sau 3 giây để tiếp tục tạo dữ liệu...</em></p>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 5000);</script>';
+            echo '<p><em>Trang sẽ tự động tải lại sau 5 giây để tiếp tục tạo dữ liệu...</em></p>';
 ?>
     </div>
 <?php
@@ -411,14 +411,21 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             $deleted_categories = 0;
 
             // Xóa tất cả posts của demo user
-            $demo_posts = get_posts([
-                'post_type'      => 'post',
-                'author'         => $user_id,
-                'posts_per_page' => -1,
-                'fields'         => 'ids',
-            ]);
+            global $wpdb;
+            $demo_posts = $wpdb->get_results($wpdb->prepare(
+                "SELECT ID FROM {$wpdb->posts} 
+                WHERE post_type = 'post' 
+                AND post_author = %d 
+                AND post_title LIKE %s 
+                AND post_name LIKE %s",
+                $user_id,
+                '%Demo Post%',
+                '%demo-post%'
+            ));
 
-            foreach ($demo_posts as $post_id) {
+            foreach ($demo_posts as $post) {
+                $post_id = $post->ID;
+
                 // Xóa ảnh đại diện
                 $thumbnail_id = get_post_thumbnail_id($post_id);
                 if ($thumbnail_id) {
@@ -433,14 +440,20 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
             // Xóa tất cả products của demo user (nếu có WooCommerce)
             if ($has_woocommerce) {
-                $demo_products = get_posts([
-                    'post_type'      => 'product',
-                    'author'         => $user_id,
-                    'posts_per_page' => -1,
-                    'fields'         => 'ids',
-                ]);
+                $demo_products = $wpdb->get_results($wpdb->prepare(
+                    "SELECT ID FROM {$wpdb->posts} 
+                    WHERE post_type = 'product' 
+                    AND post_author = %d 
+                    AND post_title LIKE %s 
+                    AND post_name LIKE %s",
+                    $user_id,
+                    '%Demo Product%',
+                    '%demo-product%'
+                ));
 
-                foreach ($demo_products as $product_id) {
+                foreach ($demo_products as $product) {
+                    $product_id = $product->ID;
+
                     // Xóa ảnh đại diện
                     $thumbnail_id = get_post_thumbnail_id($product_id);
                     if ($thumbnail_id) {
@@ -479,6 +492,29 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 $deleted_images++;
             }
 
+            // Kiểm tra còn posts/products nào của user demo không (để quyết định có xóa user)
+            $remaining_posts = $wpdb->get_results($wpdb->prepare(
+                "SELECT post_type, post_status, COUNT(*) as count 
+                FROM {$wpdb->posts} 
+                WHERE post_author = %d 
+                GROUP BY post_type, post_status",
+                $user_id
+            ));
+
+            // Tính tổng số và tạo thống kê chi tiết
+            $remaining_posts_count = 0;
+            $remaining_posts_stats = [];
+            foreach ($remaining_posts as $stat) {
+                $remaining_posts_count += $stat->count;
+
+                $remaining_posts_stats[] = sprintf(
+                    '%s %s x %d',
+                    $stat->post_type,
+                    $stat->post_status,
+                    $stat->count
+                );
+            }
+
             // Xóa danh mục demo (category)
             $demo_categories = get_terms([
                 'taxonomy'   => 'category',
@@ -486,8 +522,8 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             ]);
 
             foreach ($demo_categories as $term) {
-                // Kiểm tra nếu tên chứa 'Category Demo' hoặc chỉ có 'Demo'
-                if (strpos($term->name, 'Category Demo') !== false) {
+                // Kiểm tra nếu tên chứa 'Category Demo' và slug chứa 'category-demo'
+                if (strpos($term->name, 'Category Demo') !== false && strpos($term->slug, 'category-demo') !== false) {
                     wp_delete_term($term->term_id, 'category');
                     $deleted_categories++;
                 }
@@ -501,21 +537,25 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 ]);
 
                 foreach ($demo_product_cats as $term) {
-                    // Kiểm tra nếu tên chứa 'Product cat Demo' hoặc chỉ có 'Demo'
-                    if (strpos($term->name, 'Product cat Demo') !== false) {
+                    // Kiểm tra nếu tên chứa 'Product cat Demo' và slug chứa 'product-cat-demo'
+                    if (strpos($term->name, 'Product cat Demo') !== false && strpos($term->slug, 'product-cat-demo') !== false) {
                         wp_delete_term($term->term_id, 'product_cat');
                         $deleted_categories++;
                     }
                 }
             }
 
-            // Xóa demo user
-            require_once(ABSPATH . 'wp-admin/includes/user.php');
-            wp_delete_user($user_id);
+            // Chỉ xóa demo user nếu không còn posts/products nào
+            if ($remaining_posts_count === 0) {
+                require_once(ABSPATH . 'wp-admin/includes/user.php');
+                wp_delete_user($user_id);
+            }
 
             echo '<div class="notice notice-success"><p><strong>✓ Đã xóa thành công:</strong></p>';
             echo '<ul style="list-style: disc; margin-left: 20px;">';
-            echo '<li>Tài khoản demo: <strong>' . $demo_username . '</strong></li>';
+            if ($remaining_posts_count === 0) {
+                echo '<li>Tài khoản demo: <strong>' . $demo_username . '</strong></li>';
+            }
             echo '<li>Bài viết: <strong>' . $deleted_posts . '</strong></li>';
             if ($has_woocommerce) {
                 echo '<li>Sản phẩm: <strong>' . $deleted_products . '</strong></li>';
@@ -523,6 +563,19 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             echo '<li>Hình ảnh: <strong>' . $deleted_images . '</strong></li>';
             echo '<li>Danh mục: <strong>' . $deleted_categories . '</strong></li>';
             echo '</ul></div>';
+
+            // Hiển thị cảnh báo nếu còn dữ liệu (không xóa user)
+            if ($remaining_posts_count > 0) {
+                echo '<div class="notice notice-warning"><p><strong>⚠ Cảnh báo:</strong> Phát hiện <strong>' . $remaining_posts_count . '</strong> bài viết/sản phẩm đã được chỉnh sửa (bỏ qua không xóa).</p>';
+                if (!empty($remaining_posts_stats)) {
+                    echo '<ul style="list-style: disc; margin-left: 20px;">';
+                    foreach ($remaining_posts_stats as $stat_line) {
+                        echo '<li>' . $stat_line . '</li>';
+                    }
+                    echo '</ul>';
+                }
+                echo '<p>Tài khoản <strong>' . $demo_username . '</strong> đã được giữ lại vì còn dữ liệu không phải demo thuần túy.</p></div>';
+            }
         }
 
 ?>
@@ -585,14 +638,14 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             // Đếm số lượng dữ liệu (dùng SQL trực tiếp)
             global $wpdb;
             $count_posts = (int) $wpdb->get_var($wpdb->prepare(
-                "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_author = %d AND post_status != 'trash'",
+                "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_author = %d",
                 $user_id
             ));
 
             $count_products = 0;
             if ($has_woocommerce) {
                 $count_products = (int) $wpdb->get_var($wpdb->prepare(
-                    "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'product' AND post_author = %d AND post_status != 'trash'",
+                    "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'product' AND post_author = %d",
                     $user_id
                 ));
             }

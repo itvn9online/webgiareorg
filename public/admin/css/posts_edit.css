@@ -9,11 +9,11 @@
 
 .WGR-post-edit-search-taxonomy {
     padding: 10px 0 0 10px;
-}
 
-.WGR-post-edit-search-taxonomy textarea,
-.WGR-post-edit-search-taxonomy input {
-    width: 96%;
+    textarea,
+    input {
+        width: 96%;
+    }
 }
 
 /* */
@@ -31,24 +31,24 @@
     -o-transition: all 0.8s ease;
     -webkit-transition: all 0.8s ease;
     transition: all 0.8s ease;
+
+    li {
+        border-bottom: 1px #ccc solid;
+        margin: 0;
+        padding: 10px;
+        line-height: 20px;
+        background: rgba(255, 255, 255, .8);
+        display: none;
+    }
+
+    li:hover {
+        text-decoration: underline;
+        color: #f00;
+    }
 }
 
-..edit-post-wgr-tab:hover {
+.edit-post-wgr-tab:hover {
     z-index: 9999;
-}
-
-.edit-post-wgr-tab li {
-    border-bottom: 1px #ccc solid;
-    margin: 0;
-    padding: 10px;
-    line-height: 20px;
-    background: rgba(255, 255, 255, .8);
-    display: none;
-}
-
-.edit-post-wgr-tab li:hover {
-    text-decoration: underline;
-    color: #f00;
 }
 
 .edit-post-wgr-tab li:last-child,
