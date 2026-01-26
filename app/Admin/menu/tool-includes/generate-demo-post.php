@@ -202,6 +202,18 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
         // echo '<div class="notice notice-success"><p>✓ Đã tải sẵn ' . count($image_cache) . ' ảnh để sử dụng</p></div>';
 
+        // 
+        $lipsum_stext = [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tincidunt semper faucibus. Morbi non elit sapien. Cras sem ex, sagittis at varius dictum, condimentum non enim. Nulla ullamcorper id massa placerat pulvinar. In quam tortor, scelerisque hendrerit sagittis in, ultrices ut arcu. Duis consequat porta mattis. Praesent facilisis lacus at ligula rutrum fermentum. Quisque id lacus vitae diam pellentesque vehicula vitae eu nisi. Vivamus elementum turpis sapien, in pretium lectus tristique eu.',
+            'Phasellus et vehicula ex, quis bibendum ante. Integer vel eros rhoncus, aliquam nunc nec, feugiat dui. Sed pellentesque urna eu interdum dictum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc varius consectetur dui, varius varius sapien venenatis sit amet. Mauris ultrices laoreet sapien vel tincidunt. Sed id diam varius, sodales purus a, venenatis neque. Praesent dictum arcu eu facilisis vestibulum. Mauris nec mauris tellus. Integer bibendum est urna. Curabitur in sapien a nulla luctus vehicula. Sed odio tortor, iaculis sed velit bibendum, placerat congue orci.',
+            'Donec ultricies tincidunt dolor, a finibus ante maximus at. Quisque vel ullamcorper ex. Aliquam cursus eget sem sed varius. Nullam molestie tempus neque ut semper. In faucibus mauris sed massa faucibus imperdiet. Cras purus ex, ornare sit amet leo quis, aliquam venenatis nisi. Donec dapibus, felis sit amet iaculis sodales, tortor augue eleifend erat, non ultricies augue tellus sed velit. Integer porta laoreet quam non facilisis. Curabitur sapien turpis, finibus et tortor in, vulputate elementum nisi. Morbi at tempor mi. Etiam quis ante a tellus posuere efficitur.',
+            'Cras dolor sapien, faucibus eu purus eget, scelerisque euismod nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. Sed luctus nibh quis euismod sodales. Nulla ac lacus ipsum. Morbi mollis augue non ullamcorper accumsan. Curabitur mattis viverra sem, eu iaculis felis efficitur vel. Vivamus ac enim volutpat, fringilla mi vel, maximus mi. Donec venenatis a velit sit amet sagittis. Mauris pharetra egestas porta. Vivamus viverra, arcu vitae consequat pellentesque, orci risus fermentum lacus, eget lacinia neque lectus molestie felis. Etiam consectetur sed ante sit amet posuere. In a est lectus. Donec et enim blandit, hendrerit mi in, viverra justo.',
+            'Phasellus auctor molestie magna, in posuere augue tincidunt vel. Phasellus sed tortor aliquet, ultricies magna a, dictum metus. Morbi at nulla nisl. Nulla molestie volutpat nunc at vulputate. In hac habitasse platea dictumst. Mauris venenatis felis et ipsum condimentum, nec convallis augue accumsan. Fusce fringilla ligula lectus, et luctus elit elementum ac. Nulla eget suscipit ante.',
+            'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aenean euismod, risus in facilisis congue, erat libero efficitur erat, in convallis ligula odio a nunc. Curabitur euismod, augue in facilisis cursus, libero erat venenatis urna, a tincidunt libero risus nec libero. In hac habitasse platea dictumst. Nullam euismod, nisi vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero. Sed euismod, nisl vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero.',
+            'Nam euismod, nisi vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero. Sed euismod, nisl vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aenean euismod, risus in facilisis congue, erat libero efficitur erat, in convallis ligula odio a nunc.',
+            'Curabitur euismod, augue in facilisis cursus, libero erat venenatis urna, a tincidunt libero risus nec libero. In hac habitasse platea dictumst. Nullam euismod, nisi vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero. Sed euismod, nisl vel consectetur interdum, nisl nunc consectetur nunc, nec gravida nunc nisl at libero.',
+        ];
+
         // ===== BƯỚC 2: TẠO DANH MỤC VÀ BÀI VIẾT =====
         // Xác định taxonomy
         $taxonomy = $post_type === 'product' ? 'product_cat' : 'category';
@@ -221,7 +233,9 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             $term = term_exists($cat_name, $taxonomy);
 
             if (!$term) {
-                $term = wp_insert_term($cat_name, $taxonomy);
+                $term = wp_insert_term($cat_name, $taxonomy, [
+                    'description' => 'Danh mục demo tự động tạo bởi hệ thống. ' . $lipsum_stext[array_rand($lipsum_stext)]
+                ]);
             }
 
             if (!is_wp_error($term)) {
@@ -249,7 +263,8 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
                     if (!$sub_term) {
                         $sub_term = wp_insert_term($sub_cat_name, $taxonomy, [
-                            'parent' => $parent_id
+                            'parent' => $parent_id,
+                            'description' => 'Danh mục con demo tự động tầng bởi hệ thống. ' . $lipsum_stext[array_rand($lipsum_stext)]
                         ]);
                     }
 
@@ -289,22 +304,29 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                     ? 'Demo Product #' . $i
                     : 'Demo Post #' . $i;
 
-                // Nội dung mẫu với 1-3 ảnh ngẫu nhiên
-                $num_content_images = rand(1, 3);
-                $post_content = '<p>Đây là nội dung demo cho ' . $post_title . '</p>';
-                $post_content .= '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
+                // Nội dung mẫu với 3-5 ảnh ngẫu nhiên
+                $num_content_images = rand(3, 5);
+                $post_content = '<h2>Đây là nội dung demo cho ' . $post_title . '</h2>';
+                // lấy một đoạn văn bản mẫu ngẫu nhiên trong mảng $lipsum_stext
+                $post_content .= '<p>' . $lipsum_stext[array_rand($lipsum_stext)] . '</p>';
 
                 // Thêm ảnh ngẫu nhiên vào nội dung
                 for ($ci = 0; $ci < $num_content_images; $ci++) {
                     $random_img_num = rand(1, 20);
                     if (isset($image_cache[$random_img_num])) {
+                        // tạo thẻ heading ngẫu nhiên
+                        $random_heading_level = rand(2, 3);
+                        $post_content .= '<h' . $random_heading_level . '>Heading ' . $random_heading_level . ' demo ' . ($ci + 1) . '</h' . $random_heading_level . '>';
+
+                        // chèn ảnh vào content
                         $post_content .= $get_image_html($image_cache[$random_img_num]);
-                        $post_content .= '<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>';
+                        // lấy một đoạn văn bản mẫu ngẫu nhiên trong mảng $lipsum_stext
+                        $post_content .= '<p>' . $lipsum_stext[array_rand($lipsum_stext)] . '</p>';
                     }
                 }
 
                 // tạo title với độ dài ngẫu nhiên
-                $lorem_words = explode(' ', 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua');
+                $lorem_words = explode(' ', $lipsum_stext[array_rand($lipsum_stext)]);
                 $random_title_length = rand(5, 10);
                 $random_title = implode(' ', array_slice($lorem_words, 0, $random_title_length));
 
