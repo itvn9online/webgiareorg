@@ -154,3 +154,6 @@ database.php
 /user_guide/
 #/writable/
 
+# GitHub Files
+.github/
+
