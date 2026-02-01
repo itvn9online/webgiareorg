@@ -1,0 +1,12 @@
+/* Dùng khi muốn tải trước các font-face để tránh ảnh hưởng đến LCP trong SEO website. */
+/* Đổi tên file này thành font-face.css là nó sẽ tự được nạp trong header. */
+/* NÊN xóa các comment trong file này để giảm dung lượng CSS */
+/* Các file font cần được đặt trong thư mục `filefonts` và nạp theo cấu trúc `url(filefonts/...` để còn chuyển đổi thành URL tuyệt đối khi in code ra header. */
+/* Ví dụ: */
+@font-face {
+    font-family: 'FontSample';
+    font-style: italic;
+    font-weight: 500;
+    font-display: swap;
+    src: url(filefonts/file-font.ttf) format('TrueType');
+}

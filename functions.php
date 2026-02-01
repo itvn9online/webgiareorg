@@ -6,7 +6,11 @@
 
 //
 define('WGR_BASE_PATH', __DIR__ . '/');
+// echo 'WGR_BASE_PATH: ' . WGR_BASE_PATH . '<br>' . "\n";
 define('WGR_BASE_URI', str_replace(ABSPATH, '', __DIR__) . '/');
+// echo 'WGR_BASE_URI: ' . WGR_BASE_URI . '<br>' . "\n";
+define('WGR_CHILD_URI', str_replace(ABSPATH, '', WGR_CHILD_PATH));
+// echo 'WGR_CHILD_URI: ' . WGR_CHILD_URI . '<br>' . "\n";
 
 // nạp custom config nếu có
 if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {

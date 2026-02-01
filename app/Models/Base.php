@@ -20,9 +20,31 @@ function WGR_get_add_css($f, $ops = [], $attr = [])
     }
     */
 
-    //
+    // trả về nội dung thay vì thẻ link
     if (isset($ops['get_content'])) {
-        return '<style>' . file_get_contents($f, 1) . '</style>' . "\n";
+        $c = file_get_contents($f, 1);
+
+        // loại bỏ comment nếu có yêu cầu
+        if (isset($ops['remove_comment']) && strpos($c, '/*') !== false) {
+            $c_new = [];
+            $has_comment = false;
+            // $lines = explode("\n", $c);
+            foreach (explode("\n", $c) as $line) {
+                $line_trim = trim($line);
+                if ($line_trim == '' || substr($line_trim, 0, 2) == '/*') {
+                    continue;
+                }
+                $c_new[] = $line_trim;
+                $has_comment = true;
+            }
+            if ($has_comment === true) {
+                $c = implode("\n", $c_new);
+                file_put_contents(ABSPATH . $f, $c, LOCK_EX);
+            }
+        }
+
+        // 
+        return '<style>' . $c . '/* sourceURL=' . basename($f) . ' */</style>' . "\n";
     }
 
     // xem có chạy qua CDN không -> có thì nó sẽ giảm tải cho server
@@ -95,7 +117,7 @@ function WGR_get_add_js($f, $ops = [], $attr = [])
 
     //
     if (isset($ops['get_content'])) {
-        return '<script>' . file_get_contents($f, 1) . '</script>';
+        return '<script>' . file_get_contents($f, 1) . '/* sourceURL=' . basename($f) . ' */</script>';
     }
 
     // xem có chạy qua CDN không -> có thì nó sẽ giảm tải cho server

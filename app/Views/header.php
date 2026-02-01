@@ -92,9 +92,18 @@ include __DIR__ . '/header_cache.php';
 
         $url_font_awesome = CDN_BASE_URL . WGR_BASE_URI . 'public/thirdparty/awesome67/css/fontawesome.min.css?v=6.7.2';
     } else {
-    ?>
-        <!-- Font Awesome disable by webgiareorg default -->
-        <?php
+        echo '<!-- Font Awesome disable by webgiareorg default -->' . "\n";
+    }
+
+    // nạp font-face nếu có
+    if (is_file(WGR_CHILD_PATH . 'css/font-face.css')) {
+        // nạp file font theo kiểu inline
+        $font_face_before = WGR_get_add_css(WGR_CHILD_PATH . 'css/font-face.css', [
+            'get_content' => 1,
+            // 'remove_comment' => 1,
+        ]);
+        $font_face_before = str_replace('url(filefonts/', 'url(' . CDN_BASE_URL . WGR_CHILD_URI . 'css/filefonts/', $font_face_before);
+        echo $font_face_before;
     }
 
 
@@ -120,7 +129,7 @@ include __DIR__ . '/header_cache.php';
 
     foreach ($arr_preload_bootstrap as $v) {
         if ($v != '') {
-        ?>
+    ?>
             <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="<?php echo $v; ?>" />
     <?php
         }
