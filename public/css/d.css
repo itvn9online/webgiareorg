@@ -307,7 +307,7 @@ a.eb-tools-goto_menu {
     font-style: italic !important;
     position: relative !important;
     z-index: 999 !important;
-    top: -5px !important;
+    top: -10px !important;
 }
 
 /* desktop only */
