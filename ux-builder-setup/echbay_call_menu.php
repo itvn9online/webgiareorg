@@ -9,7 +9,7 @@ function add_echbay_call_menu()
         0 => '- Chọn menu -',
     ];
     $a = wp_get_nav_menus();
-    //print_r( $a );
+    // print_r($a);
     foreach ($a as $k => $v) {
         $ops_list[$v->term_id] = $v->name;
     }
@@ -58,7 +58,7 @@ function action_echbay_call_menu($atts)
         'custom_class' => '',
     ), $atts));
 
-    //
+    // call_menu -> ID của menu cần gọi
     if (empty($call_menu)) {
         return __FUNCTION__ . ' call_menu is empty!';
     }
@@ -74,11 +74,12 @@ function action_echbay_call_menu($atts)
             return $html;
         }
     }
-    //return $filename;
+    // return $filename;
 
     //
     $html = wp_nav_menu([
-        'echo' => false, // không echo -> lấy kết quả trả về để return
+        // không echo -> lấy kết quả trả về để return
+        'echo' => false,
         'menu' => $call_menu,
         'menu_class' => 'eb-set-menu-selected eb-menu cf',
     ]);

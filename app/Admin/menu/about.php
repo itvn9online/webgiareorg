@@ -529,7 +529,16 @@ function WGR_getIPAddress()
 <p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
 <p>Server IP: <strong><?php echo $_SERVER['SERVER_ADDR']; ?></strong> | Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
 <p>Server date: <strong><?php echo date('r'); ?></strong> | date_i18n: <strong><?php echo date_i18n('r'); ?></strong> | date_i18n (date_format time_format): <strong><?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format')); ?></strong> | current_time (mysql): <strong><?php echo current_time('mysql'); ?></strong></p>
-<p>Wordpress timezone: <strong><?php echo get_option('timezone_string'); ?></strong></p>
+<?php
+$timezone_string = get_option('timezone_string');
+$gmt_offset = get_option('gmt_offset');
+$date_format = get_option('date_format');
+$time_format = get_option('time_format');
+?>
+<p>Wordpress timezone: <strong class="<?php echo (strpos($timezone_string, 'Asia/') === false ? 'redcolor' : 'greencolor'); ?>"><?php echo $timezone_string; ?></strong>
+    - GMT offset: <strong class="<?php echo (($gmt_offset < 6 && $gmt_offset > 8) ? 'redcolor' : 'greencolor'); ?>"><?php echo $gmt_offset; ?></strong>
+    - Date format: <strong class="<?php echo (in_array($date_format, ['Y-m-d', 'd/m/Y', 'd.m.Y']) ? 'greencolor' : 'redcolor'); ?>"><?php echo $date_format; ?></strong>
+    - Time format: <strong class="<?php echo ($time_format != 'H:i' ? 'orgcolor' : 'greencolor'); ?>"><?php echo $time_format; ?></strong></p>
 <?php
 
 //
