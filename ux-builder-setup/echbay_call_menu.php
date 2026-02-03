@@ -27,8 +27,14 @@ function add_echbay_call_menu()
             ),
             'menu_title' => array(
                 'type' => 'textfield',
-                'heading' => 'Title',
+                'heading' => 'Custom Title',
                 'default' => '',
+                'placeholder' => 'Custom title',
+            ),
+            'auto_title' => array(
+                'type' => 'checkbox',
+                'heading' => 'Menu Title',
+                'default' => 'false',
                 'placeholder' => 'Menu title',
             ),
             'custom_class' => array(
@@ -48,6 +54,7 @@ function action_echbay_call_menu($atts)
     extract(shortcode_atts(array(
         'call_menu' => '',
         'menu_title' => '',
+        'auto_title' => '',
         'custom_class' => '',
     ), $atts));
 
@@ -77,7 +84,7 @@ function action_echbay_call_menu($atts)
     ]);
 
     // lấy tên menu từ term (bỏ chức năng lấy tự động vì 1 số trường hợp không muốn hiển thị tên menu)
-    if (1 > 2 && $menu_title == '') {
+    if ($menu_title == '' && $auto_title) {
         $menu_title = get_term($call_menu, 'nav_menu');
         if (is_object($menu_title) && isset($menu_title->name)) {
             $menu_title = $menu_title->name;
