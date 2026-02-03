@@ -1,4 +1,4 @@
-//console.log(typeof jQuery);
+// console.log(typeof jQuery);
 
 function a_ez_toc_link() {
 	jQuery("a.ez-toc-link")

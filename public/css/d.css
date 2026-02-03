@@ -299,6 +299,16 @@ body.woocommerce-cart #footer {
     font-weight: 700;
 }
 
+a.eb-tools-goto_menu {
+    float: right !important;
+    color: blue !important;
+    font-size: 14px !important;
+    font-family: sans-serif !important;
+    position: relative !important;
+    z-index: 999 !important;
+    font-style: italic !important;
+}
+
 /* desktop only */
 @media only screen and (min-width:748px) {
 

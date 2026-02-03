@@ -4,6 +4,33 @@
  * Công cụ hỗ trợ
  */
 
+// nếu có tham số goto_menu thì chuyển đến menu tương ứng
+if (isset($_GET['goto_menu'])) {
+    $goto_menu = trim($_GET['goto_menu']);
+    if ($goto_menu != '') {
+        // Lấy menu theo slug
+        $data_menu = get_term_by('slug', $goto_menu, 'nav_menu');
+        // print_r($data_menu);
+
+
+        // Nếu không tìm thấy và có "menu-" ở đầu, thử cắt bỏ
+        if (!$data_menu && substr($goto_menu, 0, 5) == 'menu-') {
+            $goto_menu_clean = substr($goto_menu, 5);
+            $data_menu = get_term_by('slug', $goto_menu_clean, 'nav_menu');
+        }
+
+        // Nếu tìm thấy menu
+        if ($data_menu && !is_wp_error($data_menu)) {
+            // print_r($data_menu);
+            // Chuyển đến link edit menu
+            wp_redirect(admin_url() . 'nav-menus.php?action=edit&menu=' . $data_menu->term_id);
+            exit();
+        } else {
+            echo '<p class="redcolor">Không tìm thấy menu với slug: ' . esc_html($goto_menu) . '</p>';
+        }
+    }
+}
+
 ?>
 <h1>Công cụ hỗ trợ</h1>
 <ol>

@@ -64,6 +64,22 @@ WGR_adds_js([
     'defer'
 ]);
 
+// nếu người dùng đang đăng nhập và có quyền Biên tập viên trở lên thì nạp thêm js dành cho admin
+if (WGR_USER_ID > 0 && current_user_can('edit_others_posts')) {
+?>
+    <script type="text/javascript">
+        const web_admin_link = "<?php echo admin_url(); ?>";
+    </script>
+<?php
+    WGR_adds_js([
+        WGR_BASE_PATH . 'public/javascript/footer-admin.js',
+    ], [
+        'cdn' => CDN_BASE_URL,
+    ], [
+        'defer'
+    ]);
+}
+
 ?>
 <div id="oi_popup"></div>
 </body>

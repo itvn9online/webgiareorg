@@ -776,7 +776,9 @@ check_and_update_webgiareorg();
 
 ?>
 <iframe id="target_eb_iframe" name="target_eb_iframe" title="EB iframe" src="about:blank" width="333" height="550"></iframe>
-<script>
+<script type="text/javascript">
+    const web_admin_link = "<?php echo admin_url(); ?>";
+
     // nếu tồn tại tham số update_wgr_code trên URL thì xóa nó đi sau đó tải lại trang sau 1 giây
     (function() {
         if (window.location.href.includes('update_wgr_code=') == true) {
@@ -800,7 +802,7 @@ check_and_update_webgiareorg();
             let x = jQuery(this).attr('data-name') || '';
             if (x != '') {
                 jQuery(this).attr({
-                    href: web_link + 'wp-admin/plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h
+                    href: web_admin_link + 'plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h
                 })
             }
         });
