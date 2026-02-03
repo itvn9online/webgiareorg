@@ -735,12 +735,12 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
 
                 if (is_dir(WP_PLUGIN_DIR . '/' . $k . '-main')) {
                 ?>
-                    <li><a href="<?php echo $github_plugins[$k]; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
+                    <li><a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
                 <?php
                 } else {
                 ?>
                     <li>
-                        <a href="<?php echo $github_plugins[$k]; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
+                        <a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
                         (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
                     </li>
                 <?php
@@ -809,6 +809,20 @@ check_and_update_webgiareorg();
     // nếu tồn tại tham số download_github_plugin hoặc download_wordpress_plugin trên URL thì xóa nó đi
     (function() {
         var url = new URL(window.location.href);
+        // nếu có tham số download_github_plugin hoặc download_wordpress_plugin thì lấy giá trị của nó xong cuộn chuột đến thẻ A có data-name tương ứng
+        var plugin_name_wp = url.searchParams.get("download_wordpress_plugin") || url.searchParams.get("download_github_plugin") || null;
+        if (plugin_name_wp != null) {
+            // delay nhỏ để đảm bảo DOM đã sẵn sàng
+            setTimeout(function() {
+                var targetElement = jQuery('a[data-name="' + plugin_name_wp + '"]');
+                if (targetElement.length > 0) {
+                    jQuery('html, body').animate({
+                        scrollTop: targetElement.offset().top - 99
+                    }, 1000);
+                }
+            }, 300);
+        }
+        // xóa tham số download_github_plugin và download_wordpress_plugin
         url.searchParams.delete("download_github_plugin");
         url.searchParams.delete("download_wordpress_plugin");
         window.history.replaceState({}, document.title, url);
