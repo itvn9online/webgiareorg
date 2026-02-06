@@ -718,6 +718,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             'post-duplicator' => 'Post Duplicator',
             'seo-by-rank-math' => 'Rank Math SEO',
             'wp-smushit' => 'Smush Image Optimization',
+            'wordfence' => 'Wordfence Security',
             'speculation-rules' => 'Speculative Loading',
             'tiny-compress-images' => 'TinyPNG',
             'woocommerce' => 'WooCommerce',
