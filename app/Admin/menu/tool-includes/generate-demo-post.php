@@ -441,7 +441,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 AND post_title LIKE %s 
                 AND post_name LIKE %s",
                 $user_id,
-                '%Demo Post%',
+                '%Demo%',
                 '%demo-post%'
             ));
 
@@ -469,7 +469,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                     AND post_title LIKE %s 
                     AND post_name LIKE %s",
                     $user_id,
-                    '%Demo Product%',
+                    '%Demo%',
                     '%demo-product%'
                 ));
 
@@ -538,32 +538,34 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             }
 
             // Xóa danh mục demo (category)
-            $demo_categories = get_terms([
-                'taxonomy'   => 'category',
-                'hide_empty' => false,
-            ]);
+            $demo_categories = $wpdb->get_results(
+                "SELECT t.term_id 
+                FROM {$wpdb->terms} AS t
+                INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                WHERE tt.taxonomy = 'category'
+                AND t.name LIKE '%Demo%'
+                AND t.slug LIKE '%category-demo%'"
+            );
 
             foreach ($demo_categories as $term) {
-                // Kiểm tra nếu tên chứa 'Category Demo' và slug chứa 'category-demo'
-                if (strpos($term->name, 'Category Demo') !== false && strpos($term->slug, 'category-demo') !== false) {
-                    wp_delete_term($term->term_id, 'category');
-                    $deleted_categories++;
-                }
+                wp_delete_term($term->term_id, 'category');
+                $deleted_categories++;
             }
 
             // Xóa danh mục demo (product_cat)
             if ($has_woocommerce) {
-                $demo_product_cats = get_terms([
-                    'taxonomy'   => 'product_cat',
-                    'hide_empty' => false,
-                ]);
+                $demo_product_cats = $wpdb->get_results(
+                    "SELECT t.term_id 
+                    FROM {$wpdb->terms} AS t
+                    INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                    WHERE tt.taxonomy = 'product_cat'
+                    AND t.name LIKE '%Demo%'
+                    AND t.slug LIKE '%product-cat-demo%'"
+                );
 
                 foreach ($demo_product_cats as $term) {
-                    // Kiểm tra nếu tên chứa 'Product cat Demo' và slug chứa 'product-cat-demo'
-                    if (strpos($term->name, 'Product cat Demo') !== false && strpos($term->slug, 'product-cat-demo') !== false) {
-                        wp_delete_term($term->term_id, 'product_cat');
-                        $deleted_categories++;
-                    }
+                    wp_delete_term($term->term_id, 'product_cat');
+                    $deleted_categories++;
                 }
             }
 

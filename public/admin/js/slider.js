@@ -13,14 +13,19 @@ jQuery(".wgr-slider")
 		// "small-columns-1",
 		"slider",
 		"row-slider",
+		// nút điều hướng hình tròn
 		"slider-nav-circle",
+		// nút điều hướng đơn giản
+		// "slider-nav-simple",
+		// khi muốn cho nút điều hướng ra ngoài thì dùng class này
+		// "slider-nav-outside",
 		"slider-nav-push",
 	])
 	.attr({
 		"data-flickity-options": JSON.stringify({
 			imagesLoaded: true,
 			groupCells: "100%",
-			dragThreshold: 5,
+			// dragThreshold: 5,
 			cellAlign: "left",
 			wrapAround: true,
 			prevNextButtons: true,

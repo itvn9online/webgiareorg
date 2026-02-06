@@ -11,7 +11,7 @@ jQuery(".eb-set-menu-selected").each(function () {
 				web_admin_link +
 				"admin.php?page=eb-tools&goto_menu=" +
 				menu_id +
-				'" target="_blank" rel="noopener noreferrer" class="eb-tools-goto_menu">Edit Menu</a>',
+				'" target="_blank" rel="noopener noreferrer" class="eb-tools-goto_menu">Edit</a>',
 		);
 	}
 });

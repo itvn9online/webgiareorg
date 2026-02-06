@@ -535,10 +535,10 @@ $gmt_offset = get_option('gmt_offset');
 $date_format = get_option('date_format');
 $time_format = get_option('time_format');
 ?>
-<p>Wordpress timezone: <strong class="<?php echo (strpos($timezone_string, 'Asia/') === false ? 'redcolor' : 'greencolor'); ?>"><?php echo $timezone_string; ?></strong>
-    - GMT offset: <strong class="<?php echo (($gmt_offset < 6 && $gmt_offset > 8) ? 'redcolor' : 'greencolor'); ?>"><?php echo $gmt_offset; ?></strong>
-    - Date format: <strong class="<?php echo (in_array($date_format, ['Y-m-d', 'd/m/Y', 'd.m.Y']) ? 'greencolor' : 'redcolor'); ?>"><?php echo $date_format; ?></strong>
-    - Time format: <strong class="<?php echo ($time_format != 'H:i' ? 'orgcolor' : 'greencolor'); ?>"><?php echo $time_format; ?></strong></p>
+<p>Wordpress timezone: <strong class="<?php echo (strpos($timezone_string, 'Asia/') === false ? 'orgcolor' : 'bluecolor'); ?>"><?php echo $timezone_string; ?></strong>
+    - GMT offset: <strong class="<?php echo (($gmt_offset < 6 && $gmt_offset > 8) ? 'orgcolor' : 'bluecolor'); ?>"><?php echo $gmt_offset; ?></strong>
+    - Date format: <strong class="<?php echo (in_array($date_format, ['Y-m-d', 'd/m/Y', 'd.m.Y']) ? 'bluecolor' : 'orgcolor'); ?>"><?php echo $date_format; ?></strong>
+    - Time format: <strong class="<?php echo ($time_format != 'H:i' ? 'orgcolor' : 'bluecolor'); ?>"><?php echo $time_format; ?></strong></p>
 <?php
 
 //

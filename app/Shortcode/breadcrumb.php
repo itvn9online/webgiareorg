@@ -19,6 +19,10 @@ function action_wgr_breadcrumb($entry_tag = '')
         return wgr_details_breadcrumb($entry_tag);
     } else if (is_archive()) {
         $category = get_queried_object();
+        if (empty($category) || !isset($category->term_id)) {
+            return '';
+        }
+        // print_r($category);
 
         return wgr_list_breadcrumb($category->name, [[
             'title' => $category->name,
@@ -33,7 +37,7 @@ function action_wgr_breadcrumb($entry_tag = '')
     if (empty($category)) {
         return '';
     }
-    //print_r($category);
+    // print_r($category);
     $arr_breadcrumbs = [];
 
     //
@@ -93,35 +97,49 @@ function wgr_list_breadcrumb($title, $arr_breadcrumbs, $entry_tag = '')
 {
     ob_start();
 
-    //
-    if ($entry_tag != '') {
-?>
-        <entry_title_tag class="breadcrumb-title entry-term-title"><?php echo $title; ?></entry_title_tag>
-    <?php
+    // xác định tên trang chủ dựa theo option page_on_front
+    $page_on_front = get_option('page_on_front');
+    if ($page_on_front > 0) {
+        $front_title = get_the_title($page_on_front);
+    } else {
+        $front_title = __('Home', 'flatsome');
     }
-    ?>
-    <ul aria-label="breadcrumbs" class="cf wgr-breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="<?php echo __('Home', 'flatsome'); ?>" class="breadcrumb-home"><span itemprop="name"><?php echo __('Home', 'flatsome'); ?></span></a>
-            <meta itemprop="position" content="1">
-        </li>
-        <?php
 
-        //
-        $i = 2;
-        foreach ($arr_breadcrumbs as $v) {
-        ?>
-            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="<?php echo $v['url']; ?>" itemprop="item" title="<?php echo $v['title']; ?>" class="active-menu-item"><span itemprop="name"><?php echo $v['title']; ?></span></a>
-                <meta itemprop="position" content="<?php echo $i; ?>">
-            </li>
-        <?php
-
+?>
+    <div class="wgr_list_breadcrumb">
+        <div class="wgr_list_breadcrumb-inner">
+            <?php
             //
-            $i++;
-        }
+            if ($entry_tag != '') {
+            ?>
+                <entry_title_tag class="breadcrumb-title entry-term-title"><?php echo $title; ?></entry_title_tag>
+            <?php
+            }
+            ?>
+            <ul aria-label="breadcrumbs" class="cf wgr-breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="<?php echo $front_title; ?>" class="breadcrumb-home"><span itemprop="name"><?php echo $front_title; ?></span></a>
+                    <meta itemprop="position" content="1">
+                </li>
+                <?php
 
-        ?>
-    </ul>
-    <?php
+                //
+                $i = 2;
+                foreach ($arr_breadcrumbs as $v) {
+                ?>
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="<?php echo $v['url']; ?>" itemprop="item" title="<?php echo $v['title']; ?>" class="active-menu-item"><span itemprop="name"><?php echo $v['title']; ?></span></a>
+                        <meta itemprop="position" content="<?php echo $i; ?>">
+                    </li>
+                <?php
+
+                    //
+                    $i++;
+                }
+
+                ?>
+            </ul>
+        </div>
+    </div>
+<?php
 
     //
     $result = ob_get_contents();
@@ -131,51 +149,72 @@ function wgr_list_breadcrumb($title, $arr_breadcrumbs, $entry_tag = '')
     return str_replace('entry_title_tag', $entry_tag, $result);
 }
 
-// chi tiết tin tức
+// chi tiết tin tức hoặc sản phẩm
 function wgr_details_breadcrumb($entry_tag = '')
 {
-    $category = get_the_category();
-    //print_r($category);
+    if (is_singular('post')) {
+        $category = get_the_category();
+    } else if (is_singular('product')) {
+        $category = get_the_terms(get_the_ID(), 'product_cat');
+    } else {
+        return '';
+    }
+    // print_r($category);
     if (empty($category)) {
         return '';
+    }
+
+    // xác định tên trang chủ dựa theo option page_on_front
+    $page_on_front = get_option('page_on_front');
+    if ($page_on_front > 0) {
+        $front_title = get_the_title($page_on_front);
+    } else {
+        $front_title = __('Home', 'flatsome');
     }
 
     //
     ob_start();
 
-    // nếu là h1 -> hiển thị title của post hiện tại
-    if ($entry_tag == 'h1') {
-    ?>
-        <h1 class="breadcrumb-title entry-post-title"><?php the_title(); ?></h1>
-    <?php
-    }
-    // các thẻ khác sẽ hiển thị danh mục
-    else if ($entry_tag != '') {
-    ?>
-        <entry_title_tag class="breadcrumb-title entry-post-title"><?php echo $category[0]->name; ?></entry_title_tag>
-    <?php
-    }
-    ?>
-    <ul class="cf wgr-breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="Trang chủ" class="breadcrumb-home"><span itemprop="name"><?php echo __('Home', 'flatsome'); ?></span></a>
-            <meta itemprop="position" content="1">
-        </li>
-        <?php
+?>
+    <div class="wgr_details_breadcrumb">
+        <div class="wgr_details_breadcrumb-inner">
+            <?php
 
-        //
-        $i = 2;
-        foreach ($category as $v) {
-        ?>
-            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="<?php echo get_category_link($v->term_id); ?>" itemprop="item" title="<?php echo $v->name; ?>" class="active-menu-item"><span itemprop="name"><?php echo $v->name; ?></span></a>
-                <meta itemprop="position" content="<?php echo $i; ?>">
-            </li>
-        <?php
+            // nếu là h1 -> hiển thị title của post hiện tại
+            if ($entry_tag == 'h1') {
+            ?>
+                <h1 class="breadcrumb-title entry-post-title"><?php the_title(); ?></h1>
+            <?php
+            }
+            // các thẻ khác sẽ hiển thị danh mục
+            else if ($entry_tag != '') {
+            ?>
+                <entry_title_tag class="breadcrumb-title entry-post-title"><?php echo $category[0]->name; ?></entry_title_tag>
+            <?php
+            }
+            ?>
+            <ul class="cf wgr-breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="./" itemprop="item" title="<?php echo $front_title; ?>" class="breadcrumb-home"><span itemprop="name"><?php echo $front_title; ?></span></a>
+                    <meta itemprop="position" content="1">
+                </li>
+                <?php
 
-            //
-            $i++;
-        }
-        ?>
-    </ul>
+                //
+                $i = 2;
+                foreach ($category as $v) {
+                ?>
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a href="<?php echo get_category_link($v->term_id); ?>" itemprop="item" title="<?php echo $v->name; ?>" class="active-menu-item"><span itemprop="name"><?php echo $v->name; ?></span></a>
+                        <meta itemprop="position" content="<?php echo $i; ?>">
+                    </li>
+                <?php
+
+                    //
+                    $i++;
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
 <?php
 
     //
