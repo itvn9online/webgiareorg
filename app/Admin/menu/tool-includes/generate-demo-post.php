@@ -12,12 +12,17 @@
  * 
  * Danh mục Bài viết/ Sản phẩm sẽ tạo 1 mảng dạng `'taxonomy' => ['category', 'Danh mục B', 'Danh mục C', ...]` và gán ngẫu nhiên, trong đó `taxonomy` là tên taxonomy (category, product_cat, ...) Mỗi lần chạy sẽ tạo khoảng 3-5 danh mục.
  * - 50% danh mục vừa tạo sẽ tạo thêm 3-5 danh mục con trong nó và cũng gán ngẫu nhiên Bài viết/ Sản phẩm vào danh mục con này.
+ * Khi tạo Sản phẩm sẽ kiểm tra và tạo 5 Thương hiệu nếu chưa có. Thương hiệu sử dụng taxonomy là `product_brand` và sẽ gán ngẫu nhiên cho Sản phẩm trong quá trình tạo sản phẩm.
+ * Khi tạo Sản phẩm sẽ kiểm tra và tạo 5 Thuộc tính nếu chưa có. Thuộc tính sử dụng taxonomy là `product_attributes` và sẽ gán ngẫu nhiên cho Sản phẩm trong quá trình tạo sản phẩm.
  * Tên Bài viết/ Sản phẩm sẽ là: `Demo Post #${i}` hoặc `Demo Product #${i}` trong đó `${i}` là số ngẫu nhiên từ 5-10 (đây cũng chính là số sản phẩm sẽ tạo trên mỗi danh mục)
  * Nội dung Bài viết/ Sản phẩm sẽ là đoạn văn bản mẫu (Lorem ipsum...) kèm theo 1 đến 3 ảnh ngẫu nhiên trong khoảng 1 đến 20, ảnh ngẫu nhiên thường có dạng `<p><img class="alignnone wp-image-${attachment_id} size-full" src="https://$_SERVER['HTTP_HOST']/wp-content/uploads/${year}/${month}/demo-${i}.jpg" alt="" width="450" height="450" /></p>`.
  * Ảnh Bài viết/ Sản phẩm sẽ tạo ngẫu nhiên 1 số từ 1 đến 20 rồi tạo url ảnh và lấy ID ảnh đã tải về gán làm ảnh đại diện.
  * Với sản phẩm sẽ thêm giá ngẫu nhiên từ 100.000đ đến 1.000.000đ (với bước nhảy là 1.000đ) và Ngẫu nhiên 50% sản phẩm có giá khuyến mãi.
  * - Với sản phẩm sẽ thêm gallery khoảng 3-5 ảnh.
  * - Ngẫu nhiên 50% sản phẩm sẽ thiết lập `_bubble_new` là `Enabled` và đồng thời thiết lập `_bubble_text` ngẫu nhiên là `NEW` hoặc `HOT`.
+ * - Với sản phẩm sẽ được gán ngẫu nhiên 1 Thương hiệu đã tạo ở trên.
+ * - Với sản phẩm sẽ được gán ngẫu nhiên 1 Thuộc tính đã tạo ở trên.
+ * Cần tạo ngẫu nhiên Bình luận cho Bài viết hoặc Đánh giá Sản phẩm. Mỗi Bài viết/ Sản phẩm sẽ có từ 0 đến 5 bình luận/ đánh giá, 0 nghĩa là không cần tạo, với Đánh giá Sản phẩm thì ngẫu nhiên từ 1-5 sao theo đúng chuẩn của Woocommerce.
  * Sau khi submit form, với mỗi post_type sẽ kiểm tra xem có sản phẩm demo chưa, nếu có rồi thì không tạo nữa (kiểm tra post_type tạo bởi demo user).
  * 
  * Yêu cầu:
@@ -276,6 +281,55 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             }
         }
 
+        // ===== BƯỚC 3: TẠO THƯƠNG HIỆU VÀ THUỘC TÍNH (CHỈ CHO PRODUCT) =====
+        $brand_ids = [];
+        $attribute_ids = [];
+
+        if ($post_type === 'product' && $has_woocommerce) {
+            // Tạo 5 Thương hiệu (product_brand)
+            echo '<div class="notice notice-info"><p>Đang tạo 5 thương hiệu...</p></div>';
+
+            for ($b = 1; $b <= 5; $b++) {
+                $brand_name = 'Thương hiệu Demo ' . chr(64 + $b); // A, B, C, D, E
+
+                // Kiểm tra thương hiệu đã tồn tại chưa
+                $brand_term = term_exists($brand_name, 'product_brand');
+
+                if (!$brand_term) {
+                    $brand_term = wp_insert_term($brand_name, 'product_brand', [
+                        'description' => 'Thương hiệu demo tự động tạo bởi hệ thống.'
+                    ]);
+                }
+
+                if (!is_wp_error($brand_term)) {
+                    $brand_ids[] = $brand_term['term_id'];
+                    echo '<div class="notice notice-success"><p>✓ Đã tạo thương hiệu: <strong>' . $brand_name . '</strong></p></div>';
+                }
+            }
+
+            // Tạo 5 Thuộc tính (product_attributes)
+            echo '<div class="notice notice-info"><p>Đang tạo 5 thuộc tính...</p></div>';
+
+            $attribute_names = ['Màu sắc', 'Kích thước', 'Chất liệu', 'Kiểu dáng', 'Xuất xứ'];
+
+            foreach ($attribute_names as $attr_index => $attr_name) {
+                // Kiểm tra thuộc tính đã tồn tại chưa
+                $attr_term = term_exists($attr_name . ' Demo', 'product_attributes');
+
+                if (!$attr_term) {
+                    $attr_term = wp_insert_term($attr_name . ' Demo', 'product_attributes', [
+                        'description' => 'Thuộc tính demo tự động tạo bởi hệ thống.'
+                    ]);
+                }
+
+                if (!is_wp_error($attr_term)) {
+                    $attribute_ids[] = $attr_term['term_id'];
+                    echo '<div class="notice notice-success"><p>✓ Đã tạo thuộc tính: <strong>' . $attr_name . ' Demo</strong></p></div>';
+                }
+            }
+        }
+
+        // ===== BƯỚC 4: TẠO BÀI VIẾT/SẢN PHẨM =====
         // Tạo bài viết/sản phẩm (5-10 items cho mỗi danh mục, bao gồm cả danh mục con)
         $total_created = 0;
         $max_per_request = rand($max_post_request - 10, $max_post_request); // Giới hạn tối đa ${max_post_request} bài/sản phẩm mỗi request
@@ -332,11 +386,12 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
                 // Tạo post
                 $post_data = [
-                    'post_title'    => $post_title . ' - ' . $random_title,
-                    'post_content'  => $post_content,
-                    'post_status'   => 'publish',
-                    'post_author'   => $user_id,
-                    'post_type'     => $post_type,
+                    'post_title'      => $post_title . ' - ' . $random_title,
+                    'post_content'    => $post_content,
+                    'post_status'     => 'publish',
+                    'post_author'     => $user_id,
+                    'post_type'       => $post_type,
+                    'comment_status'  => 'open', // Cho phép bình luận
                 ];
 
                 $post_id = wp_insert_post($post_data);
@@ -394,6 +449,81 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                             $bubble_text = rand(0, 1) === 1 ? 'NEW' : 'HOT';
                             update_post_meta($post_id, '_bubble_text', $bubble_text);
                         }
+
+                        // Gán ngẫu nhiên 1 Thương hiệu
+                        if (!empty($brand_ids)) {
+                            $random_brand = $brand_ids[array_rand($brand_ids)];
+                            wp_set_object_terms($post_id, (int) $random_brand, 'product_brand');
+                        }
+
+                        // Gán ngẫu nhiên 1 Thuộc tính
+                        if (!empty($attribute_ids)) {
+                            $random_attribute = $attribute_ids[array_rand($attribute_ids)];
+                            wp_set_object_terms($post_id, (int) $random_attribute, 'product_attributes');
+                        }
+                    }
+
+                    // Tạo bình luận/đánh giá ngẫu nhiên (0-5 bình luận)
+                    $num_comments = rand(0, 5);
+
+                    if ($num_comments > 0) {
+                        // Danh sách tên demo cho người bình luận
+                        $demo_names = [
+                            'Nguyễn Văn An',
+                            'Trần Thị Bích',
+                            'Lê Văn Cường',
+                            'Phạm Thị Dung',
+                            'Hoàng Văn Em',
+                            'Vũ Thị Phương',
+                            'Đặng Văn Giang',
+                            'Bùi Thị Hà',
+                            'Đỗ Văn Hùng',
+                            'Ngô Thị Lan'
+                        ];
+
+                        // Nội dung bình luận mẫu
+                        $demo_comment_contents = [
+                            'Sản phẩm rất tốt, tôi rất hài lòng!',
+                            'Chất lượng tuyệt vời, đáng đồng tiền bát gạo.',
+                            'Giao hàng nhanh, sản phẩm đúng như mô tả.',
+                            'Rất đẹp và chất lượng, sẽ ủng hộ shop thêm.',
+                            'Sản phẩm tốt, giá cả hợp lý.',
+                            'Tôi rất thích sản phẩm này!',
+                            'Chất lượng vượt mong đợi của tôi.',
+                            'Đóng gói cẩn thận, giao hàng nhanh.',
+                            'Shop phục vụ nhiệt tình, sản phẩm đẹp.',
+                            'Đã mua lần 2, chất lượng ổn định.',
+                            'Giá rẻ mà chất lượng tốt, hài lòng lắm.',
+                            'Sản phẩm như hình, rất ưng ý.',
+                        ];
+
+                        for ($c = 0; $c < $num_comments; $c++) {
+                            $comment_author = $demo_names[array_rand($demo_names)];
+                            $comment_email = 'demo' . rand(100, 999) . '@example.com';
+                            $comment_content = $demo_comment_contents[array_rand($demo_comment_contents)];
+
+                            // Tạo comment_date ngẫu nhiên trong vòng 30 ngày gần đây
+                            $random_days_ago = rand(1, 30);
+                            $comment_date = date('Y-m-d H:i:s', strtotime('-' . $random_days_ago . ' days'));
+
+                            $comment_data = [
+                                'comment_post_ID'      => $post_id,
+                                'comment_author'       => $comment_author,
+                                'comment_author_email' => $comment_email,
+                                'comment_content'      => $comment_content,
+                                'comment_approved'     => 1,
+                                'comment_date'         => $comment_date,
+                                'comment_date_gmt'     => get_gmt_from_date($comment_date),
+                            ];
+
+                            $comment_id = wp_insert_comment($comment_data);
+
+                            // Nếu là product, thêm rating (1-5 sao) theo chuẩn WooCommerce
+                            if ($post_type === 'product' && $has_woocommerce && $comment_id) {
+                                $rating = rand(1, 5);
+                                update_comment_meta($comment_id, 'rating', $rating);
+                            }
+                        }
                     }
 
                     $total_created++;
@@ -431,6 +561,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             $deleted_products = 0;
             $deleted_images = 0;
             $deleted_categories = 0;
+            $deleted_comments = 0;
 
             // Xóa tất cả posts của demo user
             global $wpdb;
@@ -447,6 +578,13 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
             foreach ($demo_posts as $post) {
                 $post_id = $post->ID;
+
+                // Xóa bình luận của bài viết
+                $comments = get_comments(['post_id' => $post_id]);
+                foreach ($comments as $comment) {
+                    wp_delete_comment($comment->comment_ID, true);
+                    $deleted_comments++;
+                }
 
                 // Xóa ảnh đại diện
                 $thumbnail_id = get_post_thumbnail_id($post_id);
@@ -475,6 +613,13 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
 
                 foreach ($demo_products as $product) {
                     $product_id = $product->ID;
+
+                    // Xóa đánh giá của sản phẩm
+                    $comments = get_comments(['post_id' => $product_id]);
+                    foreach ($comments as $comment) {
+                        wp_delete_comment($comment->comment_ID, true);
+                        $deleted_comments++;
+                    }
 
                     // Xóa ảnh đại diện
                     $thumbnail_id = get_post_thumbnail_id($product_id);
@@ -567,6 +712,34 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                     wp_delete_term($term->term_id, 'product_cat');
                     $deleted_categories++;
                 }
+
+                // Xóa thương hiệu demo (product_brand)
+                $demo_brands = $wpdb->get_results(
+                    "SELECT t.term_id 
+                    FROM {$wpdb->terms} AS t
+                    INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                    WHERE tt.taxonomy = 'product_brand'
+                    AND t.name LIKE '%Demo%'"
+                );
+
+                foreach ($demo_brands as $term) {
+                    wp_delete_term($term->term_id, 'product_brand');
+                    $deleted_categories++;
+                }
+
+                // Xóa thuộc tính demo (product_attributes)
+                $demo_attributes = $wpdb->get_results(
+                    "SELECT t.term_id 
+                    FROM {$wpdb->terms} AS t
+                    INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                    WHERE tt.taxonomy = 'product_attributes'
+                    AND t.name LIKE '%Demo%'"
+                );
+
+                foreach ($demo_attributes as $term) {
+                    wp_delete_term($term->term_id, 'product_attributes');
+                    $deleted_categories++;
+                }
             }
 
             // Chỉ xóa demo user nếu không còn posts/products nào
@@ -585,12 +758,13 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 echo '<li>Sản phẩm: <strong>' . $deleted_products . '</strong></li>';
             }
             echo '<li>Hình ảnh: <strong>' . $deleted_images . '</strong></li>';
-            echo '<li>Danh mục: <strong>' . $deleted_categories . '</strong></li>';
+            echo '<li>Danh mục/Thương hiệu/Thuộc tính: <strong>' . $deleted_categories . '</strong></li>';
+            echo '<li>Bình luận/Đánh giá: <strong>' . $deleted_comments . '</strong></li>';
             echo '</ul></div>';
 
             // Hiển thị cảnh báo nếu còn dữ liệu (không xóa user)
             if ($remaining_posts_count > 0) {
-                echo '<div class="notice notice-warning"><p><strong>⚠ Cảnh báo:</strong> Phát hiện <strong>' . $remaining_posts_count . '</strong> bài viết/sản phẩm đã được chỉnh sửa (bỏ qua không xóa).</p>';
+                echo '<div class="notice notice-warning"><p><strong>Cảnh báo:</strong> Phát hiện <strong>' . $remaining_posts_count . '</strong> bài viết/sản phẩm đã được chỉnh sửa (bỏ qua không xóa).</p>';
                 if (!empty($remaining_posts_stats)) {
                     echo '<ul style="list-style: disc; margin-left: 20px;">';
                     foreach ($remaining_posts_stats as $stat_line) {
@@ -632,11 +806,19 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
         </p>
         <ol>
             <li>Tạo tài khoản demo: <code>userdemo</code> / <code>emaildemo@<?php echo $_SERVER['HTTP_HOST']; ?></code></li>
-            <li>Tạo 3-5 danh mục ngẫu nhiên</li>
+            <li>Tải 20 ảnh demo từ webgiare.org</li>
+            <li>Tạo 3-5 danh mục ngẫu nhiên (có thể có danh mục con)</li>
+            <?php if ($post_type === 'product' && $has_woocommerce): ?>
+                <li>Tạo 5 thương hiệu và 5 thuộc tính cho sản phẩm</li>
+            <?php endif; ?>
             <li>Tạo 5-10 Bài viết/ Sản phẩm cho mỗi danh mục</li>
-            <li>Gán ảnh đại diện ngẫu nhiên từ webgiare.org</li>
-            <li>Gán giá ngẫu nhiên cho sản phẩm</li>
-            <li>Ngẫu nhiên 50% sản phẩm có giá khuyến mãi</li>
+            <li>Gán ảnh đại diện ngẫu nhiên</li>
+            <?php if ($post_type === 'product' && $has_woocommerce): ?>
+                <li>Gán giá ngẫu nhiên cho sản phẩm (100.000đ - 1.000.000đ)</li>
+                <li>Ngẫu nhiên 50% sản phẩm có giá khuyến mãi</li>
+                <li>Gán ngẫu nhiên thương hiệu và thuộc tính cho sản phẩm</li>
+            <?php endif; ?>
+            <li>Tạo ngẫu nhiên 0-5 bình luận/đánh giá (với sản phẩm có rating 1-5 sao)</li>
             <!-- <li>Ngẫu nhiên 50% sản phẩm Enabled _bubble_new</li> -->
         </ol>
 
@@ -679,6 +861,25 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 $user_id
             ));
 
+            // Đếm số lượng bình luận của posts/products thuộc demo user
+            $count_comments = (int) $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->comments} 
+                WHERE comment_post_ID IN (
+                    SELECT ID FROM {$wpdb->posts} 
+                    WHERE post_author = %d 
+                    AND post_type IN ('post', 'product')
+                )",
+                $user_id
+            ));
+
+            // Đếm số lượng danh mục demo
+            $count_categories = (int) $wpdb->get_var(
+                "SELECT COUNT(*) FROM {$wpdb->terms} AS t
+                INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
+                WHERE t.name LIKE '%Demo%' 
+                AND tt.taxonomy IN ('category', 'product_cat', 'product_brand', 'product_attributes')"
+            );
+
             if ($count_posts > 0 || $count_products > 0 || $count_attachments > 0) {
     ?>
             <div class="notice notice-warning">
@@ -694,10 +895,16 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                     <?php if ($count_attachments > 0): ?>
                         <li>Hình ảnh: <strong><?php echo $count_attachments; ?></strong></li>
                     <?php endif; ?>
+                    <?php if ($count_categories > 0): ?>
+                        <li>Danh mục/Thương hiệu/Thuộc tính: <strong><?php echo $count_categories; ?></strong></li>
+                    <?php endif; ?>
+                    <?php if ($count_comments > 0): ?>
+                        <li>Bình luận/Đánh giá: <strong><?php echo $count_comments; ?></strong></li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
-            <form method="get" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu demo?\n\nHành động này KHÔNG THỂ HOÀN TÁC!\n\nTất cả bài viết, sản phẩm, hình ảnh, danh mục demo và tài khoản demo sẽ bị xóa vĩnh viễn.');">
+            <form method="get" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu demo?\n\nHành động này KHÔNG THỂ HOÀN TÁC!\n\nTất cả bài viết, sản phẩm, hình ảnh, danh mục, thương hiệu, thuộc tính, bình luận/đánh giá demo và tài khoản demo sẽ bị xóa vĩnh viễn.');">
                 <input type="hidden" name="page" value="<?php echo $_GET['page']; ?>">
                 <input type="hidden" name="tool_action" value="<?php echo $_GET['tool_action']; ?>">
                 <input type="hidden" name="action" value="delete">
