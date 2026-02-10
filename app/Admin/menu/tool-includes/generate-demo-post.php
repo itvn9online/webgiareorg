@@ -22,6 +22,7 @@
  * - Ngẫu nhiên 50% sản phẩm sẽ thiết lập `_bubble_new` là `Enabled` và đồng thời thiết lập `_bubble_text` ngẫu nhiên là `NEW` hoặc `HOT`.
  * - Với sản phẩm sẽ được gán ngẫu nhiên 1 Thương hiệu đã tạo ở trên.
  * - Với sản phẩm sẽ được gán ngẫu nhiên 1 Thuộc tính đã tạo ở trên.
+ * - Với sản phẩm sẽ ngẫu nhiên kích hoạt chế độ Quản lý tồn kho `_manage_stock`, khi chế độ này được kích hoạt thì Số lượng `_stock` sẽ là số ngẫu nhiên từ 0-5.
  * Cần tạo ngẫu nhiên Bình luận cho Bài viết hoặc Đánh giá Sản phẩm. Mỗi Bài viết/ Sản phẩm sẽ có từ 0 đến 5 bình luận/ đánh giá, 0 nghĩa là không cần tạo, với Đánh giá Sản phẩm thì ngẫu nhiên từ 1-5 sao theo đúng chuẩn của Woocommerce.
  * Sau khi submit form, với mỗi post_type sẽ kiểm tra xem có sản phẩm demo chưa, nếu có rồi thì không tạo nữa (kiểm tra post_type tạo bởi demo user).
  * 
@@ -461,6 +462,14 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                             $random_attribute = $attribute_ids[array_rand($attribute_ids)];
                             wp_set_object_terms($post_id, (int) $random_attribute, 'product_attributes');
                         }
+
+                        // Ngẫu nhiên kích hoạt chế độ Quản lý tồn kho (50% cơ hội)
+                        if (rand(0, 9) > 4) {
+                            update_post_meta($post_id, '_manage_stock', 'yes');
+                            // Số lượng tồn kho ngẫu nhiên từ 0-5
+                            $stock = rand(0, 5);
+                            update_post_meta($post_id, '_stock', $stock);
+                        }
                     }
 
                     // Tạo bình luận/đánh giá ngẫu nhiên (0-5 bình luận)
@@ -817,6 +826,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                 <li>Gán giá ngẫu nhiên cho sản phẩm (100.000đ - 1.000.000đ)</li>
                 <li>Ngẫu nhiên 50% sản phẩm có giá khuyến mãi</li>
                 <li>Gán ngẫu nhiên thương hiệu và thuộc tính cho sản phẩm</li>
+                <li>Ngẫu nhiên 50% sản phẩm được bật quản lý tồn kho (với số lượng 0-5)</li>
             <?php endif; ?>
             <li>Tạo ngẫu nhiên 0-5 bình luận/đánh giá (với sản phẩm có rating 1-5 sao)</li>
             <!-- <li>Ngẫu nhiên 50% sản phẩm Enabled _bubble_new</li> -->
