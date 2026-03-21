@@ -717,6 +717,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             'polylang' => 'Polylang',
             'post-duplicator' => 'Post Duplicator',
             'seo-by-rank-math' => 'Rank Math SEO',
+            'sepay-gateway' => 'SePay Gateway',
             'wp-smushit' => 'Smush Image Optimization',
             'wordfence' => 'Wordfence Security',
             'speculation-rules' => 'Speculative Loading',
