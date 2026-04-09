@@ -65,7 +65,7 @@ function action_echbay_call_menu($atts)
 
     // sử dụng cache cho menu -> tránh duplicate query
     $filename = '';
-    if (WHY_EBCACHE_DISABLE == '' && function_exists('my_builder_path_cache')) {
+    if (defined('WHY_EBCACHE_DISABLE') && WHY_EBCACHE_DISABLE == '' && function_exists('my_builder_path_cache')) {
         $filename = my_builder_path_cache(__FUNCTION__ .  $call_menu);
 
         //

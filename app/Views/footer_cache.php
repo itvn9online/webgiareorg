@@ -16,30 +16,32 @@ echo $main_content;
 //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
 
 // nếu không có ghi chú về việc tắt cache
-if (WHY_EBCACHE_DISABLE == '') {
-    if (ENABLE_EBCACHE != '') {
-        //echo 'EB_THEME_CACHE: ' . EB_THEME_CACHE . '<br>' . "\n";
-        if (defined('EB_THEME_CACHE')) {
-            if (function_exists('WGR_get_cache_file')) {
-                $filename = WGR_get_cache_file();
-                //echo $filename . '<br>' . "\n";
+if (defined('WHY_EBCACHE_DISABLE')) {
+    if (WHY_EBCACHE_DISABLE == '') {
+        if (ENABLE_EBCACHE != '') {
+            //echo 'EB_THEME_CACHE: ' . EB_THEME_CACHE . '<br>' . "\n";
+            if (defined('EB_THEME_CACHE')) {
+                if (function_exists('WGR_get_cache_file')) {
+                    $filename = WGR_get_cache_file();
+                    //echo $filename . '<br>' . "\n";
 
-                //
-                if (defined('EB_FALSE_CACHE') || WGR_my_cache($filename) === false) {
-                    //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
-                    WGR_my_cache($filename, WGR_remove_html_empty_line($main_content) . WGR_builder_eb_cache_note(ENABLE_EBCACHE . ':' . basename($filename, '.txt')), EB_TIME_CACHE);
+                    //
+                    if (defined('EB_FALSE_CACHE') || WGR_my_cache($filename) === false) {
+                        //echo __FILE__ . ':' . __LINE__ . '<br>' . "\n";
+                        WGR_my_cache($filename, WGR_remove_html_empty_line($main_content) . WGR_builder_eb_cache_note(ENABLE_EBCACHE . ':' . basename($filename, '.txt')), EB_TIME_CACHE);
+                    }
+                } else {
+                    echo '<!-- WGR_get_cache_file not exists -->';
                 }
             } else {
-                echo '<!-- WGR_get_cache_file not exists -->';
+                echo '<!-- EB_THEME_CACHE not define -->';
             }
         } else {
-            echo '<!-- EB_THEME_CACHE not define -->';
+            echo '<!-- ENABLE_EBCACHE not define -->';
         }
-    } else {
-        echo '<!-- ENABLE_EBCACHE not define -->';
     }
-}
-// có thì in ra
-else {
-    echo '<!-- ' . WHY_EBCACHE_DISABLE . ' -->';
+    // có thì in ra
+    else {
+        echo '<!-- ' . WHY_EBCACHE_DISABLE . ' -->';
+    }
 }
