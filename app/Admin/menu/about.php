@@ -729,10 +729,32 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             'yith-woocommerce-wishlist' => 'YITH WooCommerce Wishlist',
         ];
 
+        // Danh sách các plugin khuyên dùng trên github
+        $recommended_plugins = [
+            'tinymce-advanced',
+            'amp',
+            'classic-editor',
+            'contact-form-7',
+            'echbay-admin-security',
+            'echbay-phonering-alo',
+            'flamingo',
+            'post-duplicator',
+            'seo-by-rank-math',
+            'speculation-rules',
+            'woocommerce',
+            'echbay-email-queue',
+        ];
+
         // gộp danh sách plugin và hiển thị
         foreach (array_merge($wordpress_plugins, $github_plugins) as $k => $v) {
             if ($v == '') {
                 $v = str_replace('-', ' ', ucfirst($k));
+            }
+
+            // Thêm class greencolor cho những plugin khuyên dùng
+            $cl = '';
+            if (in_array($k, $recommended_plugins)) {
+                $cl = ' class="greencolor"';
             }
 
             // nếu thư mục code có rồi thì bỏ qua
@@ -753,7 +775,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 ?>
                     <li>
                         <a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow" class="bold"><?php echo $v; ?></a>
-                        (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>">Download now</a>)
+                        (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>" <?php echo $cl; ?>>Download now</a>)
                     </li>
                 <?php
                 }
@@ -761,7 +783,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 ?>
                 <li>
                     <a href="#" data-name="<?php echo $k; ?>" class="thickbox bold"><?php echo $v; ?></a>
-                    (<a href="<?php echo $current_admin_page_url; ?>&download_wordpress_plugin=<?php echo $k; ?>">Download now</a>)
+                    (<a href="<?php echo $current_admin_page_url; ?>&download_wordpress_plugin=<?php echo $k; ?>" <?php echo $cl; ?>>Download now</a>)
                 </li>
         <?php
             }
