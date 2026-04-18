@@ -652,6 +652,114 @@ if (isset($_POST['save_robots']) && wp_verify_nonce($_POST['_wpnonce_robots'], '
 <br>
 <!-- END Edit robots.txt -->
 
+<!-- Tạo file favicon.ico -->
+<?php
+$favicon_path = ABSPATH . 'favicon.ico';
+$php_ico_path = WGR_BASE_PATH . 'vendor/class-php-ico.php';
+
+// Lấy thông tin hiện tại
+$site_icon_id = (int) get_option('site_icon', 0);
+
+// Xử lý form submit
+if (isset($_POST['create_favicon']) && wp_verify_nonce($_POST['_wpnonce_favicon'], 'create_favicon_action')) {
+    if ($site_icon_id > 0) {
+        $site_icon_file = get_attached_file($site_icon_id);
+
+        if ($site_icon_file && is_file($site_icon_file)) {
+            // Tải thư viện PHP_ICO nếu chưa có
+            if (!is_file($php_ico_path)) {
+                $php_ico_response = wp_remote_get('https://raw.githubusercontent.com/itvn9online/php-ico/refs/heads/master/class-php-ico.php', ['timeout' => 15]);
+                if (!is_wp_error($php_ico_response) && wp_remote_retrieve_response_code($php_ico_response) === 200) {
+                    file_put_contents($php_ico_path, wp_remote_retrieve_body($php_ico_response), LOCK_EX);
+                }
+            }
+
+            if (is_file($php_ico_path)) {
+                require_once $php_ico_path;
+                try {
+                    $ico = new PHP_ICO($site_icon_file, [
+                        // [16, 16],
+                        [32, 32],
+                        [48, 48],
+                        [64, 64]
+                    ]);
+                    if ($ico->save_ico($favicon_path)) {
+                        echo '<div class="notice notice-success"><p>✓ Đã tạo favicon.ico thành công!</p></div>';
+                    } else {
+                        echo '<div class="notice notice-error"><p>✗ Không thể tạo favicon.ico. Kiểm tra lại quyền ghi thư mục gốc.</p></div>';
+                    }
+                } catch (\Exception $e) {
+                    echo '<div class="notice notice-error"><p>✗ Lỗi khi tạo favicon.ico: ' . esc_html($e->getMessage()) . '</p></div>';
+                }
+            } else {
+                echo '<div class="notice notice-error"><p>✗ Không thể tải thư viện PHP_ICO. Vui lòng tải thủ công vào <code>' . esc_html($php_ico_path) . '</code>.</p></div>';
+            }
+        } else {
+            echo '<div class="notice notice-error"><p>✗ Không tìm thấy file ảnh từ Site Icon (ID: ' . $site_icon_id . ').</p></div>';
+        }
+    } else {
+        // Xóa favicon.ico nếu không có Site Icon
+        if (is_file($favicon_path)) {
+            unlink($favicon_path);
+            echo '<div class="notice notice-success"><p>✓ Đã xóa favicon.ico (Site Icon chưa được thiết lập).</p></div>';
+        } else {
+            echo '<div class="notice notice-info"><p>Site Icon chưa được thiết lập và favicon.ico cũng không tồn tại.</p></div>';
+        }
+    }
+}
+
+?>
+<h2>Create <a href="<?php echo get_home_url(); ?>/favicon.ico?v=<?php echo time(); ?>" target="_blank">favicon.ico</a></h2>
+<table class="widefat striped" style="max-width: 600px;">
+    <tbody>
+        <tr>
+            <td><strong>Site Icon:</strong></td>
+            <td>
+                <?php if ($site_icon_id > 0): ?>
+                    <?php echo wp_get_attachment_image($site_icon_id, [48, 48]); ?>
+                    <br>
+                    <a href="<?php echo admin_url('customize.php?autofocus[section]=title_tagline'); ?>" target="_blank">Thay đổi</a>
+                <?php else: ?>
+                    <span style="color: red;">✗ Chưa thiết lập</span>
+                    — <a href="<?php echo admin_url('customize.php?autofocus[section]=title_tagline'); ?>" target="_blank">Cài đặt Site Icon</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>favicon.ico:</strong></td>
+            <td>
+                <?php if (is_file($favicon_path)): ?>
+                    <span style="color: green;">✓ Tồn tại</span> (<?php echo size_format(filesize($favicon_path)); ?>)
+                <?php else: ?>
+                    <span style="color: red;">✗ Chưa có</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>PHP_ICO Library:</strong></td>
+            <td>
+                <?php if (is_file($php_ico_path)): ?>
+                    <span style="color: green;">✓ Đã cài đặt</span>
+                <?php else: ?>
+                    <span style="color: orange;">⚠ Chưa có — sẽ tự động tải khi nhấn nút bên dưới</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<form action="" method="post">
+    <?php wp_nonce_field('create_favicon_action', '_wpnonce_favicon'); ?>
+    <button type="submit" name="create_favicon" class="button button-primary button-large">
+        Tạo favicon.ico từ Site Icon
+    </button>
+    <?php if (!$site_icon_id): ?>
+        <p class="description" style="color: red;">Chưa có Site Icon. Vui lòng thiết lập trước trong Appearance &gt; Customize &gt; Site Identity.</p>
+    <?php endif; ?>
+</form>
+<br>
+<!-- END Tạo file favicon.ico -->
+
 <!-- Cleanup site cache -->
 <?php
 

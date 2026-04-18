@@ -117,4 +117,13 @@ else {
         include WGR_BASE_PATH . 'app/Guest/contact-price.php';
     }
     include WGR_BASE_PATH . 'app/ThirdParty/rank_math_the_breadcrumbs.php';
+
+    // Thêm link favicon.ico vào <head> nếu file tồn tại
+    // WordPress mặc định chỉ thêm PNG icon, thêm .ico giúp Google và các công cụ nhận diện chính xác hơn
+    if (is_file(ABSPATH . 'favicon.ico')) {
+        // priority 100: chạy sau wp_site_icon() mặc định của WordPress (priority 99)
+        add_action('wp_head', function () {
+            echo '<link rel="icon" href="' . esc_url(home_url('/favicon.ico')) . '" sizes="any" type="image/x-icon" />' . "\n";
+        }, 100);
+    }
 }
