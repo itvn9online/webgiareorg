@@ -742,6 +742,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             'seo-by-rank-math',
             'speculation-rules',
             'woocommerce',
+            'smtp-config-manager',
             'echbay-email-queue',
         ];
 
