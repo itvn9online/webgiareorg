@@ -26,6 +26,7 @@ function add_echbay_call_shortcode()
         //
         // 'wgr_facebook_like_box',
         'devvn_quickbuy',
+        'rank_math_breadcrumb',
     ];
     $ops_list = [
         '' => '- Chọn shortcode -',
