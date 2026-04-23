@@ -19,18 +19,18 @@
 /* */
 .edit-post-wgr-tab {
     position: fixed;
-    left: 12%;
-    bottom: 20px;
+    left: 170px;
+    bottom: 0;
     border: 1px #ccc solid;
     border-bottom: 0 none;
     box-shadow: 0 0 20px #ccc;
-    min-width: 220px;
+    /* min-width: 220px; */
     cursor: pointer;
     z-index: 999;
-    -moz-transition: all 0.8s ease;
-    -o-transition: all 0.8s ease;
-    -webkit-transition: all 0.8s ease;
-    transition: all 0.8s ease;
+    /* -moz-transition: all 0.8s ease; */
+    /* -o-transition: all 0.8s ease; */
+    /* -webkit-transition: all 0.8s ease; */
+    /* transition: all 0.8s ease; */
 
     li {
         border-bottom: 1px #ccc solid;
