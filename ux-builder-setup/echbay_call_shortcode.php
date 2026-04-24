@@ -60,6 +60,12 @@ function add_echbay_call_shortcode()
                     'default' => '',
                     'placeholder' => 'Tùy chỉnh CSS',
                 ),
+                'custom_id' => array(
+                    'type' => 'textfield',
+                    'heading' => 'ID CSS',
+                    'default' => '',
+                    'placeholder' => 'Tùy chỉnh ID',
+                ),
             ),
         )
     );
@@ -75,6 +81,7 @@ function action_echbay_call_shortcode($atts)
                 'call_shortcode' => '',
                 'for_shortcode' => '',
                 'custom_class' => '',
+                'custom_id' => '',
             ),
             $atts
         )
@@ -92,6 +99,9 @@ function action_echbay_call_shortcode($atts)
     $html = do_shortcode('[' . trim(ltrim(rtrim($for_shortcode, ']'), '[')) . ']');
     if ($custom_class != '') {
         $html = '<div class="' . $custom_class . '">' . $html . '</div>';
+    }
+    if ($custom_id != '') {
+        $html = '<div id="' . $custom_id . '">' . $html . '</div>';
     }
     return $html;
 }
