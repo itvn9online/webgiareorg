@@ -652,6 +652,89 @@ if (isset($_POST['save_robots']) && wp_verify_nonce($_POST['_wpnonce_robots'], '
 <br>
 <!-- END Edit robots.txt -->
 
+<!-- Upload llms.txt -->
+<?php
+$llms_path = ABSPATH . 'llms.txt';
+
+// Xử lý xóa file
+if (isset($_POST['delete_llms']) && wp_verify_nonce($_POST['_wpnonce_llms'], 'llms_action')) {
+    if (is_file($llms_path)) {
+        if (unlink($llms_path)) {
+            echo '<div class="notice notice-success"><p>✓ Đã xóa llms.txt thành công!</p></div>';
+        } else {
+            echo '<div class="notice notice-error"><p>✗ Không thể xóa llms.txt. Kiểm tra lại quyền ghi.</p></div>';
+        }
+    }
+}
+
+// Xử lý upload file
+if (isset($_POST['upload_llms']) && wp_verify_nonce($_POST['_wpnonce_llms'], 'llms_action')) {
+    if (!empty($_FILES['llms_file']['tmp_name'])) {
+        $uploaded_file = $_FILES['llms_file'];
+        $file_ext = strtolower(pathinfo($uploaded_file['name'], PATHINFO_EXTENSION));
+
+        if ($file_ext !== 'txt') {
+            echo '<div class="notice notice-error"><p>✗ Chỉ cho phép upload file .txt!</p></div>';
+        } elseif ($uploaded_file['size'] > 1 * 1024 * 1024) {
+            echo '<div class="notice notice-error"><p>✗ File vượt quá giới hạn 1MB!</p></div>';
+        } elseif ($uploaded_file['error'] !== UPLOAD_ERR_OK) {
+            echo '<div class="notice notice-error"><p>✗ Lỗi upload file (code: ' . intval($uploaded_file['error']) . ').</p></div>';
+        } else {
+            if (move_uploaded_file($uploaded_file['tmp_name'], $llms_path)) {
+                echo '<div class="notice notice-success"><p>✓ Đã upload llms.txt thành công!</p></div>';
+            } else {
+                echo '<div class="notice notice-error"><p>✗ Không thể lưu file. Kiểm tra lại quyền ghi thư mục gốc.</p></div>';
+            }
+        }
+    } else {
+        echo '<div class="notice notice-error"><p>✗ Vui lòng chọn file để upload!</p></div>';
+    }
+}
+?>
+<h2>Upload
+    <?php if (is_file($llms_path)): ?>
+        <a href="<?php echo get_home_url(); ?>/llms.txt?v=<?php echo filemtime($llms_path); ?>" target="_blank">llms.txt</a>
+    <?php else: ?>
+        llms.txt
+    <?php endif; ?>
+</h2>
+<table class="widefat striped" style="max-width: 600px;">
+    <tbody>
+        <tr>
+            <td><strong>Trạng thái:</strong></td>
+            <td>
+                <?php if (is_file($llms_path)): ?>
+                    <span style="color: green;">✓ Tồn tại</span>
+                    (<?php echo size_format(filesize($llms_path)); ?> —
+                    cập nhật lúc <?php echo date_i18n('d/m/Y H:i:s', filemtime($llms_path)); ?>)
+
+                    <form action="" method="post" style="display:inline; margin-left: 10px;" onsubmit="return confirm('Xóa file llms.txt?');">
+                        <?php wp_nonce_field('llms_action', '_wpnonce_llms'); ?>
+                        <button type="submit" name="delete_llms" class="button button-secondary">Xóa llms.txt</button>
+                    </form>
+                <?php else: ?>
+                    <span style="color: red;">✗ Chưa có</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Đường dẫn:</strong></td>
+            <td>
+                <code><?php echo esc_html(str_replace(ABSPATH, '', $llms_path)); ?></code>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<form action="" method="post" enctype="multipart/form-data">
+    <?php wp_nonce_field('llms_action', '_wpnonce_llms'); ?>
+    <input type="file" name="llms_file" accept=".txt" required>
+    <button type="submit" name="upload_llms" class="button button-primary button-large">Upload llms.txt</button>
+    <p class="description">Chỉ chấp nhận file .txt, tối đa 1MB. Upload sẽ ghi đè file hiện tại.</p>
+</form>
+<br>
+<!-- END Upload llms.txt -->
+
 <!-- Tạo file favicon.ico -->
 <?php
 $favicon_path = ABSPATH . 'favicon.ico';
