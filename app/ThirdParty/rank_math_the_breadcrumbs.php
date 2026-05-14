@@ -20,7 +20,7 @@ if (function_exists('rank_math_the_breadcrumbs')) {
         ob_end_clean();
 
         //
-        echo '<div class="container">' . $result . '</div>';
+        echo '<div class="container wgr-rm-breadcrumb">' . $result . '</div>';
     }
     add_action('flatsome_before_blog', 'WGR_rank_math_the_breadcrumbs');
 }
