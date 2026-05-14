@@ -644,6 +644,21 @@ defined('WGR_CACHE_PREFIX') || define('WGR_CACHE_PREFIX', '<?php echo strtolower
     ?>
 </div>
 <!-- END Redis -->
+<!-- MBstring -->
+<p><strong>PHP MBstring Extension:</strong>
+    <?php
+    if (extension_loaded('mbstring')) {
+    ?>
+        <span class="greencolor">Xin chúc mừng, <strong>MBstring</strong> đã được cài đặt!</span>
+    <?php
+    } else {
+    ?>
+        <span class="orgcolor"> Nên bổ sung thêm <code>PHP MBstring Extension</code> để tránh lỗi liên quan đến xử lý chuỗi, đặc biệt là với các website sử dụng tiếng Việt.</span>
+    <?php
+    }
+    ?>
+</p>
+<!-- END MBstring -->
 <div>
     <p class="bold">Để Bật/ Tắt chế độ tự động update, hãy thêm đoạn mã sau vào đầu file wp-config.php:</p>
     <div>
