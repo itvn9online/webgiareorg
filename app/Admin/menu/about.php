@@ -174,7 +174,10 @@ $github_plugins = [
     'smtp-config-manager' => '',
     'mail-marketing-importer' => '',
     'echbay-email-queue' => '',
+    // plugin cửa hàng tự viết bằng AI
     'echbay-store-system' => '',
+    // biên dịch lại từ plugin của devvn
+    'echbay-ai-local-store' => '',
     'echbay-wc-gsheet-sync' => '',
     'devvn-quick-buy' => '',
     'devvn-woocommerce-reviews' => '',
