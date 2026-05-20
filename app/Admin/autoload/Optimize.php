@@ -16,9 +16,7 @@ function WGR_update_core_remove_html_comment($a)
             continue;
         }
         // loại bỏ các comment html đơn giản
-        //echo substr( $v, 0, 4 ) . '<br>' . "\n";
-        //echo substr( $v, -3 ) . '<br>' . "\n";
-        if (substr($v, 0, 4) == '<!--' && substr($v, -3) == '-->') {
+        if (str_starts_with($v, '<!--') && str_ends_with($v, '-->')) {
             continue;
         }
 
@@ -44,15 +42,13 @@ function WGR_update_core_remove_php_comment($a)
         $v = trim($v);
 
         // loại bỏ các dòng comment đơn
-        if ($v == '' || substr($v, 0, 2) == '//' || substr($v, 0, 2) == '# ') {
+        if ($v == '' || str_starts_with($v, '//') || str_starts_with($v, '# ')) {
             continue;
         }
 
         // loại bỏ comment php nếu nó nằm trên 1 dòng
-        //			if ( substr( $v, 0, 2 ) == '/*' && substr( $v, -2 ) == '*/' ) {
-        //			}
         // trong code php có sẽ code html -> loại bỏ như html luôn
-        if (substr($v, 0, 4) == '<!--' && substr($v, -3) == '-->') {
+        if (str_starts_with($v, '<!--') && str_ends_with($v, '-->')) {
             continue;
         }
 
@@ -317,47 +313,13 @@ function WGR_remove_js_comment($a, $chim = false)
     foreach ($a as $v) {
         $v = trim($v);
 
-        if ($v == '' || substr($v, 0, 2) == '//') {
-        } else {
-            // thêm dấu xuống dòng với 1 số trường hợp
-            if ($chim == true || strpos($v, '//') !== false || substr($v, -1) == '\\') {
-                $v .= "\n";
-            }
-            $str .= $v;
+        if ($v == '' || str_starts_with($v, '//')) {
+            continue;
         }
+
+        // loại bỏ các comment js nếu nó nằm trên 1 dòng
+        $str .= $v . "\n";
     }
-
-    // loại bỏ khoảng trắng
-    $arr = array(
-        ' ( ' => '(',
-        ' ) ' => ')',
-        '( \'' => '(\'',
-        '\' )' => '\')',
-
-        '\' + ' => '\'+',
-        ' + \'' => '+\'',
-
-        ' == ' => '==',
-        ' != ' => '!=',
-        ' || ' => '||',
-        ' === ' => '===',
-
-        ' () ' => '()',
-        ' && ' => '&&',
-        '\' +\'' => '\'+\'',
-        ' += ' => '+=',
-        '+ \'' => '+\'',
-        '; i < ' => ';i<',
-        'var i = 0;' => 'var i=0;',
-        '; i' => ';i',
-        ' = \'' => '=\''
-    );
-
-    foreach ($arr as $k => $v) {
-        $str = str_replace($k, $v, $str);
-    }
-
-    //
     return $str;
 }
 
@@ -418,19 +380,14 @@ function WGR_remove_css_multi_comment($a)
     if (count($a) < 10) {
         return false;
     }
-    // xóa CSS block comment /* ... */ (có thể multiline)
-    $str = implode("\n", $a);
-    $str = preg_replace('!/\*.*?\*/!s', '', $str);
-
     // nén về 1 dòng
-    $a = explode("\n", $str);
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
         if ($v === '') {
             continue;
         }
-        $str .= $v;
+        $str .= $v . "\n";
     }
     return $str;
 }
@@ -616,4 +573,4 @@ function WGR_optimize_css_js()
 }
 
 //
-// WGR_optimize_css_js();
+WGR_optimize_css_js();
