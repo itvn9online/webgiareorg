@@ -411,89 +411,27 @@ function WGR_optimize_action_js($path, $dir = 'javascript', $type = 'js')
     return true;
 }
 
-// optimize cho file css
+// optimize cho file css: xóa comment /* */ và nén về 1 dòng
 function WGR_remove_css_multi_comment($a)
 {
-    $a = explode('*/', $a);
-    $str = '';
-    foreach ($a as $v) {
-        $v = explode('/*', $v);
-        $str .= $v[0];
-    }
-
-    //
-    $a = explode("\n", $str);
+    $a = explode("\n", $a);
     if (count($a) < 10) {
         return false;
     }
-    //echo 'count a: ' . count( $a ) . '<br>' . "\n";
-    $str = '';
-    foreach ($a as $v) {
-        $v = trim($v);
-        if ($v != '') {
-            $str .= $v;
-        }
-    }
+    // xóa CSS block comment /* ... */ (có thể multiline)
+    $str = implode("\n", $a);
+    $str = preg_replace('!/\*.*?\*/!s', '', $str);
 
-    // bỏ các ký tự thừa nhiều nhất có thể
-    $str = str_replace('; }', '}', $str);
-    $str = str_replace(';}', '}', $str);
-    $str = str_replace(' { ', '{', $str);
-    $str = str_replace(' {', '{', $str);
-    $str = str_replace(', .', ',.', $str);
-    $str = str_replace(', #', ',#', $str);
-    $str = str_replace(': ', ':', $str);
-    $str = str_replace('} .', '}.', $str);
-    $str = str_replace('{ }', '{}', $str);
-    // $str = str_replace('{ }', '{}', $str);
-    $str = str_replace('}.', '}' . "\n" . '.', $str);
-    $str = str_replace('}#', '}' . "\n" . '#', $str);
-    $str = str_replace('}@', '}' . "\n" . '@', $str);
-
-    // 
+    // nén về 1 dòng
     $a = explode("\n", $str);
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
-        if ($v != '') {
-            if (strpos($v, '{}') !== false) {
-                $first_char = substr($v, 0, 1);
-                if ($first_char == '.' || $first_char == '#' || $first_char == '@') {
-                    continue;
-                }
-            }
-            $str .= $v;
-            // $str .= "\n";
+        if ($v === '') {
+            continue;
         }
+        $str .= $v;
     }
-
-    // chuyển đổi tên màu sang mã màu
-    $arr_colorname_to_code = [
-        'transparent' => '00000000',
-        'red' => 'ff0000',
-        'darkred' => '8b0000',
-        'black' => '000000',
-        'white' => 'ffffff',
-        'blue' => '0000ff',
-        'darkblue' => '00008b',
-        'green' => '008000',
-        'darkgreen' => '006400',
-        'orange' => 'ffa500',
-        'darkorange' => 'ff8c00',
-    ];
-    foreach ($arr_colorname_to_code as $k => $v) {
-        $str = str_replace(':' . $k . '}', ':#' . $v . '}', $str);
-        $str = str_replace(':' . $k . ';', ':#' . $v . ';', $str);
-
-        // !important
-        $str = str_replace(':' . $k . ' !', ':#' . $v . ' !', $str);
-        $str = str_replace(':' . $k . '!', ':#' . $v . '!', $str);
-    }
-
-    // loại bỏ các dòng css chưa có code
-    // $str = WGR_remove_css_not_using($str);
-
-    //
     return $str;
 }
 
@@ -678,4 +616,4 @@ function WGR_optimize_css_js()
 }
 
 //
-WGR_optimize_css_js();
+// WGR_optimize_css_js();
