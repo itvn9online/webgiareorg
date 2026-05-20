@@ -12,20 +12,12 @@ function WGR_update_core_remove_html_comment($a)
     foreach ($a as $v) {
         $v = trim($v);
 
-        if ($v == '') {
-            continue;
-        }
         // loại bỏ các comment html đơn giản
-        if (str_starts_with($v, '<!--') && str_ends_with($v, '-->')) {
+        if ($v == '' || (str_starts_with($v, '<!--') && str_ends_with($v, '-->'))) {
             continue;
         }
 
-        $str .= $v;
-        if (strpos($v, '//') !== false) {
-            $str .= "\n";
-        } else {
-            $str .= ' ';
-        }
+        $str .= $v . "\n";
     }
 
     //
@@ -42,7 +34,12 @@ function WGR_update_core_remove_php_comment($a)
         $v = trim($v);
 
         // loại bỏ các dòng comment đơn
-        if ($v == '' || str_starts_with($v, '//') || str_starts_with($v, '# ')) {
+        if (
+            $v == ''
+            || str_starts_with($v, '//')
+            || str_starts_with($v, '#')
+            || (str_starts_with($v, '/*') && str_ends_with($v, '*/'))
+        ) {
             continue;
         }
 
@@ -313,7 +310,12 @@ function WGR_remove_js_comment($a, $chim = false)
     foreach ($a as $v) {
         $v = trim($v);
 
-        if ($v == '' || str_starts_with($v, '//')) {
+        if (
+            $v == ''
+            || str_starts_with($v, '//')
+            || str_starts_with($v, '#')
+            || (str_starts_with($v, '/*') && str_ends_with($v, '*/'))
+        ) {
             continue;
         }
 
@@ -384,7 +386,7 @@ function WGR_remove_css_multi_comment($a)
     $str = '';
     foreach ($a as $v) {
         $v = trim($v);
-        if ($v === '') {
+        if ($v === '' || (str_starts_with($v, '/*') && str_ends_with($v, '*/'))) {
             continue;
         }
         $str .= $v . "\n";
