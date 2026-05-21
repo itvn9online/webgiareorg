@@ -80,6 +80,25 @@ if (WGR_USER_ID > 0 && current_user_can('edit_others_posts')) {
     ]);
 }
 
+// nếu DISABLE_WP_CRON được bật thì nạp thêm file wp-cron.php để thay thế cho wp-cron mặc định của WordPress, tránh bị gọi trùng lặp quá nhiều lần trong 1 phút
+if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON === true) {
+    // inject động như Facebook SDK, ?v=Date.now() chạy ở browser nên không bị dính cache HTML
+    // hẹn 6 giây sau mới nạp để không ảnh hưởng đến tốc độ load trang
+?>
+    <script>
+        setTimeout(function() {
+            (function(d, s) {
+                var js = d.createElement(s),
+                    fjs = d.getElementsByTagName(s)[0];
+                js.async = true;
+                js.src = '<?php echo esc_url(DYNAMIC_BASE_URL . WGR_BASE_URI); ?>wp-cron.php?v=' + Math.floor(Date.now() / 60_000);
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script'));
+        }, 6_000);
+    </script>
+<?php
+}
+
 ?>
 <div id="oi_popup"></div>
 </body>

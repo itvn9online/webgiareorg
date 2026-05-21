@@ -48,6 +48,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         'wgr_debug' => isset($_POST['wgr_debug']) ? '1' : '0',
         'wgr_advanced_cache' => isset($_POST['wgr_advanced_cache']) ? '1' : '0',
         'wgr_object_cache' => isset($_POST['wgr_object_cache']) ? '1' : '0',
+        'wgr_disable_wp_cron' => isset($_POST['wgr_disable_wp_cron']) ? '1' : '0',
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
         'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
@@ -165,6 +166,46 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
             } else {
                 echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
             }
+        } else if ($option_name == 'wgr_disable_wp_cron') {
+            $wp_config_path = ABSPATH . 'wp-config.php';
+
+            if (is_file($wp_config_path) && is_writable($wp_config_path)) {
+                $file_content = file($wp_config_path);
+                $wp_config_content = '';
+                $has_disable_wp_cron = false;
+                foreach ($file_content as $line) {
+                    if (WGR_find_define_constant($line, 'DISABLE_WP_CRON') === false) {
+                        $wp_config_content .= $line;
+                    } else {
+                        $has_disable_wp_cron = true;
+                    }
+                }
+
+                if (empty($option_value)) {
+                    if ($has_disable_wp_cron) {
+                        if (file_put_contents($wp_config_path, $wp_config_content)) {
+                            echo '<div class="notice notice-success"><p>✓ Đã xóa DISABLE_WP_CRON khỏi wp-config.php</p></div>';
+                        } else {
+                            echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                        }
+                    }
+                } else {
+                    $disable_wp_cron_line = "define('DISABLE_WP_CRON', true); // Added by WebGiaRe Disable WP Cron";
+                    $new_content = preg_replace('/^\s*<\?php\s*$/mi', "<?php\n" . $disable_wp_cron_line . "\n", $wp_config_content);
+
+                    if ($new_content !== false) {
+                        if (file_put_contents($wp_config_path, $new_content)) {
+                            echo '<div class="notice notice-success"><p>✓ Đã chèn DISABLE_WP_CRON vào wp-config.php</p></div>';
+                        } else {
+                            echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
+                        }
+                    } else {
+                        echo '<div class="notice notice-error"><p>✗ Không tìm thấy vị trí phù hợp trong wp-config.php</p></div>';
+                    }
+                }
+            } else {
+                echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
+            }
         }
         // các trường con lại chỉ ghi vào file custom_config.php khi có giá trị
         else if (empty($option_value)) {
@@ -198,6 +239,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
 $wgr_debug = get_option('wgr_debug', '0');
 $wgr_advanced_cache = get_option('wgr_advanced_cache', '0');
 $wgr_object_cache = get_option('wgr_object_cache', '1');
+$wgr_disable_wp_cron = get_option('wgr_disable_wp_cron', '1');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
 $wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
@@ -245,6 +287,19 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                             Sử dụng WGR Object Cache (khuyên dùng)
                         </label>
                         <p class="description">Được tối ưu riêng cho code của WebGiaRe. Không thể sử dụng chung với các plugin cache khác.</p>
+                    </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">Disable WP Cron</th>
+                <td>
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" name="wgr_disable_wp_cron" value="1" <?php checked($wgr_disable_wp_cron, '1'); ?>>
+                            Tắt WP-Cron mặc định (DISABLE_WP_CRON)
+                        </label>
+                        <p class="description">Tắt wp-cron tự động theo page load. Nên bật khi đã thiết lập cronjob của hosting hoặc dùng file <code>wp-cron.php</code> của WebGiaRe để kiểm soát.</p>
                     </fieldset>
                 </td>
             </tr>
