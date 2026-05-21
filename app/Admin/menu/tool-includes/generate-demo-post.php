@@ -180,7 +180,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
             // if ($new_count < 20) {
             // Chưa đủ, reload lại trang
             echo '<div class="notice notice-warning"><p>Đã tải thêm ' . $downloaded . ' ảnh. Đang tiếp tục... (' . $new_count . '/20)</p></div>';
-            echo '<script>setTimeout(function(){ window.location.reload(); }, 5000);</script>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 5_000);</script>';
             echo '<p><em>Trang sẽ tự động tải lại sau 5 giây...</em></p>';
 ?>
     </div>
@@ -426,7 +426,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                         }
 
                         // Giá gốc từ 100.000 đến 1.000.000 (bước nhảy 1.000)
-                        $regular_price = rand(100, 1000) * 1000;
+                        $regular_price = rand(100, 1_000) * 1_000;
                         update_post_meta($post_id, '_regular_price', $regular_price);
 
                         // Ngẫu nhiên 50% sản phẩm có giá khuyến mãi
@@ -435,7 +435,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
                             $discount_percent = rand(10, 50);
                             $sale_price = $regular_price * (100 - $discount_percent) / 100;
                             // Làm tròn về bội số của 1.000
-                            $sale_price = round($sale_price / 1000) * 1000;
+                            $sale_price = round($sale_price / 1_000) * 1_000;
 
                             update_post_meta($post_id, '_sale_price', $sale_price);
                             update_post_meta($post_id, '_price', $sale_price);
@@ -548,7 +548,7 @@ $max_post_demo = $max_post_request * 2; // Tăng tổng số cần tạo lên g�
         // Nếu chưa đủ ${max_post_demo} bài viết/sản phẩm thì reload lại trang
         if ($total_demo_count < $max_post_demo) {
             echo '<div class="notice notice-info"><p>Đang tiếp tục tạo thêm dữ liệu... (' . $total_demo_count . '/' . $max_post_demo . ')</p></div>';
-            echo '<script>setTimeout(function(){ window.location.reload(); }, 5000);</script>';
+            echo '<script>setTimeout(function(){ window.location.reload(); }, 5_000);</script>';
             echo '<p><em>Trang sẽ tự động tải lại sau 5 giây để tiếp tục tạo dữ liệu...</em></p>';
 ?>
     </div>

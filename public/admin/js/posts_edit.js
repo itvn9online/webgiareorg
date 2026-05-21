@@ -10,7 +10,7 @@ function WGR_find_taxonomy_for_edit(tax_id) {
 	}
 	console.log(
 		"%c Hỗ trợ tìm kiếm taxonomy khi sửa bài #" + tax,
-		"color: green;"
+		"color: green;",
 	);
 
 	// thêm ô tìm kiếm
@@ -18,7 +18,7 @@ function WGR_find_taxonomy_for_edit(tax_id) {
 	jQuery("#" + tax + " .postbox-header").after(
 		'<div class="WGR-post-edit-search-taxonomy"><textarea placeholder="Tìm kiếm nhanh, mỗi từ khóa cách nhau bởi dấu xuống dòng" id="' +
 			input_id +
-			'" rows="2"></textarea></div>'
+			'" rows="2"></textarea></div>',
 	);
 
 	//
@@ -87,7 +87,7 @@ function WGR_edit_post_quick_tab() {
 			"#normal-sortables .postbox",
 			"#advanced-sortables .postbox",
 			// "#side-sortables .postbox",
-		].join(",")
+		].join(","),
 	).each(function () {
 		let a =
 				jQuery(".postbox-header h2:first", this).html() ||
@@ -133,7 +133,7 @@ function WGR_edit_post_quick_tab() {
 				{
 					scrollTop: to_id,
 				},
-				600
+				600,
 			);
 		} else {
 			if (jd != "") {
@@ -148,7 +148,7 @@ function WGR_edit_post_quick_tab() {
 				{
 					scrollTop: to_id,
 				},
-				600
+				600,
 			);
 		}
 	});
@@ -173,7 +173,7 @@ if (top == self) {
 
 				setTimeout(function () {
 					jQuery(".show-if-duplicator-null").fadeOut();
-				}, 5000);
+				}, 5_000);
 
 				return false;
 			}

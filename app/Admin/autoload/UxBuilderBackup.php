@@ -4,7 +4,7 @@
  * Tự động backup định kỳ phần UX builder
  */
 
-function autoUxBuilderBackup($space_backup = 3600)
+function autoUxBuilderBackup($space_backup = 3_600)
 {
     //
     $ux_builder_dir = ABSPATH . 'wgr-backup-builder';
@@ -51,7 +51,7 @@ function autoUxBuilderBackup($space_backup = 3600)
     /**
      * backup menu
      */
-    $mot_tuan = 86400 * 7;
+    $mot_tuan = 86_400 * 7;
     $data = wp_get_nav_menus();
     //print_r( $data );
     foreach ($data as $v) {

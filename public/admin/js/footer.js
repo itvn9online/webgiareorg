@@ -23,7 +23,7 @@ function start_closure_compiler_echbay() {
 	} else {
 		// Bắt đầu nén
 		var $firstFile = jQuery(
-			"#wgr-list-backup-css-js a.closure-compiler-echbay"
+			"#wgr-list-backup-css-js a.closure-compiler-echbay",
 		).first();
 
 		if ($firstFile.length === 0) {
@@ -46,7 +46,7 @@ function start_closure_compiler_echbay() {
 function after_closure_compiler_echbay(type, mesage = null, result_url = null) {
 	// Tìm file đang được nén và xóa class và attr href tương ứng
 	var $currentFile = jQuery(
-		"#wgr-list-backup-css-js a.closure-compiler-echbay"
+		"#wgr-list-backup-css-js a.closure-compiler-echbay",
 	).first();
 	$currentFile
 		.removeClass("closure-compiler-echbay")
@@ -72,7 +72,7 @@ function after_closure_compiler_echbay(type, mesage = null, result_url = null) {
 	// Nếu vẫn đang chạy, tìm file tiếp theo
 	if (isCompiling) {
 		var $nextFile = jQuery(
-			"#wgr-list-backup-css-js a.closure-compiler-echbay"
+			"#wgr-list-backup-css-js a.closure-compiler-echbay",
 		).first();
 
 		if ($nextFile.length > 0) {
@@ -94,7 +94,7 @@ function after_closure_compiler_echbay(type, mesage = null, result_url = null) {
 				jQuery(".start-compiler-closure")
 					.removeClass("btn-success")
 					.addClass("btn-primary");
-			}, 3000);
+			}, 3_000);
 		}
 	}
 }

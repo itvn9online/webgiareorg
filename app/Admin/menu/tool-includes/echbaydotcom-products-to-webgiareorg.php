@@ -243,7 +243,7 @@ if ($has_product === true) {
     <script>
         setTimeout(() => {
             window.location = '<?php echo $admin_tool_url . $tool_action . '&min_id=' . $min_id; ?>';
-        }, 9000);
+        }, 9_000);
     </script>
 <?php
 }

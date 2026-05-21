@@ -235,7 +235,7 @@ if (isset($_GET['download_wordpress_plugin']) && !empty($_GET['download_wordpres
                 echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
 
                 // Kiểm tra kích thước file
-                if (filesize($dest) > 1000) {
+                if (filesize($dest) > 1_000) {
                     // giải nén file zip
                     $unzipfile = false;
                     if (class_exists('ZipArchive')) {
@@ -443,7 +443,7 @@ function check_and_update_webgiareorg()
         chmod($dest, 0777);
 
         //
-        if (filesize($dest) > 1000) {
+        if (filesize($dest) > 1_000) {
             // kết quả giải nén
             $unzipfile = false;
             $dir_unzip_update_to = WP_CONTENT_DIR . '/';
@@ -842,7 +842,7 @@ check_and_update_webgiareorg();
             // tải lại trang sau khi cập nhật
             setTimeout(function() {
                 window.location.reload();
-            }, 1000);
+            }, 1_000);
         }
     })();
 
@@ -873,7 +873,7 @@ check_and_update_webgiareorg();
                 if (targetElement.length > 0) {
                     jQuery('html, body').animate({
                         scrollTop: targetElement.offset().top - 99
-                    }, 1000);
+                    }, 1_000);
                 }
             }, 300);
         }

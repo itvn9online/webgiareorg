@@ -139,7 +139,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                     if ($has_wp_cache) {
                         if (file_put_contents($wp_config_path, $wp_config_content)) {
                             echo '<div class="notice notice-success"><p>✓ Đã xóa WP_CACHE khỏi wp-config.php</p></div>';
-                            // echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                            // echo '<script>setTimeout(function(){ location.reload(); }, 2_000);</script>';
                         } else {
                             echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
                         }
@@ -152,7 +152,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                     if ($new_content !== false) {
                         if (file_put_contents($wp_config_path, $new_content)) {
                             echo '<div class="notice notice-success"><p>✓ Đã chèn WP_CACHE vào wp-config.php</p></div>';
-                            // echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                            // echo '<script>setTimeout(function(){ location.reload(); }, 2_000);</script>';
                         } else {
                             echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
                         }
@@ -562,7 +562,7 @@ if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_save
             if ($new_content !== false) {
                 if (file_put_contents($wp_config_path, $new_content)) {
                     echo '<div class="notice notice-success"><p>✓ Đã chèn SAVEQUERIES vào wp-config.php</p></div>';
-                    echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                    echo '<script>setTimeout(function(){ location.reload(); }, 2_000);</script>';
                 } else {
                     echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
                 }
@@ -574,7 +574,7 @@ if (isset($_POST['toggle_savequeries']) && wp_verify_nonce($_POST['_wpnonce_save
             if ($has_savequeries) {
                 if (file_put_contents($wp_config_path, $wp_config_content)) {
                     echo '<div class="notice notice-success"><p>✓ Đã xóa SAVEQUERIES khỏi wp-config.php</p></div>';
-                    echo '<script>setTimeout(function(){ location.reload(); }, 2000);</script>';
+                    echo '<script>setTimeout(function(){ location.reload(); }, 2_000);</script>';
                 } else {
                     echo '<div class="notice notice-error"><p>✗ Không thể ghi vào wp-config.php</p></div>';
                 }

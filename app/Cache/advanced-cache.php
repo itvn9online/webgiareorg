@@ -625,7 +625,7 @@ class WGR_Advanced_Cache
 
                 // Add debug comment
                 if ($this->debug_mode || (defined('WP_DEBUG') && WP_DEBUG)) {
-                    $elapsed = round((microtime(true) - $this->start_time) * 1000, 2);
+                    $elapsed = round((microtime(true) - $this->start_time) * 1_000, 2);
                     echo "<!-- Served from Redis Cache in {$elapsed}ms -->\n";
                 }
 
@@ -671,15 +671,15 @@ class WGR_Advanced_Cache
         }
 
         try {
-            // Default TTL: 1 hour (3600 seconds)
-            $ttl = defined('WGR_PAGE_CACHE_TTL') ? WGR_PAGE_CACHE_TTL : 3600;
+            // Default TTL: 1 hour (3_600 seconds)
+            $ttl = defined('WGR_PAGE_CACHE_TTL') ? WGR_PAGE_CACHE_TTL : 3_600;
 
             // Save to Redis
             $this->redis->setex($this->cache_key, $ttl, $content);
 
             // Add debug comment
             if ($this->debug_mode || (defined('WP_DEBUG') && WP_DEBUG)) {
-                $elapsed = round((microtime(true) - $this->start_time) * 1000, 2);
+                $elapsed = round((microtime(true) - $this->start_time) * 1_000, 2);
                 $content .= "\n<!-- Cached by Advanced Cache (Generated in {$elapsed}ms, TTL: {$ttl}s) -->";
             }
         } catch (Exception $e) {
@@ -706,7 +706,7 @@ class WGR_Advanced_Cache
         }
 
         // Set cache control headers
-        $max_age = defined('WGR_PAGE_CACHE_TTL') ? WGR_PAGE_CACHE_TTL : 3600;
+        $max_age = defined('WGR_PAGE_CACHE_TTL') ? WGR_PAGE_CACHE_TTL : 3_600;
         header('Cache-Control: public, max-age=' . $max_age);
         header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $max_age) . ' GMT');
     }
