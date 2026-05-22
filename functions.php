@@ -43,6 +43,15 @@ defined('WGR_REDIS_PORT') || define('WGR_REDIS_PORT', 6379);
 // Chức năng thêm mới plugin và chỉnh sửa code, lúc nào cần dùng thì comment DISALLOW_FILE_MODS -> bất tiện tí nhưng tăng bảo mật
 // defined('DISALLOW_FILE_MODS') || define('DISALLOW_FILE_MODS', true);
 
+// Tắt editor code trong admin — bảo mật tốt hơn, ít xâm phạm hơn DISALLOW_FILE_MODS
+defined('DISALLOW_FILE_EDIT') || define('DISALLOW_FILE_EDIT', true);
+
+// Giới hạn số revision lưu per post. Mặc định WordPress lưu vô hạn → DB phình to theo thời gian
+defined('WP_POST_REVISIONS') || define('WP_POST_REVISIONS', 5);
+
+// Khoảng cách giữa các lần autosave (giây). Mặc định 60s → giảm số lần ghi DB
+// defined('AUTOSAVE_INTERVAL') || define('AUTOSAVE_INTERVAL', 180);
+
 // nạp function tạo cache
 // echo WGR_BASE_PATH . 'app/Cache/Global.php' . '<br>' . "\n";
 include_once WGR_BASE_PATH . 'app/Cache/MyConfig.php';
