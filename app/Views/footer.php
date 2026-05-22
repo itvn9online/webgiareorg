@@ -88,11 +88,18 @@ if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON === true) {
     <script>
         setTimeout(function() {
             (function(d, s) {
-                var js = d.createElement(s),
-                    fjs = d.getElementsByTagName(s)[0];
-                js.async = true;
-                js.src = '<?php echo esc_url(DYNAMIC_BASE_URL . WGR_BASE_URI); ?>wp-cron.php?v=' + Math.floor(Date.now() / 60_000);
-                fjs.parentNode.insertBefore(js, fjs);
+                let ts = Math.floor(Date.now() / 60_000).toString(),
+                    ls = localStorage.getItem('wgr-wp-cron-lock');
+                if (ts == ls) {
+                    console.log('HIT ls');
+                } else {
+                    var js = d.createElement(s),
+                        fjs = d.getElementsByTagName(s)[0];
+                    js.async = true;
+                    js.src = '<?php echo esc_url(DYNAMIC_BASE_URL . WGR_BASE_URI); ?>wp-cron.php?v=' + ts;
+                    fjs.parentNode.insertBefore(js, fjs);
+                    localStorage.setItem('wgr-wp-cron-lock', ts);
+                }
             }(document, 'script'));
         }, 6_000);
     </script>
