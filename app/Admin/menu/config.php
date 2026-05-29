@@ -322,7 +322,7 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                     <label for="wgr_contact_price">Contact Price</label>
                 </th>
                 <td>
-                    <input type="url" name="wgr_contact_price" id="wgr_contact_price" value="<?php echo esc_attr($wgr_contact_price); ?>" class="regular-text" placeholder="Liên hệ">
+                    <input type="text" name="wgr_contact_price" id="wgr_contact_price" value="<?php echo esc_attr($wgr_contact_price); ?>" class="regular-text" placeholder="Liên hệ">
                     <p class="description">Chuyển giá sản phẩm từ `0 đ` thành `Liên hệ`. Để trống sẽ tắt chức năng này.</p>
                 </td>
             </tr>
