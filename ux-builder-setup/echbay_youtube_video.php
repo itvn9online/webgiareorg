@@ -96,7 +96,7 @@ function action_echbay_youtube_video($atts)
     //echo $video_src_img;
 
     //
-    $html = '<div class="img has-hover x md-x lg-x y md-y lg-y"> <a class="open-video" href="https://www.youtube.com/watch?v=' . $video_id . '">
+    $html = '<div class="img has-hover x md-x lg-x y md-y lg-y"> <a class="open-video" href="https://www.youtube.com/watch?v=' . $video_id . '" rel="nofollow noopener" target="_blank">
     <div class="img-inner image-cover dark" style="padding-top:56.25%;"> ' . $video_src_img . '
         <div class="overlay" style="background-color: rgba(0,0,0,.2)"></div>
         <div class="absolute no-click x50 y50 md-x50 md-y50 lg-x50 lg-y50 text-shadow-2">
