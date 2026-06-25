@@ -12,7 +12,8 @@ $root_htaccess = ABSPATH . '.htaccess';
 
 // nếu chưa có file htaccess -> khi nào cần reset lại file htaccess thì xóa file htaccess đi là được
 if (!is_file($root_htaccess)) {
-    echo $root_htaccess . '<br>' . "\n";
+    // echo $root_htaccess . '<br>' . "\n";
+    echo $root_htaccess . ':' . basename(__FILE__) . ':' . __LINE__ . '<br>' . "\n";
 
     //
     // $WGR_get_contents = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/tmp/htaccess.txt');

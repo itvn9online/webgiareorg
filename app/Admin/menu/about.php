@@ -174,12 +174,13 @@ $github_plugins = [
     'smtp-config-manager' => '',
     'mail-marketing-importer' => '',
     'echbay-email-queue' => '',
+    'echbay-quick-buy' => '',
     // plugin cửa hàng tự viết bằng AI
     'echbay-store-system' => '',
     // biên dịch lại từ plugin của devvn
     'echbay-ai-local-store' => '',
     'echbay-wc-gsheet-sync' => '',
-    'devvn-quick-buy' => '',
+    // 'devvn-quick-buy' => '',
     'devvn-woocommerce-reviews' => '',
 ];
 
@@ -280,7 +281,7 @@ if (isset($_GET['download_wordpress_plugin']) && !empty($_GET['download_wordpres
  * Nếu tồn tại tham số download_github_plugin thì sẽ tải plugin từ github về
  * Ví dụ:
  * wp-admin/admin.php?page=eb-about&download_github_plugin=plugin-in-github
- * Sẽ tải plugin plugin-in-github từ github về thư mục wp-content/plugins/plugin-in-github-main
+ * Sẽ tải plugin plugin-in-github từ github về thư mục wp-content/plugins/plugin-in-github
  * https://github.com/itvn9online/$_GET['download_github_plugin']/archive/refs/heads/main.zip
  */
 if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plugin'])) {
@@ -300,21 +301,45 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
             echo 'File has been save to: <strong>' . $dest . '</strong><br>' . "\n";
 
             // giải nén file zip
+            $unzipfile = false;
             if (class_exists('ZipArchive')) {
                 $zip = new ZipArchive;
                 if ($zip->open($dest) === TRUE) {
                     $zip->extractTo(WP_PLUGIN_DIR);
                     $zip->close();
-
-                    echo 'Unzip to: <strong>' . WP_PLUGIN_DIR . '/' . $plugin_name . '</strong><br>' . "\n";
-                    echo 'Unzip file success!<br>' . "\n";
-                    echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . "\n";
+                    $unzipfile = true;
                 } else {
                     echo 'Using: <strong>unzip_file (WordPress)</strong><br>' . "\n";
                     $unzipfile = unzip_file($dest, WP_PLUGIN_DIR);
                 }
             } else {
-                echo 'ZipArchive class not found!<br>' . "\n";
+                echo 'Using: <strong>unzip_file (WordPress)</strong><br>' . "\n";
+                $unzipfile = unzip_file($dest, WP_PLUGIN_DIR);
+            }
+
+            if ($unzipfile === true) {
+                $extracted_dir = WP_PLUGIN_DIR . '/' . $plugin_name . '-main';
+                $target_dir = WP_PLUGIN_DIR . '/' . $plugin_name;
+
+                if (is_dir($extracted_dir)) {
+                    if (is_dir($target_dir)) {
+                        $backup_dir = $target_dir . '-' . date('Ymd-His');
+                        rename($target_dir, $backup_dir);
+                        echo 'Backup old plugin to: <strong>' . $backup_dir . '</strong><br>' . "\n";
+                    }
+
+                    if (rename($extracted_dir, $target_dir)) {
+                        echo 'Rename folder: <strong>' . $plugin_name . '-main</strong> -> <strong>' . $plugin_name . '</strong><br>' . "\n";
+                    } else {
+                        echo '<span class="redcolor">Rename folder failed!</span><br>' . "\n";
+                    }
+                }
+
+                echo 'Unzip to: <strong>' . $target_dir . '</strong><br>' . "\n";
+                echo 'Unzip file success!<br>' . "\n";
+                echo 'Plugin: <strong>' . $plugin_name . '</strong> has been updated!<br>' . "\n";
+            } else {
+                echo '<span class="redcolor">Unzip file failed!</span><br>' . "\n";
             }
 
             // Dọn dẹp file zip
@@ -762,6 +787,7 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
             'woocommerce',
             'smtp-config-manager',
             'echbay-email-queue',
+            'echbay-quick-buy',
         ];
 
         // gộp danh sách plugin và hiển thị
