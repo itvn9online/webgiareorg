@@ -3,6 +3,15 @@
 /**
  * Hiển thị các sản phẩm biến thể trong danh sách sản phẩm trong admin.
  */
+
+/**
+ * Kiểm tra có đang ở trang danh sách sản phẩm trong admin hay không
+ * (wp-admin/edit.php?post_type=product).
+ *
+ * @param WP_Query|null $query Query đang xử lý (nếu có) để kiểm tra thêm khi
+ *                             $_GET['post_type'] không tồn tại.
+ * @return bool True nếu đang ở trang danh sách sản phẩm.
+ */
 function WGR_is_admin_products_list($query = null)
 {
     global $pagenow;
@@ -25,6 +34,15 @@ function WGR_is_admin_products_list($query = null)
     return false;
 }
 
+/**
+ * Quyết định có nên hiển thị biến thể trong danh sách sản phẩm hay không.
+ * Trả về false khi: không phải trang danh sách sản phẩm, WooCommerce chưa nạp,
+ * người dùng chọn "Ẩn biến thể" (show_variations=0), hoặc đang lọc theo
+ * loại sản phẩm khác "variable".
+ *
+ * @param WP_Query|null $query Query đang xử lý (nếu có).
+ * @return bool True nếu được phép hiển thị biến thể.
+ */
 function WGR_should_show_variations_in_admin($query = null)
 {
     if (!WGR_is_admin_products_list($query)) {
@@ -48,6 +66,12 @@ function WGR_should_show_variations_in_admin($query = null)
 }
 
 add_action('restrict_manage_posts', 'WGR_admin_products_variation_filter');
+/**
+ * Thêm dropdown "Hiển thị biến thể / Ẩn biến thể" vào thanh bộ lọc
+ * phía trên danh sách sản phẩm để người dùng bật/tắt nhanh.
+ *
+ * @param string $post_type Post type của màn hình danh sách hiện tại.
+ */
 function WGR_admin_products_variation_filter($post_type)
 {
     if ('product' !== $post_type || !current_user_can('edit_products')) {
@@ -64,6 +88,19 @@ function WGR_admin_products_variation_filter($post_type)
 }
 
 add_filter('posts_clauses', 'WGR_admin_products_list_variation_clauses', 20, 2);
+/**
+ * Chỉnh sửa SQL của query danh sách sản phẩm:
+ * - Mở rộng WHERE để lấy thêm post_type 'product_variation'
+ *   (thay vì set query var thành array, tránh warning ở wp-admin/edit.php).
+ * - Sắp xếp để biến thể luôn nằm ngay dưới sản phẩm cha.
+ * - Khi lọc theo danh mục: thêm biến thể của các sản phẩm cha thuộc danh mục đó
+ *   (biến thể không được gán term trực tiếp nên phải join qua sản phẩm cha).
+ * - Khi lọc theo loại "variable": thêm biến thể của các sản phẩm variable.
+ *
+ * @param array    $clauses Các mảnh SQL (where, orderby, ...) của query.
+ * @param WP_Query $query   Query đang xử lý.
+ * @return array Clauses sau khi chỉnh sửa.
+ */
 function WGR_admin_products_list_variation_clauses($clauses, $query)
 {
     if (!WGR_should_show_variations_in_admin($query) || !$query->is_main_query()) {
@@ -122,7 +159,40 @@ function WGR_admin_products_list_variation_clauses($clauses, $query)
     return $clauses;
 }
 
+/**
+ * Lấy tên hiển thị ngắn gọn của biến thể (chỉ phần thuộc tính, ví dụ "2kg").
+ * Không dùng get_formatted_name() vì hàm đó trả về cả tên sản phẩm cha,
+ * SKU/ID và HTML <span class="description">.
+ *
+ * @param WC_Product_Variation $product Biến thể cần lấy tên.
+ * @return string Tên biến thể để hiển thị trong admin.
+ */
+function WGR_get_admin_variation_name($product)
+{
+    $attrs = wc_get_formatted_variation($product, true, false);
+    if ('' !== $attrs) {
+        return $attrs;
+    }
+
+    // Fallback: get_name() thường có dạng "Tên sản phẩm cha - 2kg"
+    $name = $product->get_name();
+    if (false !== strpos($name, ' - ')) {
+        $parts = explode(' - ', $name);
+        return (string) end($parts);
+    }
+
+    return $name;
+}
+
 add_action('manage_product_variation_posts_custom_column', 'WGR_admin_variation_column_content', 10, 2);
+/**
+ * Đổ nội dung cho các cột của dòng biến thể trong bảng danh sách sản phẩm
+ * (ảnh, tên biến thể, SKU, giá, tồn kho...). WordPress không tự render
+ * các cột này cho post_type 'product_variation' nên phải tự xử lý.
+ *
+ * @param string $column  Tên cột đang render.
+ * @param int    $post_id ID của biến thể.
+ */
 function WGR_admin_variation_column_content($column, $post_id)
 {
     if (!WGR_should_show_variations_in_admin()) {
@@ -136,18 +206,11 @@ function WGR_admin_variation_column_content($column, $post_id)
 
     switch ($column) {
         case 'thumb':
-            $edit_link = get_edit_post_link($post_id);
-            echo '<a href="' . esc_url($edit_link) . '">' . $product->get_image('thumbnail') . '</a>';
+            echo $product->get_image('thumbnail');
             break;
 
         case 'name':
-            $edit_link  = get_edit_post_link($post_id);
-            $parent_id  = $product->get_parent_id();
-            $parent_link = $parent_id ? get_edit_post_link($parent_id) : '';
-            echo '<strong><a class="row-title" href="' . esc_url($edit_link) . '">' . esc_html($product->get_formatted_name()) . '</a></strong>';
-            if ($parent_id && $parent_link) {
-                echo '<div class="wgr-variation-parent"><a href="' . esc_url($parent_link) . '">' . esc_html(get_the_title($parent_id)) . '</a></div>';
-            }
+            echo '<strong class="row-title">' . esc_html(WGR_get_admin_variation_name($product)) . '</strong>';
             break;
 
         case 'sku':
@@ -174,55 +237,39 @@ function WGR_admin_variation_column_content($column, $post_id)
             echo wp_kses_post($stock_html);
             break;
 
-        case 'product_cat':
-        case 'product_tag':
-            $taxonomy = ('product_cat' === $column) ? 'product_cat' : 'product_tag';
-            $terms    = get_the_terms($product->get_parent_id(), $taxonomy);
-            if (empty($terms) || is_wp_error($terms)) {
-                echo '<span class="na">&ndash;</span>';
-                break;
-            }
-
-            $termlist = array();
-            foreach ($terms as $term) {
-                $termlist[] = '<a href="' . esc_url(admin_url('edit.php?product_' . ('product_cat' === $taxonomy ? 'cat' : 'tag') . '=' . $term->slug . '&post_type=product')) . '">' . esc_html($term->name) . '</a>';
-            }
-            echo implode(', ', $termlist);
-            break;
-
-        case 'featured':
-            echo '<span class="na">&ndash;</span>';
-            break;
-
-        case 'date':
-            $timestamp = get_post_timestamp($post_id);
-            if ($timestamp) {
-                echo esc_html(date_i18n(get_option('date_format'), $timestamp));
-            } else {
-                echo '<span class="na">&ndash;</span>';
-            }
+        default:
+            echo '<span class="na wgr-na" aria-hidden="true">–</span>';
             break;
     }
 }
 
-add_filter('post_row_actions', 'WGR_admin_variation_row_actions', 20, 2);
+add_filter('post_row_actions', 'WGR_admin_variation_row_actions', 999, 2);
+/**
+ * Ẩn toàn bộ row-actions (Chỉnh sửa, Sửa nhanh, Xóa tạm...) trên dòng biến thể.
+ *
+ * @param array   $actions Danh sách action link hiện có.
+ * @param WP_Post $post    Post của dòng đang render.
+ * @return array Actions sau khi lọc.
+ */
 function WGR_admin_variation_row_actions($actions, $post)
 {
     if (!WGR_should_show_variations_in_admin() || 'product_variation' !== $post->post_type) {
         return $actions;
     }
 
-    $parent_id = wp_get_post_parent_id($post->ID);
-    if ($parent_id) {
-        $actions['parent'] = '<a href="' . esc_url(get_edit_post_link($parent_id)) . '">' . esc_html__('Sản phẩm cha', 'woocommerce') . '</a>';
-    }
-
-    $actions['id'] = sprintf(esc_html__('ID: %d', 'woocommerce'), $post->ID);
-
-    return $actions;
+    return array();
 }
 
 add_filter('post_class', 'WGR_admin_variation_row_class', 10, 3);
+/**
+ * Thêm class 'wgr-admin-variation-row' vào dòng biến thể
+ * để CSS nhận diện và style riêng (thụt lề, mũi tên...).
+ *
+ * @param array $classes Danh sách class hiện có của dòng.
+ * @param array $class   Class truyền thêm (không dùng).
+ * @param int   $post_id ID của post đang render.
+ * @return array Classes sau khi bổ sung.
+ */
 function WGR_admin_variation_row_class($classes, $class, $post_id)
 {
     if (!WGR_should_show_variations_in_admin() || 'product_variation' !== get_post_type($post_id)) {
@@ -234,6 +281,10 @@ function WGR_admin_variation_row_class($classes, $class, $post_id)
 }
 
 add_action('admin_head', 'WGR_admin_variation_list_styles');
+/**
+ * In CSS vào <head> của trang danh sách sản phẩm: thụt lề tên biến thể,
+ * thêm ký hiệu "↳" trước tên, ẩn row-actions không cần thiết.
+ */
 function WGR_admin_variation_list_styles()
 {
     if (!WGR_is_admin_products_list() || !WGR_should_show_variations_in_admin()) {
@@ -241,19 +292,32 @@ function WGR_admin_variation_list_styles()
     }
 ?>
     <style>
-        .post-type-product tr.type-product_variation.wgr-admin-variation-row .column-name {
-            padding-left: 2em;
-        }
+        .post-type-product tr.type-product_variation.wgr-admin-variation-row {
+            .check-column {
+                opacity: 0;
+                visibility: hidden;
 
-        .post-type-product tr.type-product_variation.wgr-admin-variation-row .column-name .row-title::before {
-            content: "↳ ";
-            color: #787c82;
-        }
+                * {
+                    display: none;
+                }
+            }
 
-        .post-type-product tr.type-product_variation .wgr-variation-parent {
-            color: #787c82;
-            font-size: 12px;
-            margin-top: 4px;
+            .column-name {
+                padding-left: 2em;
+            }
+
+            .column-name .row-title::before {
+                content: "↳ ";
+                color: #787c82;
+            }
+
+            .row-actions {
+                display: none;
+            }
+
+            .column-date {
+                color: transparent;
+            }
         }
     </style>
 <?php
