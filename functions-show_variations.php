@@ -294,8 +294,8 @@ function WGR_admin_variation_list_styles()
     <style>
         .post-type-product tr.type-product_variation.wgr-admin-variation-row {
             .check-column {
-                opacity: 0;
-                visibility: hidden;
+                /* opacity: 0; */
+                /* visibility: hidden; */
 
                 * {
                     display: none;
