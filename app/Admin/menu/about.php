@@ -802,11 +802,24 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
                 $cl = ' class="greencolor"';
             }
 
-            // nếu thư mục code có rồi thì bỏ qua
+            // nếu thư mục code có rồi
             if (is_dir(WP_PLUGIN_DIR . '/' . $k)) {
+                // plugin github đã cài → cho phép cập nhật (ghi đè) từ github
+                if (isset($github_plugins[$k])) {
+                    if ($github_plugins[$k] == '') {
+                        $github_plugins[$k] = 'https://github.com/itvn9online/' . $k;
+                    }
         ?>
-                <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
+                    <li>
+                        <a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a>
+                        (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>" <?php echo $cl; ?>><em>Update now</em></a>)
+                    </li>
                 <?php
+                } else {
+                ?>
+                    <li><a href="#" data-name="<?php echo $k; ?>" class="thickbox"><?php echo $v; ?></a></li>
+                <?php
+                }
             } else if (isset($github_plugins[$k])) {
                 if ($github_plugins[$k] == '') {
                     $github_plugins[$k] = 'https://github.com/itvn9online/' . $k;
@@ -814,7 +827,10 @@ UPDATE `<?php echo $wpdb->prefix; ?>options` SET `option_name` = '_site_transien
 
                 if (is_dir(WP_PLUGIN_DIR . '/' . $k . '-main')) {
                 ?>
-                    <li><a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a></li>
+                    <li>
+                        <a href="<?php echo $github_plugins[$k]; ?>" data-name="<?php echo $k; ?>" target="_blank" rel="nofollow"><?php echo $v; ?></a>
+                        (<a href="<?php echo $current_admin_page_url; ?>&download_github_plugin=<?php echo $k; ?>" <?php echo $cl; ?>><em>Update now</em></a>)
+                    </li>
                 <?php
                 } else {
                 ?>
@@ -872,17 +888,16 @@ check_and_update_webgiareorg();
         }
     })();
 
-    // tạo danh sách các plugin khuyên dùng
-    (function(arr) {
-        let str = '',
-            w = Math.ceil(jQuery(window).width() / 100 * 70),
+    // gán URL thickbox cho plugin WordPress.org (chỉ thẻ a.thickbox, bỏ qua link github)
+    (function() {
+        var w = Math.ceil(jQuery(window).width() / 100 * 70),
             h = Math.ceil(jQuery(window).height() / 100 * 80);
-        jQuery('#wgr-recommends-following-plugins a').each(function() {
-            let x = jQuery(this).attr('data-name') || '';
+        jQuery('#wgr-recommends-following-plugins a.thickbox').each(function() {
+            var x = jQuery(this).attr('data-name') || '';
             if (x != '') {
                 jQuery(this).attr({
                     href: web_admin_link + 'plugin-install.php?tab=plugin-information&plugin=' + x + '&TB_iframe=true&width=' + w + '&height=' + h
-                })
+                });
             }
         });
     })();
