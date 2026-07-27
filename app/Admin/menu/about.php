@@ -322,6 +322,7 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
                 $target_dir = WP_PLUGIN_DIR . '/' . $plugin_name;
 
                 if (is_dir($extracted_dir)) {
+                    $backup_dir = '';
                     if (is_dir($target_dir)) {
                         $backup_dir = $target_dir . '-' . date('Ymd-His');
                         rename($target_dir, $backup_dir);
@@ -330,8 +331,41 @@ if (isset($_GET['download_github_plugin']) && !empty($_GET['download_github_plug
 
                     if (rename($extracted_dir, $target_dir)) {
                         echo 'Rename folder: <strong>' . $plugin_name . '-main</strong> -> <strong>' . $plugin_name . '</strong><br>' . "\n";
+
+                        // Update thành công → xóa thư mục backup vừa tạo + các bản backup cũ còn sót
+                        $backup_dirs = [];
+                        if ($backup_dir !== '' && is_dir($backup_dir)) {
+                            $backup_dirs[] = $backup_dir;
+                        }
+                        foreach (glob(WP_PLUGIN_DIR . '/' . $plugin_name . '-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]', GLOB_ONLYDIR) ?: [] as $old_backup) {
+                            if (!in_array($old_backup, $backup_dirs, true)) {
+                                $backup_dirs[] = $old_backup;
+                            }
+                        }
+
+                        foreach ($backup_dirs as $dir_to_remove) {
+                            $it = new RecursiveDirectoryIterator($dir_to_remove, RecursiveDirectoryIterator::SKIP_DOTS);
+                            $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+                            foreach ($files as $file) {
+                                if ($file->isDir()) {
+                                    rmdir($file->getRealPath());
+                                } else {
+                                    unlink($file->getRealPath());
+                                }
+                            }
+                            if (rmdir($dir_to_remove)) {
+                                echo 'Removed backup: <strong>' . $dir_to_remove . '</strong><br>' . "\n";
+                            } else {
+                                echo '<span class="redcolor">Remove backup failed: ' . $dir_to_remove . '</span><br>' . "\n";
+                            }
+                        }
                     } else {
                         echo '<span class="redcolor">Rename folder failed!</span><br>' . "\n";
+                        // rename fail → khôi phục bản cũ từ backup
+                        if ($backup_dir !== '' && is_dir($backup_dir) && !is_dir($target_dir)) {
+                            rename($backup_dir, $target_dir);
+                            echo 'Restored old plugin from backup.<br>' . "\n";
+                        }
                     }
                 }
 
