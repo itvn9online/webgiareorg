@@ -148,6 +148,8 @@ class WGR_Advanced_Cache
             'ttclid',
             // Pinterest
             'epik',
+            // zalo
+            'gidzl',
             // Other common tracking
             'mc_cid',      // MailChimp
             'mc_eid',      // MailChimp
