@@ -155,9 +155,11 @@ function action_echbay_item_contact($atts)
     if ($menu_icon != '') {
         // nếu menu link ko được thiết lập thì tạo link tự động luôn
         if ($menu_link == '') {
-            if ($menu_icon == 'icon-phone') {
+            $the_link = trim($the_link);
+            $first_char = substr($the_link, 0, 1);
+            if ($menu_icon == 'icon-phone' && ($first_char == '0' || $first_char == '+')) {
                 $menu_link = 'tel:' . $the_link;
-            } else if ($menu_icon == 'icon-envelop') {
+            } else if ($menu_icon == 'icon-envelop' && strpos($the_link, '@') !== false) {
                 $menu_link = 'mailto:' . $the_link;
             }
         }
@@ -170,7 +172,7 @@ function action_echbay_item_contact($atts)
     $menu_text = $menu_icon . $menu_text;
 
     // 
-    if ($menu_link != '') {
+    if ($menu_link != '' && $menu_link != '#') {
         $menu_text = '<a href="' . $menu_link . '" rel="nofollow" target="' . $the_target . '" class="echbay-items-contact-link" aria-label="External">' . $menu_text . '</a>';
     }
 
