@@ -172,10 +172,25 @@ function WGR_select($sql)
 }
 
 // hàm file_get_contents khó chạy trên localhost -> dùng cURL để thay thế
-function WGR_get_contents($url, $flag = 0)
+function WGR_get_contents($url, $flag = 0, $timeout = 10)
 {
     if ($flag > 0) {
         return file_get_contents($url, 1);
+    }
+
+    $timeout = (int) $timeout;
+    if ($timeout < 1) {
+        $timeout = 10;
+    }
+
+    // không có curl thì fallback, vẫn phải có timeout để tránh treo trang
+    if (!function_exists('curl_init')) {
+        $ctx = stream_context_create([
+            'http' => [
+                'timeout' => $timeout,
+            ],
+        ]);
+        return @file_get_contents($url, false, $ctx);
     }
 
     // 
@@ -186,15 +201,22 @@ function WGR_get_contents($url, $flag = 0)
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
+        // TIMEOUT = 0 sẽ treo vô hạn nếu host chặn outbound / DNS chậm
+        CURLOPT_CONNECTTIMEOUT => min(5, $timeout),
+        CURLOPT_TIMEOUT => $timeout,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_USERAGENT => 'webgiareorg',
     ));
 
     $response = curl_exec($curl);
+    $errno = curl_errno($curl);
 
     curl_close($curl);
     // echo $response;
+    if ($errno || $response === false) {
+        return false;
+    }
     return $response;
 }

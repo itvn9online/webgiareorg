@@ -452,136 +452,146 @@ deny from all
 }
 
 // kiểm tra và cập nhật phiên bản mới nếu có
-function check_and_update_webgiareorg()
-{
-    $version = file_get_contents(WGR_BASE_PATH . 'VERSION');
-    if (isset($_GET['update_wgr_code'])) {
-        $remote_version = $version;
-    } else {
-        $remote_version = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/VERSION');
-        // $remote_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
-    }
-    // $remote_version = '24.08.20';
-    // echo EB_MY_CACHE_CONFIG . '<br>' . "\n";
-    // echo EB_THEME_CACHE . '<br>' . "\n";
+if (!function_exists('check_and_update_webgiareorg')) {
+    function check_and_update_webgiareorg()
+    {
+        $version = trim((string) @file_get_contents(WGR_BASE_PATH . 'VERSION'));
+        if (isset($_GET['update_wgr_code'])) {
+            $remote_version = $version;
+        } else {
+            $remote_version = WGR_get_contents('https://raw.echbay.com/itvn9online/webgiareorg/main/VERSION');
+            // $remote_version = file_get_contents('https://flatsome.webgiare.org/wp-content/webgiareorg/VERSION');
+            $remote_version = is_string($remote_version) ? trim($remote_version) : '';
 
-    //
-    if (isset($_GET['update_wgr_code']) || version_compare($version, $remote_version, '<')) {
-        // echo $version . "\n";
-        // echo $remote_version . "\n";
-        $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
-        echo 'File zip has been save to: ' . $dest . '<br>' . "\n";
-        if (is_file($dest)) {
-            unlink($dest);
+            // request fail / HTML lỗi / timeout → bỏ qua, không được coi là version mới hơn
+            if ($remote_version === '' || !preg_match('/^\d+(\.\d+)+$/', $remote_version)) {
+                return false;
+            }
         }
+        // $remote_version = '24.08.20';
+        // echo EB_MY_CACHE_CONFIG . '<br>' . "\n";
+        // echo EB_THEME_CACHE . '<br>' . "\n";
 
         //
-        $download_url = 'https://github.com/itvn9online/webgiareorg/archive/refs/heads/main.zip';
+        if (isset($_GET['update_wgr_code']) || version_compare($version, $remote_version, '<')) {
+            // echo $version . "\n";
+            // echo $remote_version . "\n";
+            $dest = WP_CONTENT_DIR . '/upgrade/webgiareorg.zip';
+            echo 'File zip has been save to: ' . $dest . '<br>' . "\n";
+            if (is_file($dest)) {
+                unlink($dest);
+            }
 
-        //
-        if (!copy($download_url, $dest)) {
-            echo 'ERROR copy file from link: ' . $download_url . '<br>' . "\n";
+            //
+            $download_url = 'https://github.com/itvn9online/webgiareorg/archive/refs/heads/main.zip';
 
-            // 
-            if (!file_put_contents($dest, file_get_contents($download_url))) {
-                echo 'ERROR file_get_contents file from link: ' . $download_url . '<br>' . "\n";
+            //
+            if (!copy($download_url, $dest)) {
+                echo 'ERROR copy file from link: ' . $download_url . '<br>' . "\n";
 
                 // 
-                if (!file_put_contents($dest, fopen($download_url, 'r'))) {
-                    echo 'ERROR fopen file from link: ' . $download_url . '<br>' . "\n";
-                    return false;
+                if (!file_put_contents($dest, file_get_contents($download_url))) {
+                    echo 'ERROR file_get_contents file from link: ' . $download_url . '<br>' . "\n";
+
+                    // 
+                    if (!file_put_contents($dest, fopen($download_url, 'r'))) {
+                        echo 'ERROR fopen file from link: ' . $download_url . '<br>' . "\n";
+                        return false;
+                    } else {
+                        echo 'FOPEN file from link: ' . $download_url . '<br>' . "\n";
+                    }
                 } else {
-                    echo 'FOPEN file from link: ' . $download_url . '<br>' . "\n";
+                    echo 'GET_CONTENT file from link: ' . $download_url . '<br>' . "\n";
                 }
             } else {
-                echo 'GET_CONTENT file from link: ' . $download_url . '<br>' . "\n";
+                echo 'COPY file from link: ' . $download_url . '<br>' . "\n";
             }
-        } else {
-            echo 'COPY file from link: ' . $download_url . '<br>' . "\n";
-        }
-        chmod($dest, 0777);
-
-        //
-        if (filesize($dest) > 1_000) {
-            // kết quả giải nén
-            $unzipfile = false;
-            $dir_unzip_update_to = WP_CONTENT_DIR . '/';
-            $dir_name_for_unzip_to = 'webgiareorg-main';
+            chmod($dest, 0777);
 
             //
-            if (class_exists('ZipArchive')) {
-                echo '<div>Using: <strong>ZipArchive</strong></div>';
+            if (filesize($dest) > 1_000) {
+                // kết quả giải nén
+                $unzipfile = false;
+                $dir_unzip_update_to = WP_CONTENT_DIR . '/';
+                $dir_name_for_unzip_to = 'webgiareorg-main';
 
-                $zip = new ZipArchive;
-                if (
-                    $zip->open($dest) === TRUE
-                ) {
-                    $zip->extractTo($dir_unzip_update_to);
-                    $zip->close();
+                //
+                if (class_exists('ZipArchive')) {
+                    echo '<div>Using: <strong>ZipArchive</strong></div>';
 
-                    //
-                    $unzipfile = true;
-                }
-            } else {
-                echo '<div>Using: <strong>unzip_file (wordpress)</strong></div>';
+                    $zip = new ZipArchive;
+                    if (
+                        $zip->open($dest) === TRUE
+                    ) {
+                        $zip->extractTo($dir_unzip_update_to);
+                        $zip->close();
 
-                $unzipfile = unzip_file($dest, $dir_unzip_update_to);
-            }
-
-            //
-            if ($unzipfile == true) {
-                echo '<div>Unzip to: <strong>' . $dir_unzip_update_to . $dir_name_for_unzip_to . '</strong></div>';
-
-                if (!is_dir($dir_unzip_update_to . $dir_name_for_unzip_to)) {
-                    echo '<h3 class="redcolor">Unzip faild...</strong></h3>';
+                        //
+                        $unzipfile = true;
+                    }
                 } else {
-                    // thực hiện đổi tên thư mục
-                    $myoldfolder = $dir_unzip_update_to . 'webgiareorg';
-                    echo $myoldfolder . '<br>' . "\n";
+                    echo '<div>Using: <strong>unzip_file (wordpress)</strong></div>';
 
-                    // đổi tên thư mục code cũ
-                    $mynewfolder = '';
-                    if (is_dir($myoldfolder)) {
-                        $mynewfolder = $myoldfolder . '-' . date('Ymd-His');
-                        echo $mynewfolder . '<br>' . "\n";
+                    $unzipfile = unzip_file($dest, $dir_unzip_update_to);
+                }
 
-                        // ưu tiên sử dụng PHP thuần cho nó nhanh
-                        if (rename($myoldfolder, $mynewfolder)) {
-                            echo '<div>Hoàn thành quá trình backup code (rename)!</div>';
+                //
+                if ($unzipfile == true) {
+                    echo '<div>Unzip to: <strong>' . $dir_unzip_update_to . $dir_name_for_unzip_to . '</strong></div>';
+
+                    if (!is_dir($dir_unzip_update_to . $dir_name_for_unzip_to)) {
+                        echo '<h3 class="redcolor">Unzip faild...</strong></h3>';
+                    } else {
+                        // thực hiện đổi tên thư mục
+                        $myoldfolder = $dir_unzip_update_to . 'webgiareorg';
+                        echo $myoldfolder . '<br>' . "\n";
+
+                        // đổi tên thư mục code cũ
+                        $mynewfolder = '';
+                        if (is_dir($myoldfolder)) {
+                            $mynewfolder = $myoldfolder . '-' . date('Ymd-His');
+                            echo $mynewfolder . '<br>' . "\n";
+
+                            // ưu tiên sử dụng PHP thuần cho nó nhanh
+                            if (rename($myoldfolder, $mynewfolder)) {
+                                echo '<div>Hoàn thành quá trình backup code (rename)!</div>';
+                            }
+                        }
+
+                        // đổi tên thư mục code mới
+                        if (rename($dir_unzip_update_to . $dir_name_for_unzip_to, $myoldfolder)) {
+                            echo '<div>Hoàn thành quá trình cập nhật code (rename)!</div>';
                         }
                     }
-
-                    // đổi tên thư mục code mới
-                    if (rename($dir_unzip_update_to . $dir_name_for_unzip_to, $myoldfolder)) {
-                        echo '<div>Hoàn thành quá trình cập nhật code (rename)!</div>';
-                    }
+                } else {
+                    echo '<div>Do not unzip file, update faild!</div>';
                 }
             } else {
-                echo '<div>Do not unzip file, update faild!</div>';
+                echo '<div>File bị xóa vì không đủ dung lượng cần thiết!</div>';
             }
-        } else {
-            echo '<div>File bị xóa vì không đủ dung lượng cần thiết!</div>';
-        }
 
-        // Dọn dẹp file zip
-        unlink($dest);
-        echo 'File removed: <strong>' . $dest . '</strong><br>' . "\n";
+            // Dọn dẹp file zip
+            unlink($dest);
+            echo 'File removed: <strong>' . $dest . '</strong><br>' . "\n";
+        }
     }
 }
 
-function WGR_getIPAddress()
-{
-    $client_ip = $_SERVER['REMOTE_ADDR'];
-    if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-        $client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
-    } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        // $client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        $client_ip = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
-    } else if (isset($_SERVER['HTTP_X_REAL_IP'])) {
-        $client_ip = $_SERVER['HTTP_X_REAL_IP'];
-        // $client_ip = trim(explode(',', $_SERVER['HTTP_X_REAL_IP'])[0]);
+if (!function_exists('WGR_getIPAddress')) {
+    function WGR_getIPAddress()
+    {
+        $client_ip = $_SERVER['REMOTE_ADDR'];
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+        } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // $client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $client_ip = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
+        } else if (isset($_SERVER['HTTP_X_REAL_IP'])) {
+            $client_ip = $_SERVER['HTTP_X_REAL_IP'];
+            // $client_ip = trim(explode(',', $_SERVER['HTTP_X_REAL_IP'])[0]);
+        }
+        return $client_ip;
     }
-    return $client_ip;
 }
 
 ?>
@@ -589,7 +599,7 @@ function WGR_getIPAddress()
 <p>Phiên bản WebGiaRe code: <strong><?php echo file_get_contents(WGR_BASE_PATH . 'VERSION'); ?></strong></p>
 <p>Mặc định, WebGiaRe code sẽ được cập nhật tự động mỗi khi có phiên bản mới. Bạn có thể <a href="<?php echo $current_admin_page_url; ?>&update_wgr_code=1" class="bold">Bấm vào đây</a> để cập nhật lại WebGiaRe code thủ công.</p>
 <p>PHP version: <strong><?php echo PHP_VERSION; ?></strong>.</p>
-<p>Server IP: <strong><?php echo $_SERVER['SERVER_ADDR']; ?></strong> | Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
+<p>Server IP: <strong><?php echo ($_SERVER['SERVER_ADDR'] ?? ($_SERVER['LOCAL_ADDR'] ?? 'N/A')); ?></strong> | Client IP: <strong><?php echo WGR_getIPAddress(); ?></strong></p>
 <p>Server date: <strong><?php echo date('r'); ?></strong> | date_i18n: <strong><?php echo date_i18n('r'); ?></strong> | date_i18n (date_format time_format): <strong><?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format')); ?></strong> | current_time (mysql): <strong><?php echo current_time('mysql'); ?></strong></p>
 <?php
 $timezone_string = get_option('timezone_string');
@@ -899,6 +909,12 @@ if (defined('WGR_CHECKED_UPDATE_THEME')) {
     <p class="greencolor">Phiên bản Flatsome của bạn đang được cập nhật thông qua server của <span class="bold">themeforest.net</span></p>
 <?php
 }
+
+// đẩy HTML ra trước khi gọi remote, tránh trang about bị trắng khi check version bị treo
+if (ob_get_level() > 0) {
+    @ob_flush();
+}
+@flush();
 
 //
 check_and_update_webgiareorg();

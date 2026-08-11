@@ -18,7 +18,15 @@ function func_include_wgr_private_code()
     }
 
     //
-    include $inc;
+    try {
+        include $inc;
+    } catch (Throwable $e) {
+        echo '<div class="notice notice-error"><p>';
+        echo '<strong>WGR include error:</strong> ' . esc_html($e->getMessage());
+        echo '<br>' . esc_html($e->getFile()) . ':' . (int) $e->getLine();
+        echo '</p></div>';
+        return false;
+    }
 
     //
     return true;
