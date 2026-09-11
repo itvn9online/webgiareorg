@@ -282,46 +282,9 @@ function WGR_ajax_load_product_variations()
     wp_send_json_success(array('rows' => $rows));
 }
 
-add_action('admin_head', 'WGR_admin_variation_list_styles');
-/**
- * CSS cho dòng biến thể append bằng AJAX.
- */
-function WGR_admin_variation_list_styles()
-{
-    if (!WGR_should_show_variations_in_admin()) {
-        return;
-    }
-?>
-    <style>
-        .post-type-product tr.type-product_variation.wgr-admin-variation-row {
-            .check-column * {
-                display: none;
-            }
-
-            .column-name {
-                padding-left: 2em;
-            }
-
-            .column-name .row-title::before {
-                content: "↳ ";
-                color: #787c82;
-            }
-
-            .row-actions {
-                display: none;
-            }
-
-            .column-date {
-                color: transparent;
-            }
-        }
-    </style>
-<?php
-}
-
 add_action('admin_footer-edit.php', 'WGR_admin_variation_list_script');
 /**
- * JS: lấy product ID từ #the-list, gọi AJAX, append biến thể dưới từng sản phẩm cha.
+ * Nạp JS: lấy product ID từ #the-list, gọi AJAX, append biến thể dưới từng sản phẩm cha.
  */
 function WGR_admin_variation_list_script()
 {
@@ -329,78 +292,21 @@ function WGR_admin_variation_list_script()
         return;
     }
 
-    $ajax_url = admin_url('admin-ajax.php');
-    $nonce    = wp_create_nonce('wgr_load_product_variations');
+    $config = array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('wgr_load_product_variations'),
+    );
 ?>
     <script>
-        (function($) {
-            function wgrCollectProductIds() {
-                var ids = [];
-                $('#the-list > tr[id^="post-"]').each(function() {
-                    if ($(this).hasClass('wgr-admin-variation-row')) {
-                        return;
-                    }
-                    var idAttr = this.id || '';
-                    var m = idAttr.match(/^post-(\d+)$/);
-                    if (m) {
-                        ids.push(parseInt(m[1], 10));
-                    }
-                });
-                return ids;
-            }
-
-            function wgrCollectColumns() {
-                var cols = [];
-                $('#the-list').closest('table').find('thead tr .manage-column').each(function() {
-                    var id = this.id || '';
-                    if (id) {
-                        cols.push(id);
-                    }
-                });
-                return cols;
-            }
-
-            function wgrLoadVariations() {
-                var $list = $('#the-list');
-                if (!$list.length) {
-                    return;
-                }
-
-                var ids = wgrCollectProductIds();
-                if (!ids.length) {
-                    return;
-                }
-
-                $.ajax({
-                    url: <?php echo wp_json_encode($ajax_url); ?>,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'wgr_load_product_variations',
-                        nonce: <?php echo wp_json_encode($nonce); ?>,
-                        product_ids: ids,
-                        columns: wgrCollectColumns()
-                    }
-                }).done(function(res) {
-                    if (!res || !res.success || !res.data || !res.data.rows) {
-                        return;
-                    }
-
-                    var rows = res.data.rows;
-                    Object.keys(rows).forEach(function(parentId) {
-                        var $parent = $list.find('tr#post-' + parentId);
-                        if (!$parent.length) {
-                            return;
-                        }
-                        // Xóa biến thể cũ (nếu có) rồi append lại.
-                        $list.find('tr.wgr-admin-variation-row[data-parent="' + parentId + '"]').remove();
-                        $parent.after(rows[parentId]);
-                    });
-                });
-            }
-
-            $(wgrLoadVariations);
-        })(jQuery);
+        window.wgrShowVariations = <?php echo wp_json_encode($config); ?>;
     </script>
 <?php
+    WGR_adds_js(
+        array(
+            WGR_BASE_PATH . 'public/admin/js/show_variations.js',
+        ),
+        array(
+            'cdn' => CDN_BASE_URL,
+        )
+    );
 }

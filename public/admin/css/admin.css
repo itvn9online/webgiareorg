@@ -63,6 +63,7 @@
     }
 }
 
+/* CSS cho tìm kiếm theo tiêu đề. */
 #wgr-search-by-title {
     margin: 12px 0 16px;
     padding: 12px 14px;
@@ -90,8 +91,8 @@
 }
 
 #wgr-search-by-title li {
-    margin: 0 0 4px;
-    line-height: 1.5;
+    /* margin: 0 0 4px; */
+    /* line-height: 1.5; */
 }
 
 #wgr-search-by-title .wgr-search-by-title-slug {
@@ -105,4 +106,28 @@
     color: inherit;
     border-radius: 2px;
     font-weight: 600;
+}
+
+/* CSS cho dòng biến thể append bằng AJAX. */
+.post-type-product tr.type-product_variation.wgr-admin-variation-row {
+    .check-column * {
+        display: none;
+    }
+
+    .column-name {
+        padding-left: 2em;
+    }
+
+    .column-name .row-title::before {
+        content: "↳ ";
+        color: #787c82;
+    }
+
+    .row-actions {
+        display: none;
+    }
+
+    .column-date {
+        color: transparent;
+    }
 }
