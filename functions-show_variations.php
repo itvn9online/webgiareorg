@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Hiển thị các sản phẩm biến thể trong danh sách sản phẩm trong admin.
+ * Hiển thị biến thể sản phẩm trong danh sách admin bằng AJAX.
+ * Không sửa query chính — giữ nguyên phân trang/lọc/tìm kiếm của WooCommerce,
+ * rồi sau khi bảng load xong thì nạp biến thể và append ngay dưới sản phẩm cha.
  */
 
 /**
  * Kiểm tra có đang ở trang danh sách sản phẩm trong admin hay không
  * (wp-admin/edit.php?post_type=product).
  *
- * @param WP_Query|null $query Query đang xử lý (nếu có) để kiểm tra thêm khi
- *                             $_GET['post_type'] không tồn tại.
- * @return bool True nếu đang ở trang danh sách sản phẩm.
+ * @return bool
  */
-function WGR_is_admin_products_list($query = null)
+function WGR_is_admin_products_list()
 {
     global $pagenow;
 
@@ -20,32 +20,17 @@ function WGR_is_admin_products_list($query = null)
         return false;
     }
 
-    if (isset($_GET['post_type']) && 'product' === $_GET['post_type']) {
-        return true;
-    }
-
-    if ($query instanceof WP_Query && $query->is_main_query()) {
-        $post_type = $query->get('post_type');
-        if ('product' === $post_type || (is_array($post_type) && in_array('product', $post_type, true))) {
-            return true;
-        }
-    }
-
-    return false;
+    return isset($_GET['post_type']) && 'product' === $_GET['post_type'];
 }
 
 /**
  * Quyết định có nên hiển thị biến thể trong danh sách sản phẩm hay không.
- * Trả về false khi: không phải trang danh sách sản phẩm, WooCommerce chưa nạp,
- * người dùng chọn "Ẩn biến thể" (show_variations=0), hoặc đang lọc theo
- * loại sản phẩm khác "variable".
  *
- * @param WP_Query|null $query Query đang xử lý (nếu có).
- * @return bool True nếu được phép hiển thị biến thể.
+ * @return bool
  */
-function WGR_should_show_variations_in_admin($query = null)
+function WGR_should_show_variations_in_admin()
 {
-    if (!WGR_is_admin_products_list($query)) {
+    if (!WGR_is_admin_products_list()) {
         return false;
     }
 
@@ -67,8 +52,7 @@ function WGR_should_show_variations_in_admin($query = null)
 
 add_action('restrict_manage_posts', 'WGR_admin_products_variation_filter');
 /**
- * Thêm dropdown "Hiển thị biến thể / Ẩn biến thể" vào thanh bộ lọc
- * phía trên danh sách sản phẩm để người dùng bật/tắt nhanh.
+ * Thêm dropdown "Hiển thị biến thể / Ẩn biến thể" vào thanh bộ lọc.
  *
  * @param string $post_type Post type của màn hình danh sách hiện tại.
  */
@@ -87,85 +71,11 @@ function WGR_admin_products_variation_filter($post_type)
 <?php
 }
 
-add_filter('posts_clauses', 'WGR_admin_products_list_variation_clauses', 20, 2);
 /**
- * Chỉnh sửa SQL của query danh sách sản phẩm:
- * - Mở rộng WHERE để lấy thêm post_type 'product_variation'
- *   (thay vì set query var thành array, tránh warning ở wp-admin/edit.php).
- * - Sắp xếp để biến thể luôn nằm ngay dưới sản phẩm cha.
- * - Khi lọc theo danh mục: thêm biến thể của các sản phẩm cha thuộc danh mục đó
- *   (biến thể không được gán term trực tiếp nên phải join qua sản phẩm cha).
- * - Khi lọc theo loại "variable": thêm biến thể của các sản phẩm variable.
- *
- * @param array    $clauses Các mảnh SQL (where, orderby, ...) của query.
- * @param WP_Query $query   Query đang xử lý.
- * @return array Clauses sau khi chỉnh sửa.
- */
-function WGR_admin_products_list_variation_clauses($clauses, $query)
-{
-    if (!WGR_should_show_variations_in_admin($query) || !$query->is_main_query()) {
-        return $clauses;
-    }
-
-    global $wpdb;
-
-    $product_post_type_where = "{$wpdb->posts}.post_type = 'product'";
-    if (strpos($clauses['where'], $product_post_type_where) !== false) {
-        $clauses['where'] = str_replace(
-            $product_post_type_where,
-            "{$wpdb->posts}.post_type IN ('product', 'product_variation')",
-            $clauses['where']
-        );
-    }
-
-    $clauses['orderby'] = "COALESCE(NULLIF({$wpdb->posts}.post_parent, 0), {$wpdb->posts}.ID) ASC, {$wpdb->posts}.post_parent ASC, {$wpdb->posts}.menu_order ASC, {$wpdb->posts}.post_title ASC";
-
-    if (!empty($_GET['product_cat'])) {
-        $term = get_term_by('slug', wc_clean(wp_unslash($_GET['product_cat'])), 'product_cat');
-        if ($term && !is_wp_error($term)) {
-            $parent_ids = get_posts(
-                array(
-                    'post_type'      => 'product',
-                    'post_status'    => 'any',
-                    'fields'         => 'ids',
-                    'posts_per_page' => -1,
-                    'tax_query'      => array(
-                        array(
-                            'taxonomy' => 'product_cat',
-                            'field'    => 'term_id',
-                            'terms'    => array((int) $term->term_id),
-                        ),
-                    ),
-                )
-            );
-
-            if (!empty($parent_ids)) {
-                $parent_ids_sql = implode(',', array_map('absint', $parent_ids));
-                $clauses['where'] .= " OR ({$wpdb->posts}.post_type = 'product_variation' AND {$wpdb->posts}.post_parent IN ({$parent_ids_sql}))";
-            }
-        }
-    }
-
-    $product_type = isset($_GET['product_type']) ? wc_clean(wp_unslash($_GET['product_type'])) : '';
-    if ('variable' === $product_type) {
-        $clauses['where'] .= " OR ({$wpdb->posts}.post_type = 'product_variation' AND {$wpdb->posts}.post_parent IN (
-      SELECT tr.object_id FROM {$wpdb->term_relationships} tr
-      INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-      INNER JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
-      WHERE tt.taxonomy = 'product_type' AND t.slug = 'variable'
-    ))";
-    }
-
-    return $clauses;
-}
-
-/**
- * Lấy tên hiển thị ngắn gọn của biến thể (chỉ phần thuộc tính, ví dụ "2kg").
- * Không dùng get_formatted_name() vì hàm đó trả về cả tên sản phẩm cha,
- * SKU/ID và HTML <span class="description">.
+ * Lấy tên hiển thị ngắn gọn của biến thể (chỉ phần thuộc tính).
  *
  * @param WC_Product_Variation $product Biến thể cần lấy tên.
- * @return string Tên biến thể để hiển thị trong admin.
+ * @return string
  */
 function WGR_get_admin_variation_name($product)
 {
@@ -174,7 +84,6 @@ function WGR_get_admin_variation_name($product)
         return $attrs;
     }
 
-    // Fallback: get_name() thường có dạng "Tên sản phẩm cha - 2kg"
     $name = $product->get_name();
     if (false !== strpos($name, ' - ')) {
         $parts = explode(' - ', $name);
@@ -184,42 +93,59 @@ function WGR_get_admin_variation_name($product)
     return $name;
 }
 
-add_action('manage_product_variation_posts_custom_column', 'WGR_admin_variation_column_content', 10, 2);
 /**
- * Đổ nội dung cho các cột của dòng biến thể trong bảng danh sách sản phẩm
- * (ảnh, tên biến thể, SKU, giá, tồn kho...). WordPress không tự render
- * các cột này cho post_type 'product_variation' nên phải tự xử lý.
+ * Danh sách cột của bảng sản phẩm (để build HTML dòng biến thể khớp cột).
  *
- * @param string $column  Tên cột đang render.
- * @param int    $post_id ID của biến thể.
+ * @return array<string, string>
  */
-function WGR_admin_variation_column_content($column, $post_id)
+function WGR_admin_product_list_columns()
 {
-    if (!WGR_should_show_variations_in_admin()) {
-        return;
+    $columns = get_column_headers('edit-product');
+
+    if (!is_array($columns) || empty($columns)) {
+        $columns = array(
+            'cb'          => '<input type="checkbox" />',
+            'thumb'       => '<span class="wc-image tips">' . esc_html__('Image', 'woocommerce') . '</span>',
+            'name'        => esc_html__('Name', 'woocommerce'),
+            'sku'         => esc_html__('SKU', 'woocommerce'),
+            'is_in_stock' => esc_html__('Stock', 'woocommerce'),
+            'price'       => esc_html__('Price', 'woocommerce'),
+            'product_cat' => esc_html__('Categories', 'woocommerce'),
+            'product_tag' => esc_html__('Tags', 'woocommerce'),
+            'featured'    => '<span class="wc-featured tips">' . esc_html__('Featured', 'woocommerce') . '</span>',
+            'date'        => esc_html__('Date'),
+        );
     }
 
-    $product = wc_get_product($post_id);
-    if (!$product || !$product->is_type('variation')) {
-        return;
-    }
+    return $columns;
+}
 
+/**
+ * Nội dung 1 ô cột cho dòng biến thể.
+ *
+ * @param string               $column  Tên cột.
+ * @param WC_Product_Variation $product Biến thể.
+ * @return string
+ */
+function WGR_admin_variation_column_html($column, $product)
+{
     switch ($column) {
+        // case 'cb':
+            // return '<input type="checkbox" disabled="disabled" />';
+
         case 'thumb':
-            echo $product->get_image('thumbnail');
-            break;
+            return $product->get_image('thumbnail');
 
         case 'name':
-            echo '<strong class="row-title">' . esc_html(WGR_get_admin_variation_name($product)) . '</strong>';
-            break;
+            return '<strong class="row-title">' . esc_html(WGR_get_admin_variation_name($product)) . '</strong>';
 
         case 'sku':
-            echo $product->get_sku() ? esc_html($product->get_sku()) : '<span class="na">&ndash;</span>';
-            break;
+            $sku = $product->get_sku();
+            return $sku ? esc_html($sku) : '<span class="na">&ndash;</span>';
 
         case 'price':
-            echo $product->get_price_html() ? wp_kses_post($product->get_price_html()) : '<span class="na">&ndash;</span>';
-            break;
+            $price_html = $product->get_price_html();
+            return $price_html ? wp_kses_post($price_html) : '<span class="na">&ndash;</span>';
 
         case 'is_in_stock':
             if ($product->is_on_backorder()) {
@@ -234,72 +160,142 @@ function WGR_admin_variation_column_content($column, $post_id)
                 $stock_html .= ' (' . wc_stock_amount($product->get_stock_quantity()) . ')';
             }
 
-            echo wp_kses_post($stock_html);
-            break;
+            return wp_kses_post($stock_html);
 
         default:
-            echo '<span class="na wgr-na" aria-hidden="true">–</span>';
-            break;
+            return '<span class="na wgr-na" aria-hidden="true">&ndash;</span>';
     }
 }
 
-add_filter('post_row_actions', 'WGR_admin_variation_row_actions', 999, 2);
 /**
- * Ẩn toàn bộ row-actions (Chỉnh sửa, Sửa nhanh, Xóa tạm...) trên dòng biến thể.
+ * Build HTML <tr> cho một biến thể.
  *
- * @param array   $actions Danh sách action link hiện có.
- * @param WP_Post $post    Post của dòng đang render.
- * @return array Actions sau khi lọc.
+ * @param WC_Product_Variation $product  Biến thể.
+ * @param array                $columns  Cột bảng.
+ * @return string
  */
-function WGR_admin_variation_row_actions($actions, $post)
+function WGR_admin_variation_row_html($product, $columns)
 {
-    if (!WGR_should_show_variations_in_admin() || 'product_variation' !== $post->post_type) {
-        return $actions;
+    $post_id = $product->get_id();
+    $classes = array(
+        'iedit',
+        'author-self',
+        'level-0',
+        'post-' . $post_id,
+        'type-product_variation',
+        'status-' . esc_attr($product->get_status()),
+        'hentry',
+        'wgr-admin-variation-row',
+    );
+
+    $html = '<tr id="post-' . absint($post_id) . '" class="' . esc_attr(implode(' ', $classes)) . '" data-parent="' . absint($product->get_parent_id()) . '">';
+
+    foreach ($columns as $column_name => $column_label) {
+        $primary = ('name' === $column_name) ? ' column-primary' : '';
+
+        if ('cb' === $column_name) {
+            $html .= '<th scope="row" class="check-column">' . WGR_admin_variation_column_html($column_name, $product) . '</th>';
+            continue;
+        }
+
+        $html .= '<td class="' . esc_attr($column_name) . ' column-' . esc_attr($column_name) . $primary . '" data-colname="' . esc_attr(wp_strip_all_tags((string) $column_label)) . '">';
+        $html .= WGR_admin_variation_column_html($column_name, $product);
+        $html .= '</td>';
     }
 
-    return array();
+    $html .= '</tr>';
+
+    return $html;
 }
 
-add_filter('post_class', 'WGR_admin_variation_row_class', 10, 3);
+add_action('wp_ajax_wgr_load_product_variations', 'WGR_ajax_load_product_variations');
 /**
- * Thêm class 'wgr-admin-variation-row' vào dòng biến thể
- * để CSS nhận diện và style riêng (thụt lề, mũi tên...).
- *
- * @param array $classes Danh sách class hiện có của dòng.
- * @param array $class   Class truyền thêm (không dùng).
- * @param int   $post_id ID của post đang render.
- * @return array Classes sau khi bổ sung.
+ * AJAX: nhận danh sách product ID đang hiện trên page, trả về HTML biến thể
+ * theo từng parent để JS append ngay dưới dòng cha.
  */
-function WGR_admin_variation_row_class($classes, $class, $post_id)
+function WGR_ajax_load_product_variations()
 {
-    if (!WGR_should_show_variations_in_admin() || 'product_variation' !== get_post_type($post_id)) {
-        return $classes;
+    if (!current_user_can('edit_products')) {
+        wp_send_json_error(array('message' => 'Forbidden'), 403);
     }
 
-    $classes[] = 'wgr-admin-variation-row';
-    return $classes;
+    check_ajax_referer('wgr_load_product_variations', 'nonce');
+
+    if (!function_exists('wc_get_product')) {
+        wp_send_json_error(array('message' => 'WooCommerce missing'), 400);
+    }
+
+    $product_ids = isset($_POST['product_ids']) ? (array) wp_unslash($_POST['product_ids']) : array();
+    $product_ids = array_values(array_unique(array_filter(array_map('absint', $product_ids))));
+
+    if (empty($product_ids)) {
+        wp_send_json_success(array('rows' => array()));
+    }
+
+    // Giới hạn để tránh request quá lớn từ 1 page admin.
+    $product_ids = array_slice($product_ids, 0, 100);
+
+    // Ưu tiên thứ tự cột từ thead phía client để khớp đúng bảng đang hiển thị.
+    $columns = WGR_admin_product_list_columns();
+    if (!empty($_POST['columns']) && is_array($_POST['columns'])) {
+        $requested = array_map('sanitize_key', wp_unslash($_POST['columns']));
+        $ordered   = array();
+        foreach ($requested as $col) {
+            if ('' === $col) {
+                continue;
+            }
+            $ordered[$col] = isset($columns[$col]) ? $columns[$col] : $col;
+        }
+        if (!empty($ordered)) {
+            $columns = $ordered;
+        }
+    }
+
+    $rows = array();
+
+    foreach ($product_ids as $parent_id) {
+        $parent = wc_get_product($parent_id);
+        if (!$parent || !$parent->is_type('variable')) {
+            continue;
+        }
+
+        $variation_ids = $parent->get_children();
+        if (empty($variation_ids)) {
+            continue;
+        }
+
+        $html = '';
+        foreach ($variation_ids as $variation_id) {
+            $variation = wc_get_product($variation_id);
+            if (!$variation || !$variation->is_type('variation')) {
+                continue;
+            }
+
+            $html .= WGR_admin_variation_row_html($variation, $columns);
+        }
+
+        if ('' !== $html) {
+            $rows[(string) $parent_id] = $html;
+        }
+    }
+
+    wp_send_json_success(array('rows' => $rows));
 }
 
 add_action('admin_head', 'WGR_admin_variation_list_styles');
 /**
- * In CSS vào <head> của trang danh sách sản phẩm: thụt lề tên biến thể,
- * thêm ký hiệu "↳" trước tên, ẩn row-actions không cần thiết.
+ * CSS cho dòng biến thể append bằng AJAX.
  */
 function WGR_admin_variation_list_styles()
 {
-    if (!WGR_is_admin_products_list() || !WGR_should_show_variations_in_admin()) {
+    if (!WGR_should_show_variations_in_admin()) {
         return;
     }
 ?>
     <style>
         .post-type-product tr.type-product_variation.wgr-admin-variation-row {
-            .check-column {
-                /* opacity: 0; */
-                /* visibility: hidden; */
-
-                * {
-                    display: none;
-                }
+            .check-column * {
+                display: none;
             }
 
             .column-name {
@@ -320,5 +316,91 @@ function WGR_admin_variation_list_styles()
             }
         }
     </style>
+<?php
+}
+
+add_action('admin_footer-edit.php', 'WGR_admin_variation_list_script');
+/**
+ * JS: lấy product ID từ #the-list, gọi AJAX, append biến thể dưới từng sản phẩm cha.
+ */
+function WGR_admin_variation_list_script()
+{
+    if (!WGR_should_show_variations_in_admin()) {
+        return;
+    }
+
+    $ajax_url = admin_url('admin-ajax.php');
+    $nonce    = wp_create_nonce('wgr_load_product_variations');
+?>
+    <script>
+        (function($) {
+            function wgrCollectProductIds() {
+                var ids = [];
+                $('#the-list > tr[id^="post-"]').each(function() {
+                    if ($(this).hasClass('wgr-admin-variation-row')) {
+                        return;
+                    }
+                    var idAttr = this.id || '';
+                    var m = idAttr.match(/^post-(\d+)$/);
+                    if (m) {
+                        ids.push(parseInt(m[1], 10));
+                    }
+                });
+                return ids;
+            }
+
+            function wgrCollectColumns() {
+                var cols = [];
+                $('#the-list').closest('table').find('thead tr .manage-column').each(function() {
+                    var id = this.id || '';
+                    if (id) {
+                        cols.push(id);
+                    }
+                });
+                return cols;
+            }
+
+            function wgrLoadVariations() {
+                var $list = $('#the-list');
+                if (!$list.length) {
+                    return;
+                }
+
+                var ids = wgrCollectProductIds();
+                if (!ids.length) {
+                    return;
+                }
+
+                $.ajax({
+                    url: <?php echo wp_json_encode($ajax_url); ?>,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'wgr_load_product_variations',
+                        nonce: <?php echo wp_json_encode($nonce); ?>,
+                        product_ids: ids,
+                        columns: wgrCollectColumns()
+                    }
+                }).done(function(res) {
+                    if (!res || !res.success || !res.data || !res.data.rows) {
+                        return;
+                    }
+
+                    var rows = res.data.rows;
+                    Object.keys(rows).forEach(function(parentId) {
+                        var $parent = $list.find('tr#post-' + parentId);
+                        if (!$parent.length) {
+                            return;
+                        }
+                        // Xóa biến thể cũ (nếu có) rồi append lại.
+                        $list.find('tr.wgr-admin-variation-row[data-parent="' + parentId + '"]').remove();
+                        $parent.after(rows[parentId]);
+                    });
+                });
+            }
+
+            $(wgrLoadVariations);
+        })(jQuery);
+    </script>
 <?php
 }

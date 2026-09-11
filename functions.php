@@ -21,7 +21,7 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
 defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
 defined('WGR_OBJECT_CACHE') || define('WGR_OBJECT_CACHE', '1');
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
-defined('WGR_SHOW_VARIATIONS') || define('WGR_SHOW_VARIATIONS', '1');
+defined('WGR_SHOW_VARIATIONS') || define('WGR_SHOW_VARIATIONS', '0');
 defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
 defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 
@@ -100,16 +100,12 @@ if (is_admin()) {
     include WGR_BASE_PATH . 'app/Admin/Autoload.php';
     include WGR_BASE_PATH . 'app/Admin/Menu.php';
 
-    // Bỏ qua khi đang search / lọc — posts_clauses của show_variations làm lệch kết quả
-    if (
-        WGR_SHOW_VARIATIONS == '1'
-        && !isset($_GET['s'])
-        && !isset($_GET['product_cat'])
-        && !isset($_GET['stock_status'])
-        && !isset($_GET['product_brand'])
-    ) {
+    // Hiển thị biến thể bằng AJAX — không đụng query chính nên chạy được cùng search/lọc
+    if (WGR_SHOW_VARIATIONS == '1') {
         include WGR_BASE_PATH . 'functions-show_variations.php';
-    } else if (!empty($_GET['s'])) {
+    }
+
+    if (!empty($_GET['s'])) {
         include WGR_BASE_PATH . 'functions-search_by_title.php';
     }
 

@@ -112,7 +112,7 @@ function WGR_search_by_title_render()
     }
 
     $keyword = WGR_search_by_title_keyword();
-    if ('' === $keyword) {
+    if ('' === $keyword || mb_strlen($keyword) < 3) {
         return;
     }
 
@@ -170,8 +170,7 @@ function WGR_search_by_title_render()
             <?php
             echo esc_html(
                 sprintf(
-                    /* translators: 1: post type label, 2: keyword, 3: result count */
-                    __('%1$s khớp tiêu đề/slug với “%2$s” (%3$d)', 'webgiareorg'),
+                    '%1$s khớp tiêu đề/slug với “%2$s” (%3$d)',
                     $post_type_label,
                     $keyword,
                     count($posts)
@@ -179,12 +178,7 @@ function WGR_search_by_title_render()
             );
             ?>
         </h2>
-        <?php if ($slug_hint !== '') : ?>
-            <p class="wgr-search-by-title-meta">
-                <?php echo esc_html(sprintf(__('Slug tìm kiếm: %s', 'webgiareorg'), $slug_hint)); ?>
-            </p>
-        <?php endif; ?>
-        <ul>
+        <ol>
             <?php foreach ($posts as $post) : ?>
                 <?php
                 $edit_link = get_edit_post_link((int) $post->ID);
@@ -202,7 +196,7 @@ function WGR_search_by_title_render()
                     </span>
                 </li>
             <?php endforeach; ?>
-        </ul>
+        </ol>
     </div>
     <script>
         (function() {
