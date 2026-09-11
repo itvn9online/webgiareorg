@@ -208,8 +208,9 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
                 echo '<div class="notice notice-error"><p>✗ Không thể truy cập wp-config.php hoặc file không có quyền ghi!</p></div>';
             }
         }
-        // các trường con lại chỉ ghi vào file custom_config.php khi có giá trị
-        else if (empty($option_value)) {
+        // Chỉ bỏ qua chuỗi rỗng (text/URL trống). Giữ ghi '0' cho checkbox —
+        // empty('0') === true nên nếu skip sẽ mất define và fallback default '1' ở functions.php
+        else if ($option_value === '') {
             continue;
         } else if ($option_name == 'cdn_base_url') {
             // Nếu không phải là URL hợp lệ hoặc trùng với giá trị mặc định thì bỏ qua
