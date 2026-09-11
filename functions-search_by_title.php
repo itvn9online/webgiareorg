@@ -103,6 +103,50 @@ function WGR_search_posts_by_title($keyword, $post_type = 'post', $limit = 50)
 }
 
 /**
+ * Highlight từ khóa trong chuỗi (escape HTML an toàn).
+ *
+ * @param string $text    Chuỗi gốc.
+ * @param string $keyword Từ khóa cần bôi.
+ * @return string HTML đã escape + <mark>.
+ */
+function WGR_search_by_title_highlight($text, $keyword)
+{
+    $text    = (string) $text;
+    $keyword = trim((string) $keyword);
+
+    if ('' === $text) {
+        return '';
+    }
+
+    if ('' === $keyword) {
+        return esc_html($text);
+    }
+
+    $pattern = '/(' . preg_quote($keyword, '/') . ')/iu';
+    $parts   = preg_split($pattern, $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+    if (!is_array($parts)) {
+        return esc_html($text);
+    }
+
+    $out = '';
+    foreach ($parts as $i => $part) {
+        if ('' === $part) {
+            continue;
+        }
+
+        // Phần lẻ = đoạn khớp từ khóa (PREG_SPLIT_DELIM_CAPTURE).
+        if ($i % 2 === 1) {
+            $out .= '<mark class="wgr-search-by-title-mark">' . esc_html($part) . '</mark>';
+        } else {
+            $out .= esc_html($part);
+        }
+    }
+
+    return $out;
+}
+
+/**
  * In CSS + HTML kết quả, rồi đẩy khối này lên ngay trước table.wp-list-table.
  */
 function WGR_search_by_title_render()
@@ -122,49 +166,12 @@ function WGR_search_by_title_render()
         return;
     }
 
-    $slug_hint      = sanitize_title($keyword);
-    $post_type_obj  = get_post_type_object($post_type);
+    $slug_hint       = sanitize_title($keyword);
+    $post_type_obj   = get_post_type_object($post_type);
     $post_type_label = $post_type_obj && !empty($post_type_obj->labels->name)
         ? $post_type_obj->labels->name
         : $post_type;
 ?>
-    <style>
-        #wgr-search-by-title {
-            margin: 12px 0 16px;
-            padding: 12px 14px;
-            background: #fff;
-            border: 1px solid #c3c4c7;
-            border-left: 4px solid #2271b1;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
-        }
-
-        #wgr-search-by-title h2 {
-            margin: 0 0 8px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        #wgr-search-by-title .wgr-search-by-title-meta {
-            margin: 0 0 8px;
-            color: #646970;
-            font-size: 12px;
-        }
-
-        #wgr-search-by-title ul {
-            margin: 0;
-            padding-left: 1.25em;
-        }
-
-        #wgr-search-by-title li {
-            margin: 0 0 4px;
-            line-height: 1.5;
-        }
-
-        #wgr-search-by-title .wgr-search-by-title-slug {
-            color: #646970;
-            font-size: 12px;
-        }
-    </style>
     <div id="wgr-search-by-title">
         <h2>
             <?php
@@ -188,10 +195,10 @@ function WGR_search_by_title_render()
                 ?>
                 <li>
                     <a href="<?php echo esc_url($edit_link); ?>">
-                        <?php echo esc_html($post->post_title); ?>
+                        <?php echo WGR_search_by_title_highlight($post->post_title, $keyword); ?>
                     </a>
                     <span class="wgr-search-by-title-slug">
-                        — <?php echo esc_html($post->post_name); ?>
+                        — <?php echo WGR_search_by_title_highlight($post->post_name, $slug_hint); ?>
                         (#<?php echo (int) $post->ID; ?>, <?php echo esc_html($post->post_status); ?>)
                     </span>
                 </li>
