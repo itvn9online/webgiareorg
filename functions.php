@@ -21,7 +21,7 @@ if (is_file(WGR_CHILD_PATH . 'custom_config.php')) {
 defined('WGR_ADVANCED_CACHE') || define('WGR_ADVANCED_CACHE', '0');
 defined('WGR_OBJECT_CACHE') || define('WGR_OBJECT_CACHE', '1');
 defined('WGR_TERM_DESCRIPTION_ORDER') || define('WGR_TERM_DESCRIPTION_ORDER', '0');
-defined('WGR_SHOW_VARIATIONS') || define('WGR_SHOW_VARIATIONS', '0');
+defined('WGR_SHOW_VARIATIONS') || define('WGR_SHOW_VARIATIONS', '1');
 defined('WGR_CONTACT_PRICE') || define('WGR_CONTACT_PRICE', '');
 defined('WGR_ADD_FONT_AWESOME') || define('WGR_ADD_FONT_AWESOME', '0');
 

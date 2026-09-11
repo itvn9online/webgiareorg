@@ -209,7 +209,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
             }
         }
         // Chỉ bỏ qua chuỗi rỗng (text/URL trống). Giữ ghi '0' cho checkbox —
-        // empty('0') === true nên nếu skip sẽ mất define và fallback default '0' ở functions.php
+        // empty('0') === true nên nếu skip sẽ mất define và fallback default '1' ở functions.php
         else if ($option_value === '') {
             continue;
         } else if ($option_name == 'cdn_base_url') {
@@ -243,7 +243,7 @@ $wgr_advanced_cache = get_option('wgr_advanced_cache', '0');
 $wgr_object_cache = get_option('wgr_object_cache', '1');
 $wgr_disable_wp_cron = get_option('wgr_disable_wp_cron', '1');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
-$wgr_show_variations = get_option('wgr_show_variations', '0');
+$wgr_show_variations = get_option('wgr_show_variations', '1');
 $wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
 $cdn_base_url = get_option('cdn_base_url', '');
