@@ -100,7 +100,14 @@ if (is_admin()) {
     include WGR_BASE_PATH . 'app/Admin/Autoload.php';
     include WGR_BASE_PATH . 'app/Admin/Menu.php';
 
-    if (WGR_SHOW_VARIATIONS == '1') {
+    // Bỏ qua khi đang search / lọc — posts_clauses của show_variations làm lệch kết quả
+    if (
+        WGR_SHOW_VARIATIONS == '1'
+        && !isset($_GET['s'])
+        && !isset($_GET['product_cat'])
+        && !isset($_GET['stock_status'])
+        && !isset($_GET['product_brand'])
+    ) {
         include WGR_BASE_PATH . 'functions-show_variations.php';
     }
 
