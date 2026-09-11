@@ -54,3 +54,11 @@
     left: -999px;
     width: 99%;
 }
+
+#posts-filter {
+    .actions {
+        select {
+            max-width: 150px !important;
+        }
+    }
+}
