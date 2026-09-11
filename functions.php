@@ -109,6 +109,8 @@ if (is_admin()) {
         && !isset($_GET['product_brand'])
     ) {
         include WGR_BASE_PATH . 'functions-show_variations.php';
+    } else if (!empty($_GET['s'])) {
+        include WGR_BASE_PATH . 'functions-search_by_title.php';
     }
 
     //
