@@ -180,6 +180,7 @@ $github_plugins = [
     // biên dịch lại từ plugin của devvn
     'echbay-ai-local-store' => '',
     'echbay-wc-gsheet-sync' => '',
+    'echbay-leech-data' => '',
     // 'devvn-quick-buy' => '',
     'devvn-woocommerce-reviews' => '',
 ];
