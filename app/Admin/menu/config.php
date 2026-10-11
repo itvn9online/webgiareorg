@@ -51,6 +51,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         'wgr_disable_wp_cron' => isset($_POST['wgr_disable_wp_cron']) ? '1' : '0',
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
         'wgr_show_variations' => isset($_POST['wgr_show_variations']) ? '1' : '0',
+        'wgr_multilevel_menu' => isset($_POST['wgr_multilevel_menu']) ? '1' : '0',
         'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
         // CDN
@@ -244,6 +245,7 @@ $wgr_object_cache = get_option('wgr_object_cache', '1');
 $wgr_disable_wp_cron = get_option('wgr_disable_wp_cron', '1');
 $wgr_term_description_order = get_option('wgr_term_description_order', '0');
 $wgr_show_variations = get_option('wgr_show_variations', '1');
+$wgr_multilevel_menu = get_option('wgr_multilevel_menu', '1');
 $wgr_contact_price = get_option('wgr_contact_price', '');
 $wgr_add_font_awesome = get_option('wgr_add_font_awesome', '0');
 $cdn_base_url = get_option('cdn_base_url', '');
@@ -329,6 +331,19 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
                             Hiển thị biến thể trong danh sách sản phẩm (admin)
                         </label>
                         <p class="description">Hiển thị các sản phẩm biến thể trong trang quản lý sản phẩm WooCommerce.</p>
+                    </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">Multilevel menu</th>
+                <td>
+                    <fieldset>
+                        <label>
+                            <input type="checkbox" name="wgr_multilevel_menu" value="1" <?php checked($wgr_multilevel_menu, '1'); ?>>
+                            Hiển thị sub-menu trên header dạng đa cấp (fly-out)
+                        </label>
+                        <p class="description">Menu cấp 1 hiển thị trên 1 cột, di chuột vào sẽ hiển thị menu cấp tiếp theo sang bên phải. Nạp file <code>public/css/multilevel-menu.css</code>.</p>
                     </fieldset>
                 </td>
             </tr>

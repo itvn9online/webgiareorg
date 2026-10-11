@@ -136,6 +136,15 @@ include __DIR__ . '/header_cache.php';
     }
 
 
+    // định hình sub-menu đa cấp cho header -> nạp trước css của child-theme để child-theme có thể ghi đè
+    if (WGR_MULTILEVEL_MENU == '1') {
+        WGR_adds_css([
+            WGR_BASE_PATH . 'public/css/multilevel-menu.css',
+        ], [
+            'cdn' => CDN_BASE_URL,
+        ]);
+    }
+
     // nạp các file css dùng chung cho toàn website
     WGR_adds_css([
         //WGR_BASE_PATH . 'public/thirdparty/awesome47/css/font-awesome.min.css',
