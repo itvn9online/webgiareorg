@@ -51,7 +51,7 @@ if (isset($_POST['save_wgr_options']) && wp_verify_nonce($_POST['_wpnonce_wgr_op
         'wgr_disable_wp_cron' => isset($_POST['wgr_disable_wp_cron']) ? '1' : '0',
         'wgr_term_description_order' => isset($_POST['wgr_term_description_order']) ? '1' : '0',
         'wgr_show_variations' => isset($_POST['wgr_show_variations']) ? '1' : '0',
-        'wgr_multilevel_menu' => isset($_POST['wgr_multilevel_menu']) ? '1' : '0',
+        'wgr_multilevel_menu' => sanitize_text_field($_POST['wgr_multilevel_menu'] ?? '0'),
         'wgr_contact_price' => sanitize_text_field($_POST['wgr_contact_price'] ?? ''),
         'wgr_add_font_awesome' => sanitize_text_field($_POST['wgr_add_font_awesome'] ?? '0'),
         // CDN
@@ -336,15 +336,17 @@ $eb_cdn_uploads_url = get_option('eb_cdn_uploads_url', '');
             </tr>
 
             <tr>
-                <th scope="row">Multilevel menu</th>
+                <th scope="row">
+                    <label for="wgr_multilevel_menu">Multilevel menu</label>
+                </th>
                 <td>
-                    <fieldset>
-                        <label>
-                            <input type="checkbox" name="wgr_multilevel_menu" value="1" <?php checked($wgr_multilevel_menu, '1'); ?>>
-                            Hiển thị sub-menu trên header dạng đa cấp (fly-out)
-                        </label>
-                        <p class="description">Menu cấp 1 hiển thị trên 1 cột, di chuột vào sẽ hiển thị menu cấp tiếp theo sang bên phải. Nạp file <code>public/css/multilevel-menu.css</code>.</p>
-                    </fieldset>
+                    <select name="wgr_multilevel_menu" id="wgr_multilevel_menu" class="regular-text">
+                        <option value="0" <?php selected($wgr_multilevel_menu, '0'); ?>>Mặc định của Flatsome</option>
+                        <option value="1" <?php selected($wgr_multilevel_menu, '1'); ?>>Fly-out: cấp 1 một cột, menu con bay sang phải</option>
+                        <option value="2" <?php selected($wgr_multilevel_menu, '2'); ?>>Mega menu: chia nhóm theo cột, bung rộng</option>
+                        <option value="3" <?php selected($wgr_multilevel_menu, '3'); ?>>Vertical tabs: tab bên trái, menu con dạng lưới bên phải</option>
+                    </select>
+                    <p class="description">Kiểu hiển thị sub-menu trên header (chỉ áp dụng cho desktop). Nạp file <code>public/css/menu-*.css</code> tương ứng.</p>
                 </td>
             </tr>
 

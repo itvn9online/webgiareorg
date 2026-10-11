@@ -51,6 +51,8 @@ include __DIR__ . '/header_cache.php';
     ?>
     <style>
         <?php
+        // chiều rộng .container của Flatsome = site_width - 30 -> dùng cho các css cần khớp với container
+        echo ':root{--wgr-container-width:' . (intval(get_theme_mod('site_width', 1080)) - 30) . 'px}';
         if (WGR_TERM_DESCRIPTION_ORDER != '0') {
             echo file_get_contents(WGR_BASE_PATH . 'public/css/term-description-order.css', 1);
         }
@@ -137,9 +139,14 @@ include __DIR__ . '/header_cache.php';
 
 
     // định hình sub-menu đa cấp cho header -> nạp trước css của child-theme để child-theme có thể ghi đè
-    if (WGR_MULTILEVEL_MENU == '1') {
+    $arr_multilevel_menu = [
+        '1' => 'menu-flyout.css',
+        '2' => 'menu-mega.css',
+        '3' => 'menu-tabs.css',
+    ];
+    if (isset($arr_multilevel_menu[WGR_MULTILEVEL_MENU])) {
         WGR_adds_css([
-            WGR_BASE_PATH . 'public/css/multilevel-menu.css',
+            WGR_BASE_PATH . 'public/css/' . $arr_multilevel_menu[WGR_MULTILEVEL_MENU],
         ], [
             'cdn' => CDN_BASE_URL,
         ]);

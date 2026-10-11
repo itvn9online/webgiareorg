@@ -1,0 +1,125 @@
+/**
+ * Menu dạng tab dọc cho header của Flatsome (#masthead)
+ * Cột bên trái là menu cấp 2, di chuột vào mục nào thì bên phải hiển thị menu con của mục đó dạng lưới
+ * Khi chưa di chuột vào mục nào thì hiển thị sẵn menu con của mục đầu tiên
+ */
+@media (min-width: 850px) {
+    /* rộng bằng .container của header -> luôn nằm ngay dưới menu cấp 1, rê chuột xuống không bị hụt */
+    #masthead .header-nav > li.current-dropdown > .nav-dropdown:has(ul.sub-menu) {
+        position: fixed;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: var(--wgr-container-width, 1050px) !important;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) {
+        display: block;
+        min-height: 380px;
+        padding: 15px 0;
+    }
+
+    /* cột tab bên trái */
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li.nav-dropdown-col {
+        position: static;
+        display: block;
+        width: 270px;
+        min-width: 0;
+        margin: 0;
+        border: 0;
+        white-space: normal;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li > a,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li.menu-item-has-children > a {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 12px 40px 12px 25px;
+        border: 0;
+        color: #333;
+        font-size: .95em;
+        font-weight: 600;
+        line-height: 1.3;
+        text-transform: none;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li.menu-item-has-children > a::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 22px;
+        width: 6px;
+        height: 6px;
+        margin-top: -3px;
+        border-top: 1px solid currentColor;
+        border-right: 1px solid currentColor;
+        transform: rotate(45deg);
+        opacity: .6;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li:hover > a,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu):not(:has(> li:hover)) > li:first-child > a {
+        background-color: rgba(0, 0, 0, .04);
+        box-shadow: inset 3px 0 0 var(--fs-color-primary, #446084);
+        color: var(--fs-color-primary, #446084);
+    }
+
+    /* khung nội dung bên phải: dùng !important vì Flatsome ép display:block!important cho .active > ul.sub-menu */
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li > ul.sub-menu {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 270px;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        align-content: start;
+        gap: 0 20px;
+        margin: 0;
+        padding: 20px 30px;
+        border-left: 1px solid #ececec;
+        background-color: #fff;
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li:hover > ul.sub-menu,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li:focus-within > ul.sub-menu,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu):not(:has(> li:hover)):not(:has(> li:focus-within)) > li:first-child > ul.sub-menu {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li li {
+        display: block;
+        margin: 0;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li li > a,
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li li.menu-item-has-children > a {
+        display: block;
+        margin: 0;
+        padding: 9px 0;
+        border-bottom: 1px solid #f3f3f3;
+        color: rgba(74, 74, 74, .85);
+        font-size: .95em;
+        font-weight: normal;
+        line-height: 1.3;
+        text-transform: none;
+        transition: color .2s, padding-left .2s;
+    }
+
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li li > a:hover {
+        padding-left: 5px;
+        color: var(--fs-color-primary, #446084);
+    }
+
+    /* cấp 4 trở đi hiển thị thụt lề ngay bên dưới */
+    #masthead .header-nav .nav-dropdown:has(ul.sub-menu) > li li ul {
+        padding-left: 12px;
+    }
+}
