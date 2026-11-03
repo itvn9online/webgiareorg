@@ -1,8 +1,8 @@
 /**
- * Ô tìm kiếm nhanh Bài viết/ Trang/ Sản phẩm/ Portfolio để thêm vào menu
- * trên màn hình Giao diện > Menu (nav-menus.php).
+ * Ô tìm kiếm nhanh Chuyên mục/ Danh mục sản phẩm/ Thương hiệu/ Thẻ/ Bài viết/ Trang/ Sản phẩm/ Portfolio
+ * để thêm vào menu trên màn hình Giao diện > Menu (nav-menus.php).
  *
- * Config từ PHP: window.wgrNavMenuSearch = { ajaxUrl, nonce, postTypes }
+ * Config từ PHP: window.wgrNavMenuSearch = { ajaxUrl, nonce, labels }
  */
 (function ($) {
 	var cfg = window.wgrNavMenuSearch || {};
@@ -46,6 +46,7 @@
 				$list.append(
 					$('<li class="wgr-nav-menu-search-item"></li>')
 						.attr({
+							"data-kind": group.kind,
 							"data-type": group.type,
 							"data-id": item.id,
 							title: "Bấm để thêm vào menu",
@@ -122,7 +123,7 @@
 		window.wpNavMenu.addItemToMenu(
 			{
 				"-1": {
-					"menu-item-type": "post_type",
+					"menu-item-type": $item.attr("data-kind"),
 					"menu-item-object": $item.attr("data-type"),
 					"menu-item-object-id": $item.attr("data-id"),
 				},
@@ -146,8 +147,8 @@
 			return;
 		}
 
-		var labels = Object.keys(cfg.postTypes || {}).map(function (k) {
-			return cfg.postTypes[k];
+		var labels = (cfg.labels || []).filter(function (label, i, arr) {
+			return arr.indexOf(label) === i;
 		});
 
 		var $box = $(
@@ -162,16 +163,15 @@
 		);
 		$box
 			.find("input")
-			.attr(
-				"placeholder",
-				"Tìm kiếm " + labels.join("/ ") + "... để thêm vào menu",
-			);
+			.attr("placeholder", "Tìm kiếm danh mục, bài viết, sản phẩm... để thêm vào menu");
 		$box
 			.find(".description")
 			.text(
-				"* Nhập tối thiểu " +
+				"* Tìm trong: " +
+					labels.join(", ") +
+					". Nhập tối thiểu " +
 					MIN_CHARS +
-					" ký tự của tiêu đề (có dấu hoặc không dấu) hoặc ID, sau đó bấm vào kết quả để thêm vào cuối menu. Nhớ bấm Lưu menu sau khi thêm.",
+					" ký tự của tên/ tiêu đề (có dấu hoặc không dấu) hoặc ID, sau đó bấm vào kết quả để thêm vào cuối menu. Nhớ bấm Lưu menu sau khi thêm.",
 			);
 		$frame.before($box);
 		$("body").addClass("wgr-has-nav-menu-search");

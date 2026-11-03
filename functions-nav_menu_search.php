@@ -1,10 +1,33 @@
 <?php
 
 /**
- * Ô tìm kiếm nhanh Bài viết/ Trang/ Sản phẩm/ Portfolio trong màn hình Giao diện > Menu (nav-menus.php).
- * Tìm theo post_title hoặc post_name (slug đã bỏ dấu) — chính xác hơn ô tìm kiếm mặc định của WP,
+ * Ô tìm kiếm nhanh Chuyên mục/ Danh mục sản phẩm/ Thương hiệu/ Thẻ/ Bài viết/ Trang/ Sản phẩm/ Portfolio
+ * trong màn hình Giao diện > Menu (nav-menus.php).
+ * Tìm theo tên/ tiêu đề hoặc slug (đã bỏ dấu) — chính xác hơn ô tìm kiếm mặc định của WP,
  * bấm vào kết quả là thêm luôn vào menu đang sửa (dùng wpNavMenu.addItemToMenu của WP).
  */
+
+/**
+ * Danh sách taxonomy được phép tìm kiếm để thêm vào menu.
+ * product_cat, product_brand, product_tag (WooCommerce) chỉ có khi web cài plugin tương ứng.
+ *
+ * @return array<string, string> taxonomy => label
+ */
+function WGR_nav_menu_search_taxonomies()
+{
+    $result = array();
+
+    foreach (array('category', 'product_cat', 'product_brand', 'post_tag', 'product_tag') as $taxonomy) {
+        $obj = get_taxonomy($taxonomy);
+        if (!$obj) {
+            continue;
+        }
+
+        $result[$taxonomy] = !empty($obj->labels->name) ? $obj->labels->name : $taxonomy;
+    }
+
+    return $result;
+}
 
 /**
  * Danh sách post type được phép tìm kiếm để thêm vào menu.
@@ -37,7 +60,7 @@ function WGR_nav_menu_search_post_types()
  * @param int    $limit     Số kết quả tối đa.
  * @return array<int, object>
  */
-function WGR_nav_menu_search_query($keyword, $post_type, $limit = 30)
+function WGR_nav_menu_search_query($keyword, $post_type, $limit = 50)
 {
     global $wpdb;
 
@@ -92,9 +115,71 @@ function WGR_nav_menu_search_query($keyword, $post_type, $limit = 30)
     return is_array($rows) ? $rows : array();
 }
 
+/**
+ * Tìm term của 1 taxonomy theo tên/slug (hoặc ID nếu từ khóa là số), kèm tên term cha.
+ * Không có từ khóa thì trả về danh sách theo tên A-Z.
+ *
+ * @param string $keyword  Từ khóa.
+ * @param string $taxonomy Taxonomy cần tìm.
+ * @param int    $limit    Số kết quả tối đa.
+ * @return array<int, object>
+ */
+function WGR_nav_menu_search_term_query($keyword, $taxonomy, $limit = 50)
+{
+    global $wpdb;
+
+    $select = "SELECT t.term_id, t.name, p.name AS parent_name
+             FROM {$wpdb->terms} AS t
+             INNER JOIN {$wpdb->term_taxonomy} AS tt ON tt.term_id = t.term_id
+             LEFT JOIN {$wpdb->terms} AS p ON p.term_id = tt.parent
+             WHERE tt.taxonomy = %s";
+
+    if ('' === $keyword) {
+        $sql = $wpdb->prepare(
+            $select . " ORDER BY t.name ASC LIMIT %d",
+            $taxonomy,
+            $limit
+        );
+    } else {
+        $slug = sanitize_title($keyword);
+        if ('' === $slug) {
+            $slug = $keyword;
+        }
+        $by_id = ctype_digit($keyword) ? (int) $keyword : 0;
+
+        // ưu tiên: trùng ID > trùng tên > tên bắt đầu bằng từ khóa > còn lại
+        $sql = $wpdb->prepare(
+            $select . "
+               AND (
+                    t.term_id = %d
+                    OR t.name LIKE %s
+                    OR t.slug LIKE %s
+               )
+             ORDER BY
+                (t.term_id = %d) DESC,
+                (t.name = %s) DESC,
+                (t.name LIKE %s) DESC,
+                t.name ASC
+             LIMIT %d",
+            $taxonomy,
+            $by_id,
+            '%' . $wpdb->esc_like($keyword) . '%',
+            '%' . $wpdb->esc_like($slug) . '%',
+            $by_id,
+            $keyword,
+            $wpdb->esc_like($keyword) . '%',
+            $limit
+        );
+    }
+
+    $rows = $wpdb->get_results($sql);
+
+    return is_array($rows) ? $rows : array();
+}
+
 add_action('wp_ajax_wgr_nav_menu_search_posts', 'WGR_ajax_nav_menu_search_posts');
 /**
- * AJAX: trả về kết quả tìm kiếm, nhóm theo từng post type.
+ * AJAX: trả về kết quả tìm kiếm, nhóm theo từng taxonomy/ post type.
  */
 function WGR_ajax_nav_menu_search_posts()
 {
@@ -113,6 +198,32 @@ function WGR_ajax_nav_menu_search_posts()
     }
 
     $groups = array();
+
+    foreach (WGR_nav_menu_search_taxonomies() as $taxonomy => $label) {
+        $items = array();
+        foreach (WGR_nav_menu_search_term_query($keyword, $taxonomy) as $row) {
+            // tên term trong DB được lưu dạng đã escape (vd: &amp;)
+            $name = html_entity_decode($row->name, ENT_QUOTES, 'UTF-8');
+            if (!empty($row->parent_name)) {
+                $name = html_entity_decode($row->parent_name, ENT_QUOTES, 'UTF-8') . ' › ' . $name;
+            }
+
+            $items[] = array(
+                'id'    => (int) $row->term_id,
+                'title' => $name,
+            );
+        }
+
+        if (!empty($items)) {
+            $groups[] = array(
+                'kind'  => 'taxonomy',
+                'type'  => $taxonomy,
+                'label' => $label,
+                'items' => $items,
+            );
+        }
+    }
+
     foreach (WGR_nav_menu_search_post_types() as $post_type => $label) {
         $items = array();
         foreach (WGR_nav_menu_search_query($keyword, $post_type) as $row) {
@@ -124,6 +235,7 @@ function WGR_ajax_nav_menu_search_posts()
 
         if (!empty($items)) {
             $groups[] = array(
+                'kind'  => 'post_type',
                 'type'  => $post_type,
                 'label' => $label,
                 'items' => $items,
@@ -147,7 +259,7 @@ function WGR_nav_menu_search_script()
     $config = array(
         'ajaxUrl'   => admin_url('admin-ajax.php'),
         'nonce'     => wp_create_nonce('wgr_nav_menu_search_posts'),
-        'postTypes' => WGR_nav_menu_search_post_types(),
+        'labels'    => array_values(array_merge(WGR_nav_menu_search_taxonomies(), WGR_nav_menu_search_post_types())),
     );
 ?>
     <script>
