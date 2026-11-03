@@ -108,6 +108,105 @@
     font-weight: 600;
 }
 
+/* CSS cho ô tìm kiếm nhanh để thêm vào menu (nav-menus.php). */
+.wgr-nav-menu-search {
+    margin: 12px 0 16px;
+    max-width: 600px;
+
+    .wgr-nav-menu-search-input {
+        display: flex;
+        align-items: center;
+    }
+
+    input[type="search"] {
+        width: 100%;
+    }
+
+    .description {
+        color: #F90;
+    }
+
+    .wgr-nav-menu-search-results {
+        display: none;
+        max-height: 350px;
+        overflow-y: auto;
+        margin: 0;
+        padding: 5px 0;
+        background: #fff;
+        border: 1px solid #c3c4c7;
+    }
+
+    .wgr-nav-menu-search-results li {
+        margin: 0;
+        padding: 5px 15px;
+        border-bottom: 1px solid #f0f0f1;
+    }
+
+    .wgr-nav-menu-search-group {
+        font-weight: 600;
+        background: #f6f7f7;
+    }
+
+    .wgr-nav-menu-search-item {
+        cursor: pointer;
+    }
+
+    .wgr-nav-menu-search-item:hover {
+        background: #f0f6fc;
+    }
+
+    .wgr-nav-menu-search-item.is-adding {
+        opacity: .5;
+    }
+
+    .wgr-nav-menu-search-item.is-added {
+        color: #00a32a;
+    }
+
+    .wgr-nav-menu-search-item.is-added::after {
+        content: " ✓";
+    }
+
+    .wgr-nav-menu-search-id {
+        color: #8c8f94;
+        font-size: 12px;
+    }
+
+    .wgr-nav-menu-search-empty {
+        color: #646970;
+    }
+}
+
+/* màn hình rộng: ghim ô tìm kiếm thành cột bên phải, chừa chỗ cho nội dung menu */
+@media (min-width: 1101px) {
+    body.wgr-has-nav-menu-search #wpbody {
+        padding-right: 25%;
+    }
+
+    body.wgr-has-nav-menu-search .wgr-nav-menu-search {
+        position: fixed;
+        z-index: 99;
+        top: 32px;
+        right: 0;
+        bottom: 0;
+        width: 20%;
+        max-width: none;
+        margin: 0;
+        padding: 15px;
+        background: #fff;
+        box-shadow: 0 0 10px #ccc;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+
+        .wgr-nav-menu-search-results {
+            flex: 1 1 auto;
+            min-height: 0;
+            max-height: none;
+        }
+    }
+}
+
 /* CSS cho dòng biến thể append bằng AJAX. */
 .post-type-product tr.type-product_variation.wgr-admin-variation-row {
     .check-column * {

@@ -106,6 +106,9 @@ if (is_admin()) {
         include WGR_BASE_PATH . 'functions-show_variations.php';
     }
 
+    // Ô tìm kiếm nhanh bài viết/ sản phẩm... để thêm vào menu (Giao diện > Menu)
+    include WGR_BASE_PATH . 'functions-nav_menu_search.php';
+
     if (!empty($_GET['s'])) {
         include WGR_BASE_PATH . 'functions-search_by_title.php';
     }
