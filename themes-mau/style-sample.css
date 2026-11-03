@@ -5,6 +5,12 @@ Author: Dao Quoc Dai - itvn9online@gmail.com
 Template: flatsome
 Version: 3.0
 */
+
+/* Đây chỉ là file css để khai báo child-theme */
+/* Không nên viết css vào đây mà viết vào file /css/d.css */
+/* Tương tự với js thì viết vào file /javascript/d.js */
+/* Nếu trong project có file style-sample.css và functions-sample.php thì đổi tên thành style.css và functions.php */
+
 /*************** ADD CUSTOM CSS HERE.   ***************/
 @media only screen and (max-width: 48em) {
     /*************** ADD MOBILE ONLY CSS HERE  ***************/
