@@ -31,9 +31,81 @@ if (is_file($my_config_php)) {
     // $my_config_content = file_get_contents($my_config_php);
 }
 
+// Logic lấy nội dung robots.txt (đặt sớm để cảnh báo ở đầu page)
+$robots_content = '';
+$robots_base_content = '';
+$robots_main_path = ABSPATH . 'robots.txt';
+$robots_child_path = WGR_CHILD_PATH . 'tmp/robots.txt';
+$robots_base_path = WGR_BASE_PATH . 'tmp/robots.txt';
+$robots_save_notice = '';
+
+// Ưu tiên lấy từ ABSPATH trước
+if (is_file($robots_main_path)) {
+    $robots_content = file_get_contents($robots_main_path);
+} elseif (is_file($robots_child_path)) {
+    $robots_content = file_get_contents($robots_child_path);
+} else {
+    $robots_base_content = trim(file_get_contents($robots_base_path));
+    $robots_content = $robots_base_content;
+}
+
+// Xử lý form submit robots.txt
+if (isset($_POST['save_robots']) && wp_verify_nonce($_POST['_wpnonce_robots'], 'save_robots_action')) {
+    $new_robots_content = stripslashes($_POST['robots_content']);
+    if (empty($new_robots_content)) {
+        if ($robots_base_content == '') {
+            $robots_base_content = trim(file_get_contents($robots_base_path));
+            $new_robots_content = $robots_base_content;
+        } else {
+            $new_robots_content = $robots_base_content;
+        }
+    }
+
+    // Lưu vào ABSPATH/robots.txt
+    if (file_put_contents($robots_main_path, $new_robots_content) !== false) {
+        $robots_save_notice = '<div class="notice notice-success"><p>Đã lưu robots.txt thành công!</p></div>';
+
+        if ($robots_base_content == '') {
+            $robots_base_content = trim(file_get_contents($robots_base_path));
+        }
+
+        // Kiểm tra nếu nội dung khác với base template thì lưu thêm vào child
+        if ($new_robots_content !== $robots_base_content) {
+            $child_tmp_dir = dirname($robots_child_path);
+            if (!is_dir($child_tmp_dir)) {
+                wp_mkdir_p($child_tmp_dir);
+            }
+            file_put_contents($robots_child_path, $new_robots_content);
+        } else if (is_file($robots_child_path)) {
+            unlink($robots_child_path);
+        }
+
+        $robots_content = $new_robots_content;
+    } else {
+        $robots_save_notice = '<div class="notice notice-error"><p>Lỗi: Không thể lưu robots.txt!</p></div>';
+    }
+}
+
+// Cảnh báo nếu robots.txt trống / thiếu Sitemap / Sitemap sai domain
+$robots_home_url = untrailingslashit(get_home_url());
+$robots_expected_sitemap = 'Sitemap: ' . $robots_home_url . '/sitemap_index.xml';
+$robots_sitemap_warning = '';
+if (trim((string) $robots_content) === '') {
+    $robots_sitemap_warning = 'File robots.txt đang trống. Vui lòng thêm dòng: <code>' . esc_html($robots_expected_sitemap) . '</code>';
+} elseif (stripos($robots_content, $robots_expected_sitemap) === false) {
+    if (preg_match('/^\s*Sitemap:\s*(.+)$/mi', $robots_content, $robots_sitemap_match)) {
+        $robots_sitemap_warning = 'Sitemap trong robots.txt đang trỏ sai domain (<code>' . esc_html(trim($robots_sitemap_match[1])) . '</code>). Domain hiện tại cần là: <code>' . esc_html($robots_expected_sitemap) . '</code>';
+    } else {
+        $robots_sitemap_warning = 'robots.txt thiếu dòng Sitemap đúng domain. Vui lòng thêm: <code>' . esc_html($robots_expected_sitemap) . '</code>';
+    }
+}
 
 ?>
 <h1>Cấu hình website</h1>
+<?php if (!empty($robots_sitemap_warning)): ?>
+    <div class="notice notice-error"><p><strong>⚠ Cảnh báo robots.txt:</strong> <?php echo $robots_sitemap_warning; ?></p></div>
+<?php endif; ?>
+<?php echo $robots_save_notice; ?>
 <h2><?php echo str_replace(ABSPATH, '', $my_config_php); ?></h2>
 <div class="text-center w99">
     <textarea rows="<?php echo count(explode("\n", $my_config_content)); ?>" class="large-text code" placeholder="My config content" readonly disabled><?php echo esc_html($my_config_content); ?></textarea>
@@ -663,63 +735,6 @@ define('WGR_REDIS_PORT', 6379);</pre>
 <hr>
 
 <!-- Edit robots.txt -->
-<?php
-// Logic lấy nội dung robots.txt
-$robots_content = '';
-$robots_base_content = '';
-$robots_main_path = ABSPATH . 'robots.txt';
-$robots_child_path = WGR_CHILD_PATH . 'tmp/robots.txt';
-$robots_base_path = WGR_BASE_PATH . 'tmp/robots.txt';
-
-// Ưu tiên lấy từ ABSPATH trước
-if (is_file($robots_main_path)) {
-    $robots_content = file_get_contents($robots_main_path);
-} elseif (is_file($robots_child_path)) {
-    $robots_content = file_get_contents($robots_child_path);
-} else {
-    $robots_base_content = trim(file_get_contents($robots_base_path));
-    $robots_content = $robots_base_content;
-}
-
-// Xử lý form submit
-if (isset($_POST['save_robots']) && wp_verify_nonce($_POST['_wpnonce_robots'], 'save_robots_action')) {
-    $new_robots_content = stripslashes($_POST['robots_content']);
-    if (empty($new_robots_content)) {
-        if ($robots_base_content == '') {
-            $robots_base_content = trim(file_get_contents($robots_base_path));
-            $new_robots_content = $robots_base_content;
-        } else {
-            $new_robots_content = $robots_base_content;
-        }
-    }
-
-    // Lưu vào ABSPATH/robots.txt
-    if (file_put_contents($robots_main_path, $new_robots_content) !== false) {
-        echo '<div class="notice notice-success"><p>Đã lưu robots.txt thành công!</p></div>';
-
-        // 
-        if ($robots_base_content == '') {
-            $robots_base_content = trim(file_get_contents($robots_base_path));
-        }
-
-        // Kiểm tra nếu nội dung khác với base template thì lưu thêm vào child
-        if ($new_robots_content !== $robots_base_content) {
-            // Tạo thư mục tmp nếu chưa có
-            $child_tmp_dir = dirname($robots_child_path);
-            if (!is_dir($child_tmp_dir)) {
-                wp_mkdir_p($child_tmp_dir);
-            }
-            file_put_contents($robots_child_path, $new_robots_content);
-        } else if (is_file($robots_child_path)) {
-            unlink($robots_child_path);
-        }
-
-        $robots_content = $new_robots_content;
-    } else {
-        echo '<div class="notice notice-error"><p>Lỗi: Không thể lưu robots.txt!</p></div>';
-    }
-}
-?>
 <h2>Edit <a href="<?php echo get_home_url(); ?>/robots.txt" target="_blank">robots.txt</a></h2>
 <form action="" method="post">
     <?php wp_nonce_field('save_robots_action', '_wpnonce_robots'); ?>
