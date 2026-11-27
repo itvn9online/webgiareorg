@@ -42,8 +42,8 @@
 
     #masthead .header-nav .nav-dropdown li:hover > a,
     #masthead .header-nav .nav-dropdown li:focus-within > a {
-        background-color: rgba(0, 0, 0, .04);
-        color: hsla(0, 0%, 7%, .85);
+        /* background-color: rgba(0, 0, 0, .04); */
+        /* color: hsla(0, 0%, 7%, .85); */
     }
 
     /* mũi tên báo hiệu có menu con */
